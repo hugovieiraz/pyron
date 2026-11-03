@@ -172,11 +172,25 @@ export function montarPalco(ctx) {
     caixas.hidden = ctx.foto;
     linhas.style.display = ctx.foto ? "none" : "";
     const visivel = (r) => (r.classe === "ponto_quente" ? ctx.camadas.pontos : ctx.camadas.regioes) || r.id === ctx.sel;
+    const pq = a.resumo?.ponto_mais_quente;
+    const comAlvo = pq && !a.sem_temperatura && ctx.camadas.pontos;
     for (const r of a.regioes.filter(visivel)) {
       const [x0, y0, x1, y1] = r.caixa;
       const sel = r.id === ctx.sel;
+      if (r.classe === "ponto_quente") {
+        // ponto quente é a bolinha no pixel mais quente dele, não caixa (pedido do Hugo em 03/11/2026); o mais
+        // quente da cena já tem o alvo, então ali não entra uma segunda bolinha
+        const m = r.medida;
+        const cx = m ? m.x_max + 0.5 : (x0 + x1) / 2, cy = m ? m.y_max + 0.5 : (y0 + y1) / 2;
+        if (comAlvo && !sel && m && m.x_max === pq.x && m.y_max === pq.y) continue;
+        const ponto = el("span", { class: `ponto-regiao sev-${r.severidade}${sel ? " selecionada" : ""}`, dataset: { id: r.id },
+          style: { left: pct(cx, W), top: pct(cy, H) }, title: `${r.nome} · ${temperatura(m?.t_max)}` });
+        if (ctx.camadas.rotulos && (sel || !SEM_ALERTA.has(r.severidade))) ponto.append(el("span", { class: "etq" }, `${r.nome} · ${temperatura(m?.t_max)}`));
+        caixas.append(ponto);
+        continue;
+      }
       const caixa = el("div", {
-        class: `caixa sev-${r.severidade}${sel ? " selecionada" : ""}`, dataset: { id: r.id },
+        class: `caixa sev-${r.severidade}${r.pai ? " parte" : ""}${sel ? " selecionada" : ""}`, dataset: { id: r.id },
         style: { left: pct(x0, W), top: pct(y0, H), width: pct(x1 - x0, W), height: pct(y1 - y0, H) },
         title: `${r.nome} · ${temperatura(r.medida?.t_max)}`,
       });
@@ -188,8 +202,7 @@ export function montarPalco(ctx) {
         linhas.append(svg("polygon", { points: contorno.map(([x, y]) => `${x},${y}`).join(" "), class: `contorno sev-${r.severidade}${sel ? " selecionado" : ""}` }));
       }
     }
-    const pq = a.resumo?.ponto_mais_quente;
-    if (pq && !a.sem_temperatura && ctx.camadas.pontos) caixas.append(el("span", { class: "alvo-quente", style: { left: pct(pq.x + 0.5, W), top: pct(pq.y + 0.5, H) }, title: A.maisQuente(temperatura(pq.t_max)) }));
+    if (comAlvo) caixas.append(el("span", { class: "alvo-quente", style: { left: pct(pq.x + 0.5, W), top: pct(pq.y + 0.5, H) }, title: A.maisQuente(temperatura(pq.t_max)) }));
     for (const med of ctx.camadas.medicoes ? a.medicoes || [] : []) {
       const v = med.valor || {};
       if (med.tipo === "ponto") {
@@ -341,6 +354,8 @@ export function montarPalco(ctx) {
     if (ctx.ferramenta === "selecionar") {
       const alca = ev.target.closest(".alca");
       const alvo = ev.target.closest(".caixa[data-id]");
+      const ponto = ev.target.closest(".ponto-regiao[data-id]");
+      if (ponto) { ctx.selecionar(ponto.dataset.id); return; }  // a bolinha só seleciona: não tem caixa para mover
       if (alca && ctx.sel && ctx.podeEditar) {
         gesto = { tipo: "redimensionar", canto: alca.dataset.canto, caixa: [...ctx.regiao().caixa], p0: p };
       } else if (alvo) {
@@ -530,7 +545,7 @@ export function montarPalco(ctx) {
   return {
     barra,
     palco,
-    realcar: (id, ligar) => caixas.querySelector(`.caixa[data-id="${id}"]`)?.classList.toggle("realce", ligar),
+    realcar: (id, ligar) => caixas.querySelector(`[data-id="${id}"]`)?.classList.toggle("realce", ligar),
     encerrar() {
       parar();
       document.removeEventListener("keydown", teclado);

@@ -8,8 +8,20 @@ import { avisar } from "../componentes.js";
 const A = T.analise;
 export const ORDEM_SEVERIDADE = ["imediato", "urgente", "programar", "atencao", "normal", "nao_avaliado", "sem_medida"];
 
+const pesoSeveridade = (r) => ORDEM_SEVERIDADE.indexOf(r.severidade);
+const maisGrave = (a, b) => pesoSeveridade(a) - pesoSeveridade(b) || (b.medida?.t_max ?? -999) - (a.medida?.t_max ?? -999);
+
+/** Da mais grave para a mais fria. As partes de um para-raio (``pai``) vêm logo abaixo dele, de cima para baixo, e o
+ * grupo entra na posição da pior região dele. */
 export function regioesOrdenadas(regioes) {
-  return [...regioes].sort((a, b) => ORDEM_SEVERIDADE.indexOf(a.severidade) - ORDEM_SEVERIDADE.indexOf(b.severidade) || (b.medida?.t_max ?? -999) - (a.medida?.t_max ?? -999));
+  const ids = new Set(regioes.map((r) => r.id));
+  const filhas = new Map();
+  for (const r of regioes) if (r.pai && ids.has(r.pai)) filhas.set(r.pai, [...(filhas.get(r.pai) || []), r]);
+  const grupos = regioes.filter((r) => !(r.pai && ids.has(r.pai))).map((r) => {
+    const partes = (filhas.get(r.id) || []).sort((a, b) => a.caixa[1] - b.caixa[1]);
+    return { lista: [r, ...partes], pior: [r, ...partes].sort(maisGrave)[0] };
+  });
+  return grupos.sort((a, b) => maisGrave(a.pior, b.pior)).flatMap((g) => g.lista);
 }
 
 /** Apaga a região e oferece Desfazer (a região volta no mesmo lugar da lista). */
@@ -37,7 +49,7 @@ export function listaRegioes(ctx, realcar) {
   const regioes = regioesOrdenadas(ctx.a.regioes);
   const lista = el("div", { class: "lista-regioes", role: "listbox", "aria-label": A.regioes, tabindex: "-1" });
   lista.append(...regioes.map((r, i) => el("button", {
-    type: "button", role: "option", class: `linha-regiao sev-${r.severidade}`, "aria-selected": "false", tabindex: i === 0 ? "0" : "-1",
+    type: "button", role: "option", class: `linha-regiao sev-${r.severidade}${r.pai ? " parte" : ""}`, "aria-selected": "false", tabindex: i === 0 ? "0" : "-1",
     dataset: { id: r.id }, title: `${r.nome}: ${r.severidade_rotulo || T.niveis[r.severidade] || ""}`,
     onclick: () => ctx.selecionar(r.id),
     onmouseenter: () => realcar(r.id, true), onmouseleave: () => realcar(r.id, false),

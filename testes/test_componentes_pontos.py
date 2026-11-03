@@ -164,9 +164,8 @@ def test_analise_com_os_dois_juntos(cliente, sessao_falsa) -> None:  # noqa: F81
     a = cliente.post("/api/analises", files={"arquivo": ("teste.jpg", _termograma_flir(), "image/jpeg")}).json()
     assert a["modelo"]["tipo"] == "combinado"
     classes = sorted(r["classe"] for r in a["regioes"])
-    assert classes == ["aletas_isoladoras", "ponto_quente"]  # a peça (modelo) e o calor (regra)
-    pq = next(r for r in a["regioes"] if r["classe"] == "ponto_quente")
-    assert pq["componente"]["classe"] == "aletas_isoladoras"
+    # o ponto quente cai dentro da peça: fica só a peça, e o ponto mais quente é o dela (pedido do Hugo, 03/11/2026)
+    assert classes == ["aletas_isoladoras"]
     assert a["resumo"]["ponto_mais_quente"]["t_max"] == pytest.approx(45.0, abs=0.1)
     assert a["resumo"]["ponto_mais_quente"]["componente"]["classe"] == "aletas_isoladoras"
 
@@ -177,3 +176,45 @@ def test_analise_com_os_dois_juntos(cliente, sessao_falsa) -> None:  # noqa: F81
     # só o modelo de peças: sem ponto quente
     r = cliente.post(f"/api/analises/{a['id']}/detectar", json={"modelo": cartao["id"]}).json()
     assert [x["classe"] for x in r["regioes"]] == ["aletas_isoladoras"]
+
+
+# ---------------------------------------------------------------- para-raio: partes em faixas e ponto quente só fora das peças
+
+D = detectores.Deteccao
+
+
+def test_partes_do_para_raio_viram_faixas_sem_sobreposicao() -> None:
+    """Caixas como as do RF-DETR na FLIR2614: aletas quase do tamanho do para-raio, terminais entrando nelas."""
+    saida = detectores.organizar_para_raios([
+        D("para_raio", [53, 44, 76, 122], 0.96),
+        D("aletas_isoladoras", [54, 40, 75, 115], 0.94),
+        D("aletas_isoladoras", [55, 60, 74, 100], 0.50),  # repetida, menos confiante: sai
+        D("terminal_superior", [56, 44, 71, 51], 0.85),
+        D("terminal_inferior", [56, 114, 74, 122], 0.75),
+    ])
+    por_classe = {d.classe: d for d in saida}
+    assert len(saida) == 4 and all(d.grupo == 0 for d in saida)
+    assert por_classe["aletas_isoladoras"].caixa == [54, 51, 75, 114]  # entre os terminais e dentro do para-raio
+    assert por_classe["terminal_superior"].caixa[3] <= por_classe["aletas_isoladoras"].caixa[1]
+    assert por_classe["aletas_isoladoras"].caixa[3] <= por_classe["terminal_inferior"].caixa[1]
+
+
+def test_para_raios_numerados_da_esquerda_e_sem_repetido() -> None:
+    saida = detectores.organizar_para_raios([
+        D("para_raio", [100, 10, 120, 90], 0.9),
+        D("para_raio", [10, 10, 30, 90], 0.8),
+        D("para_raio", [11, 12, 30, 88], 0.7),  # o mesmo da esquerda
+        D("terminal_superior", [102, 10, 118, 20], 0.8),
+        D("terminal_superior", [200, 10, 210, 20], 0.8),  # fora de qualquer para-raio: passa sem grupo
+    ])
+    pr = [d for d in saida if d.classe == "para_raio"]
+    assert [d.caixa[0] for d in pr] == [10, 100] and [d.grupo for d in pr] == [0, 1]
+    ts = sorted((d for d in saida if d.classe == "terminal_superior"), key=lambda d: d.caixa[0])
+    assert [d.grupo for d in ts] == [1, None]
+
+
+def test_ponto_quente_dentro_da_peca_sai() -> None:
+    pecas = [D("para_raio", [50, 40, 80, 120], 0.9)]
+    pontos = [D("ponto_quente", [52, 100, 62, 118], 0.9), D("ponto_quente", [90, 30, 100, 60], 0.9), D("ponto_quente", [37, 118, 63, 139], 0.9)]
+    fora = detectores.pontos_fora_das_pecas(pontos, pecas)
+    assert [d.caixa for d in fora] == [[90, 30, 100, 60], [37, 118, 63, 139]]

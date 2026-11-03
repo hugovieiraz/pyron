@@ -353,26 +353,40 @@ def _regioes_do_detector(det: detectores.Detector, matriz: np.ndarray, imagem: n
                 r["id"] = uuid.uuid4().hex[:8]
         return regioes
 
+    # As partes de um para-raio levam o número dele ("Terminal Superior 2" é do "Para-raio 2") e o ``pai``;
+    # uma parte solta conta depois dos para-raios, para o número não repetir.
+    deteccoes = det.detectar(matriz, imagem)
+    grupos = 1 + max((d.grupo for d in deteccoes if d.grupo is not None), default=-1)
     contagem: dict[str, int] = {}
+    pais: dict[int, str] = {}
     regioes = []
-    for d in det.detectar(matriz, imagem):
-        contagem[d.classe] = contagem.get(d.classe, 0) + 1
-        regioes.append(
-            {
-                "id": uuid.uuid4().hex[:8],
-                "nome": f"{det.nomes.get(d.classe) or NOMES_CLASSES.get(d.classe, d.classe)} {contagem[d.classe]}",
-                "classe": d.classe,
-                "caixa": [round(v, 2) for v in d.caixa],
-                "confianca": d.confianca,
-                "origem": f"modelo:{det.id}",
-            }
-        )
+    for d in deteccoes:
+        if d.grupo is None:
+            inicio = grupos if d.classe in (detectores.PARA_RAIO, *detectores.PARTES_PARA_RAIO) else 0
+            contagem[d.classe] = contagem.get(d.classe, inicio) + 1
+            numero = contagem[d.classe]
+        else:
+            numero = d.grupo + 1
+        regiao = {
+            "id": uuid.uuid4().hex[:8],
+            "nome": f"{det.nomes.get(d.classe) or NOMES_CLASSES.get(d.classe, d.classe)} {numero}",
+            "classe": d.classe,
+            "caixa": [round(v, 2) for v in d.caixa],
+            "confianca": d.confianca,
+            "origem": f"modelo:{det.id}",
+        }
+        if d.grupo is not None:
+            if d.classe == detectores.PARA_RAIO:
+                pais[d.grupo] = regiao["id"]
+            elif d.grupo in pais:
+                regiao["pai"] = pais[d.grupo]
+        regioes.append(regiao)
     return regioes
 
 
 def _calcular(a: dict, matriz: np.ndarray) -> dict:
     cond = a.get("condicoes", {})
-    campos = ("id", "nome", "classe", "caixa", "confianca", "origem", "segmentacao", "classificacao_dinov2")
+    campos = ("id", "nome", "classe", "caixa", "confianca", "origem", "pai", "segmentacao", "classificacao_dinov2")
     base = [{k: v for k, v in r.items() if k in campos} for r in a["regioes"]]
     a["regioes"], a["resumo"] = analise.analisar_regioes(
         matriz, base, cond.get("ambiente_c"), cond.get("carga_pct"), criterios=_criterios(), componentes=_componentes()
@@ -793,6 +807,8 @@ def _aplicar_edicao(a: dict, m: np.ndarray, corpo: dict) -> None:
                 "confianca": r.get("confianca"),
                 "origem": r.get("origem") or "manual",
             }
+            if r.get("pai"):
+                item["pai"] = str(r["pai"])[:16]
             if "segmentacao" in r:
                 item["segmentacao"] = r["segmentacao"]
             if "classificacao_dinov2" in r:

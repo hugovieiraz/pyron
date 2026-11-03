@@ -468,6 +468,10 @@ async function montarAberto(no, id) {
     sobre.replaceChildren(...q.regioes.map((r) => {
       const [x0, y0, x1, y1] = r.caixa;
       const fora = r.severidade && r.severidade !== "normal";
+      if (r.classe === "ponto_quente" && r.x_max != null) {  // ponto quente: a bolinha no pixel mais quente, como na Análise
+        return el("span", { class: `ponto-regiao sev-${r.severidade || "sem_medida"}`, title: [r.nome, r.t_max != null ? temperatura(r.t_max) : null].filter(Boolean).join(", "),
+          style: { "--k": "1", left: pct(r.x_max + 0.5, W), top: pct(r.y_max + 0.5, H) } }, fora ? el("span", { class: "etq" }, `${r.nome} · ${temperatura(r.t_max)}`) : null);
+      }
       return el("div", { class: `caixa-video${fora ? " fora" : ""}`, title: [r.nome, r.t_max != null ? temperatura(r.t_max) : null].filter(Boolean).join(", "),
         style: { "--sev": `var(--${r.severidade || "sem_medida"})`, left: pct(x0, W), top: pct(y0, H), width: pct(x1 - x0, W), height: pct(y1 - y0, H) } },
       fora ? el("span", { class: "etq" }, `${r.nome} · ${temperatura(r.t_max)}`) : null); // rótulo só fora do normal, como na Análise

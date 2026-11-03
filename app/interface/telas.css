@@ -46,6 +46,13 @@
 .camada-caixas.com-selecao .caixa:not(.selecionada) { opacity: .6; }
 .camada-caixas .caixa.realce { opacity: 1; box-shadow: 0 0 0 calc(var(--borda-sel) / var(--k)) var(--marca-imagem); }
 .camada-caixas .caixa.selecionada { border-width: calc(var(--borda-sel) * 1.5 / var(--k)); box-shadow: 0 0 0 calc(1px / var(--k)) var(--contorno-imagem); cursor: move; }
+/* parte de um para-raio (terminal, aletas): linha mais fina, por dentro da caixa do para-raio */
+.camada-caixas .caixa.parte { border-width: calc(1px / var(--k)); border-style: dashed; }
+/* ponto quente: a bolinha no pixel mais quente, na cor da severidade (não caixa) */
+.ponto-regiao { position: absolute; width: var(--e-3); height: var(--e-3); border-radius: 50%; background: var(--sev, var(--marca-imagem)); border: var(--borda-sel) solid var(--marca-imagem); box-shadow: 0 0 0 1px var(--contorno-imagem); transform: translate(-50%, -50%) scale(calc(1 / var(--k))); cursor: pointer; transition: opacity var(--dur-rapida) var(--ease-padrao); }
+.camada-caixas.com-selecao .ponto-regiao:not(.selecionada) { opacity: .6; }
+.ponto-regiao.selecionada, .ponto-regiao.realce { opacity: 1; width: var(--e-4); height: var(--e-4); }
+.ponto-regiao .etq { position: absolute; left: 100%; top: 50%; margin-left: var(--e-1); transform: translateY(-50%); white-space: nowrap; pointer-events: none; padding: 0 var(--e-1); border-radius: var(--r-p); background: var(--rotulo-imagem); color: var(--marca-imagem); font-size: var(--t-1); line-height: var(--a-1); font-variant-numeric: tabular-nums; }
 .caixa.rascunho { position: absolute; border: calc(var(--borda-sel) / var(--k)) dashed var(--marca-imagem); background: var(--palco-hover); pointer-events: none; }
 .caixa .etq, .mira-ponto .etq {
   position: absolute; left: 0; bottom: 100%; margin-bottom: var(--e-1); white-space: nowrap; pointer-events: none;
@@ -98,6 +105,7 @@
   transition: background-color var(--dur-rapida) var(--ease-padrao);
 }
 .linha-regiao:last-child { border-bottom: 0; }
+.linha-regiao.parte { padding-left: calc(var(--e-4) + var(--e-6)); } /* parte de um para-raio, abaixo dele */
 .linha-regiao .traco { height: var(--e-5); align-self: center; }
 .linha-regiao .nome { color: var(--texto); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .linha-regiao:hover { background: var(--superficie-2); }

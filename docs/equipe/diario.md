@@ -13,6 +13,21 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 03/11/2026 · Hugo: ponto quente em bolinha e partes do para-raio
+
+- Feito: pedido do Hugo. (1) No combinado para-raios + pontos quentes, ponto quente que cai dentro de uma peça sai
+  (`pontos_fora_das_pecas()` em `nucleo/detectores/__init__.py`): o ponto mais quente do para-raio é o do próprio
+  modelo. (2) `organizar_para_raios()`: um para-raio por grupo (repetido sai), partes cortadas na caixa dele, uma de
+  cada tipo, e aletas entre o fim do terminal superior e o começo do inferior (antes as caixas se cobriam e mediam o
+  mesmo pixel). As partes levam o número do para-raio ("Terminal Superior 2" é do "Para-raio 2") e o campo `pai`.
+  (3) Análise e Captura › Vídeo: ponto quente é bolinha na cor da severidade no pixel mais quente, não caixa; as
+  partes têm linha tracejada fina e vêm recuadas logo abaixo do para-raio na lista (`regioesOrdenadas`).
+- Para o outro: `Deteccao` ganhou `grupo` (opcional) e a região ganhou `pai` (guardado nas edições). Inspeções
+  antigas continuam com as caixas de antes até a detecção ser refeita. A medição com retângulo foi começada e
+  desfeita a pedido do Hugo: a tela Medição continua igual ao `477394d`.
+- Pendente (Hugo): refazer a detecção nas inspeções antigas ou não; dizer o que "não está carregando" (a Análise e a
+  Medição abriram normais no Pyron da porta 8765 em 03/11).
+
 ## 31/10/2026 · Codex · Upload de imagem
 
 - Feito: leitura do fluxo de imagem em `app/interface/js/medicao/medir.js` e `app/servidor.py`. Medição aceita JPEG, PNG, WebP e HEIC/HEIF pelo seletor, arrastar/soltar ou colar. A foto aparece localmente antes de ser guardada; falha no POST da galeria é capturada sem aviso, e o servidor rejeita fotos acima de 40 MB.
