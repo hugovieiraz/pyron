@@ -1,0 +1,154 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p3_table_os",
+  "position": {
+    "x": 20,
+    "y": 415,
+    "z": 600,
+    "height": 285,
+    "width": 1240,
+    "tabOrder": 600
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "ordem_servico"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.ordem_servico"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "status_manutencao"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.status_manutencao"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "subestacao_instalacao"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.subestacao_instalacao"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "equipamento"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.equipamento"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "peca_a_reparar_substituir"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.peca_a_reparar_substituir"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "t_max_detectada_c"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.t_max_detectada_c"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "pct_mta_atingido"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.pct_mta_atingido"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "data_limite"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.data_limite"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "dias_restantes_para_reparo"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.dias_restantes_para_reparo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "equipe_responsavel"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.equipe_responsavel"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

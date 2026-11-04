@@ -1,0 +1,154 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p4_table_roi",
+  "position": {
+    "x": 20,
+    "y": 415,
+    "z": 600,
+    "height": 285,
+    "width": 1240,
+    "tabOrder": 600
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "regiao_id"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.regiao_id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "instalacao"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.instalacao"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "equipamento"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.equipamento"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "regiao_nome"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.regiao_nome"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "classe_componente"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.classe_componente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "origem"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.origem"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "confianca"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.confianca"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "t_max"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.t_max"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "pct_mta"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.pct_mta"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "severidade"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.severidade"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

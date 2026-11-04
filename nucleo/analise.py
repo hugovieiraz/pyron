@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import asdict, dataclass
+from typing import Any
 
 import numpy as np
 
@@ -232,6 +233,200 @@ def _referencia_semelhantes(itens: list[dict]) -> float:
     return float(np.median(maximos)) if len(maximos) >= 3 else maximos[0]
 
 
+# ---------------------------------------------------------------- Pareamento Contextual Trifásico (UniVAD C³ + SAM-LAD)
+
+
+def calcular_afinidade_contextual(item_a: dict, item_b: dict) -> float:
+    """Calcula a afinidade contextual entre dois ativos segundo UniVAD (C³) e SAM-LAD (DCGA).
+
+    Combina:
+    1. Similaridade semântica/visual DINOv2 (embeddings ou distribuição de scores);
+    2. Consistência de escala geométrica (altura e largura das caixas/máscaras);
+    3. Alinhamento espacial de barramento/perspectiva (ordenada vertical similar).
+    """
+    ca = item_a.get("caixa") or [0.0, 0.0, 10.0, 10.0]
+    cb = item_b.get("caixa") or [0.0, 0.0, 10.0, 10.0]
+
+    wa = max(float(ca[2]) - float(ca[0]), 1.0)
+    ha = max(float(ca[3]) - float(ca[1]), 1.0)
+    wb = max(float(cb[2]) - float(cb[0]), 1.0)
+    hb = max(float(cb[3]) - float(cb[1]), 1.0)
+
+    yca = 0.5 * (float(ca[1]) + float(ca[3]))
+    ycb = 0.5 * (float(cb[1]) + float(cb[3]))
+
+    # 1. Similaridade visual / semântica
+    emb_a = item_a.get("embedding_dinov2")
+    emb_b = item_b.get("embedding_dinov2")
+    scores_a = (item_a.get("classificacao_dinov2") or {}).get("scores")
+    scores_b = (item_b.get("classificacao_dinov2") or {}).get("scores")
+
+    if emb_a is not None and emb_b is not None:
+        va = np.asarray(emb_a, dtype=np.float32).ravel()
+        vb = np.asarray(emb_b, dtype=np.float32).ravel()
+        na = max(float(np.linalg.norm(va)), 1e-12)
+        nb = max(float(np.linalg.norm(vb)), 1e-12)
+        sim_vis = float(np.clip(np.dot(va / na, vb / nb), 0.0, 1.0))
+    elif isinstance(scores_a, dict) and isinstance(scores_b, dict) and scores_a and scores_b:
+        chaves = sorted(set(scores_a) | set(scores_b))
+        va = np.array([float(scores_a.get(k, 0.0)) for k in chaves], dtype=np.float32)
+        vb = np.array([float(scores_b.get(k, 0.0)) for k in chaves], dtype=np.float32)
+        na = max(float(np.linalg.norm(va)), 1e-12)
+        nb = max(float(np.linalg.norm(vb)), 1e-12)
+        sim_vis = float(np.clip(np.dot(va / na, vb / nb), 0.0, 1.0))
+    else:
+        cls_a = item_a.get("classe")
+        cls_b = item_b.get("classe")
+        sim_vis = 1.0 if (cls_a and cls_a == cls_b and cls_a != "ponto_quente") else 0.0
+
+    # 2. Consistência de escala (altura e largura)
+    sim_h = min(ha, hb) / max(ha, hb)
+    sim_w = min(wa, wb) / max(wa, wb)
+    sim_escala = 0.65 * sim_h + 0.35 * sim_w
+
+    # 3. Alinhamento espacial (componentes trifásicos costumam estar na mesma bancada/altura)
+    desvio_y = abs(yca - ycb) / max(ha, hb, 10.0)
+    sim_espacial = math.exp(-desvio_y / 1.5)
+
+    afinidade = 0.50 * sim_vis + 0.30 * sim_escala + 0.20 * sim_espacial
+    return float(np.clip(afinidade, 0.0, 1.0))
+
+
+def agrupar_homologos_trifasicos(
+    itens: list[dict],
+    limiar_afinidade: float = 0.68,
+) -> list[dict[str, Any]]:
+    """Agrupa ativos homólogos (ex.: Fases A, B e C) por grafo de afinidade contextual (UniVAD C³ / SAM-LAD).
+
+    Para cada grupo homólogo formado:
+    - Ordena os ativos espacialmente da esquerda para a direita (Fase A -> B -> C);
+    - Elege automaticamente o componente homólogo mais frio como referência saudável (T_min_homologo)
+      e calcula também a mediana normativa (T_ref_mediana);
+    - Calcula o score de anomalia lógica térmica/estrutural (SAM-LAD) de cada fase.
+    """
+    validos = [
+        it for it in itens
+        if it.get("medida") and it.get("classe") not in (None, "", "ponto_quente")
+    ]
+    n = len(validos)
+    if n < 2:
+        return []
+
+    visitados = [False] * n
+    grupos_brutos: list[list[dict]] = []
+
+    for i in range(n):
+        if visitados[i]:
+            continue
+        cls_i = validos[i].get("classe")
+        tem_dino_i = bool(validos[i].get("embedding_dinov2") or validos[i].get("classificacao_dinov2"))
+        # Regiões genéricas "componente" sem DINOv2 não são agrupadas às cegas
+        if cls_i == "componente" and not tem_dino_i:
+            continue
+
+        grupo_atual = [validos[i]]
+        visitados[i] = True
+
+        for j in range(i + 1, n):
+            if visitados[j]:
+                continue
+            cls_j = validos[j].get("classe")
+            tem_dino_j = bool(validos[j].get("embedding_dinov2") or validos[j].get("classificacao_dinov2"))
+            if cls_j == "componente" and not tem_dino_j:
+                continue
+
+            mesma_classe_nomeada = (
+                cls_i == cls_j and cls_i not in ("componente", "equipamento")
+            )
+            afinidade = calcular_afinidade_contextual(validos[i], validos[j])
+            if mesma_classe_nomeada or afinidade >= limiar_afinidade:
+                grupo_atual.append(validos[j])
+                visitados[j] = True
+
+        if len(grupo_atual) >= 2:
+            grupos_brutos.append(grupo_atual)
+
+    saida_grupos: list[dict[str, Any]] = []
+    rotulos_fases_trio = ("A", "B", "C")
+
+    for idx_g, g in enumerate(grupos_brutos, start=1):
+        # Ordena da esquerda para a direita pela coordenada X central
+        g_ordenado = sorted(
+            g,
+            key=lambda item: 0.5 * (float(item["caixa"][0]) + float(item["caixa"][2])),
+        )
+        # Calcula afinidade média intra-grupo
+        pares_af = []
+        for a_idx in range(len(g_ordenado)):
+            for b_idx in range(a_idx + 1, len(g_ordenado)):
+                pares_af.append(calcular_afinidade_contextual(g_ordenado[a_idx], g_ordenado[b_idx]))
+        afinidade_media = float(np.mean(pares_af)) if pares_af else 1.0
+
+        mais_frio = min(g_ordenado, key=lambda item: float(item["medida"]["t_max"]))
+        t_frio = float(mais_frio["medida"]["t_max"])
+        t_mediana = _referencia_semelhantes(g_ordenado)
+        t_quente = max(float(item["medida"]["t_max"]) for item in g_ordenado)
+        amplitude = round(t_quente - t_frio, 2)
+
+        classe_grupo = g_ordenado[0].get("classe") or "componente"
+        id_grupo = f"homologo_{classe_grupo}_{idx_g}"
+
+        membros_resumo = []
+        for pos, item in enumerate(g_ordenado):
+            if len(g_ordenado) == 3:
+                fase = rotulos_fases_trio[pos]
+            else:
+                fase = str(pos + 1)
+
+            t_item = float(item["medida"]["t_max"])
+            dt_frio = round(max(t_item - t_frio, 0.0), 2)
+            dt_mediana = round(max(t_item - t_mediana, 0.0), 2)
+            # Score de anomalia lógica SAM-LAD (normalizado em [0, 1] para desvios até 25 °C)
+            score_logico = round(float(1.0 - math.exp(-dt_frio / 12.0)), 4)
+
+            info_membro = {
+                "grupo_id": id_grupo,
+                "fase_estimada": fase,
+                "referencia_fria_id": mais_frio.get("id") or mais_frio.get("nome"),
+                "referencia_fria_nome": mais_frio.get("nome") or mais_frio.get("classe"),
+                "t_ref_fria_c": round(t_frio, 2),
+                "t_ref_mediana_c": round(t_mediana, 2),
+                "dt_contra_fria_c": dt_frio,
+                "dt_contra_mediana_c": dt_mediana,
+                "afinidade_contextual": round(afinidade_media, 4),
+                "score_anomalia_logica": score_logico,
+            }
+            item["pareamento_homologo"] = info_membro
+            membros_resumo.append({
+                "id": item.get("id"),
+                "nome": item.get("nome") or item.get("classe"),
+                "classe": item.get("classe"),
+                "fase_estimada": fase,
+                "t_max": round(t_item, 2),
+                "dt_contra_fria_c": dt_frio,
+                "dt_contra_mediana_c": dt_mediana,
+                "score_anomalia_logica": score_logico,
+            })
+
+        saida_grupos.append({
+            "grupo_id": id_grupo,
+            "classe": classe_grupo,
+            "total_homologos": len(g_ordenado),
+            "trifasico": len(g_ordenado) == 3,
+            "afinidade_contextual": round(afinidade_media, 4),
+            "referencia_fria": {
+                "id": mais_frio.get("id"),
+                "nome": mais_frio.get("nome") or mais_frio.get("classe"),
+                "t_max": round(t_frio, 2),
+            },
+            "t_ref_mediana_c": round(t_mediana, 2),
+            "amplitude_termica_c": amplitude,
+            "membros": membros_resumo,
+        })
+
+    return saida_grupos
+
+
 # ---------------------------------------------------------------- componentes × pontos quentes
 
 PONTO_QUENTE = "ponto_quente"
@@ -356,10 +551,17 @@ def analisar_regioes(
         item["entorno_c"] = temperatura_entorno(temperatura, r["caixa"], outras=outras, objetos=objetos) if m else None
         saida.append(item)
 
+    # Pareamento contextual trifásico (UniVAD C³ + SAM-LAD)
+    pareamento_trifasico = agrupar_homologos_trifasicos(saida)
+
     grupos: dict[str, list[dict]] = {}
     for item in saida:
         if item["medida"] and item.get("classe") not in (None, "", "ponto_quente", "componente"):
             grupos.setdefault(item["classe"], []).append(item)
+        elif item["medida"] and item.get("classe") == "componente" and item.get("pareamento_homologo"):
+            # Quando componentes genéricos foram agrupados por afinidade visual DINOv2 (UniVAD C³)
+            gid = item["pareamento_homologo"]["grupo_id"]
+            grupos.setdefault(gid, []).append(item)
 
     for item in saida:
         m = item["medida"]
@@ -376,8 +578,11 @@ def analisar_regioes(
         if item["entorno_c"] is not None:
             item["dt_entorno"] = m["t_max"] - item["entorno_c"]
 
-        # Relativa: contra o semelhante
-        grupo = grupos.get(item.get("classe"), [])
+        # Relativa: contra o semelhante (por classe ou por agrupamento homólogo C³)
+        chave_grupo = item.get("classe")
+        if chave_grupo == "componente" and item.get("pareamento_homologo"):
+            chave_grupo = item["pareamento_homologo"]["grupo_id"]
+        grupo = grupos.get(chave_grupo, [])
         if len(grupo) >= 2:
             item["dt_ref"], item["ref_tipo"] = m["t_max"] - _referencia_semelhantes(grupo), "semelhantes"
             item["dt_corrigido"] = max(item["dt_ref"], 0.0) * (1.0 if dieletrico else fator_carga)
@@ -480,6 +685,7 @@ def analisar_regioes(
     resumo = {
         "ponto_mais_quente": ponto_mais_quente,
         "comparacao_componentes": comparacao,
+        "pareamento_trifasico": pareamento_trifasico,
         "severidade": sev,
         "severidade_rotulo": NIVEIS[sev]["rotulo"],
         "mensagem": mensagem,
@@ -501,6 +707,7 @@ def _resumo_sem_temperatura(saida: list[dict], crit: dict, fator_carga: float) -
     return {
         "ponto_mais_quente": None,
         "comparacao_componentes": [],
+        "pareamento_trifasico": [],
         "severidade": "sem_medida",
         "severidade_rotulo": NIVEIS["sem_medida"]["rotulo"],
         "mensagem": (f"{len(saida)} {'componente identificado' if len(saida) == 1 else 'componentes identificados'}, sem temperatura."

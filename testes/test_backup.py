@@ -56,6 +56,36 @@ def test_backup_e_restauracao_de_ida_e_volta(cliente, tmp_path) -> None:
     assert len(list((tmp_path / "dados_app" / "backups").glob("antes_de_restaurar_*.zip"))) == 1
 
 
+def test_backup_preserva_cadastro_de_medidas_e_pasta_medicao(tmp_path) -> None:
+    from app import backup
+    from app.armazenamento import Armazenamento
+    from app.cadastro_medidas import Cadastro
+
+    pasta = tmp_path / "dados_app"
+    Armazenamento(pasta)
+    cad = Cadastro(pasta)
+    m = cad.propor("se-teste--tr-01", "Bucha A", "altura", 45.0, "referencia", "Caio Técnico")
+    cad.validar(m["id"], "Ana Engenheira", "CREA-PB 12345")
+    (pasta / "medicao").mkdir(parents=True)
+    (pasta / "medicao" / "registro.jsonl").write_text('{"id": "m1"}\n', encoding="utf-8")
+
+    pacote = backup.gerar(pasta)
+    nomes = zipfile.ZipFile(io.BytesIO(pacote)).namelist()
+    assert "cadastro_medidas.sqlite" in nomes
+    assert "medicao/registro.jsonl" in nomes
+
+    # altera o cadastro e apaga o registro depois do backup
+    cad.propor("se-teste--tr-01", "Bucha B", "altura", 99.0, "manual", "Caio Técnico")
+    (pasta / "medicao" / "registro.jsonl").write_text('{"id": "outro"}\n', encoding="utf-8")
+    assert len(cad.medidas("se-teste--tr-01")) == 2
+
+    backup.restaurar(pasta, pacote)
+    medidas_restauradas = Cadastro(pasta).medidas("se-teste--tr-01")
+    assert len(medidas_restauradas) == 1
+    assert medidas_restauradas[0]["componente"] == "Bucha A" and medidas_restauradas[0]["status"] == "validada"
+    assert (pasta / "medicao" / "registro.jsonl").read_text(encoding="utf-8") == '{"id": "m1"}\n'
+
+
 def test_restaurar_arquivo_errado_nao_mexe_em_nada(cliente) -> None:
     a = cliente.post("/api/analises", files={"arquivo": ("a.jpg", _termograma_flir(), "image/jpeg")}).json()
     assert cliente.post("/api/backup/restaurar", files={"arquivo": ("x.zip", b"isto nao e zip", "application/zip")}).status_code == 422
@@ -68,9 +98,6 @@ def test_restaurar_arquivo_errado_nao_mexe_em_nada(cliente) -> None:
 
 
 def test_backup_deixa_de_fora_o_perfil_do_navegador_e_o_certificado(tmp_path) -> None:
-    import io
-    import zipfile
-
     from app import backup
 
     (tmp_path / "imagens").mkdir()

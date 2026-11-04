@@ -16,6 +16,7 @@ Dependências opcionais: ``pip install -e .[segmentacao]`` (ver ``pyproject.toml
 
 from __future__ import annotations
 
+import inspect
 import json
 import logging
 import time
@@ -265,6 +266,68 @@ class SAM2Segmentor:
             tempo_ms=round(tempo_ms, 1),
             **memoria_gpu(self.dispositivo),
         )
+        return Segmentacao(mascara=mascara, score=float(scores[melhor]), caixa=caixa, tempo_ms=tempo_ms)
+
+    def segmentar_com_pontos(
+        self,
+        pontos_xy: Sequence[Sequence[float]] | np.ndarray,
+        rotulos: Sequence[int] | np.ndarray,
+        bbox_xyxy: Sequence[float] | np.ndarray | None = None,
+    ) -> Segmentacao:
+        """Segmenta sub-região ou hotspot usando prompts de pontos positivos (1) e negativos (0) (DefectSAM).
+
+        Se o preditor injetado não suportar ``point_coords`` (ex.: PreditorFalso de testes legados),
+        realiza fallback seguro para a caixa delimitadora.
+        """
+        if self._forma_quadro is None:
+            raise RuntimeError("chame set_frame(imagem) antes de pedir uma máscara")
+        altura, largura = self._forma_quadro
+        coords = np.asarray(pontos_xy, dtype=np.float32).reshape(-1, 2)
+        labels = np.asarray(rotulos, dtype=np.int32).reshape(-1)
+        if coords.shape[0] == 0 or coords.shape[0] != labels.shape[0]:
+            raise ValueError("pontos_xy e rotulos devem possuir o mesmo número de elementos (> 0)")
+
+        if bbox_xyxy is not None:
+            caixa = validar_caixa(bbox_xyxy, largura, altura)
+            box_arr = np.asarray(caixa, dtype=np.float32)
+        else:
+            # Cria caixa local ao redor dos pontos positivos para registrar metadado consistente
+            pos = coords[labels > 0] if np.any(labels > 0) else coords
+            x0 = float(np.clip(pos[:, 0].min() - 16.0, 0.0, largura - 2.0))
+            y0 = float(np.clip(pos[:, 1].min() - 16.0, 0.0, altura - 2.0))
+            x1 = float(np.clip(pos[:, 0].max() + 16.0, x0 + 1.0, largura))
+            y1 = float(np.clip(pos[:, 1].max() + 16.0, y0 + 1.0, altura))
+            caixa = (x0, y0, x1, y1)
+            box_arr = None
+
+        inicio = time.perf_counter()
+        assinatura = inspect.signature(self.preditor.predict)
+        suporta_pontos = "point_coords" in assinatura.parameters or any(
+            p.kind == inspect.Parameter.VAR_KEYWORD for p in assinatura.parameters.values()
+        )
+
+        with self._contexto():
+            if suporta_pontos:
+                kwargs = {
+                    "point_coords": coords,
+                    "point_labels": labels,
+                    "multimask_output": self.multimask,
+                }
+                if box_arr is not None and "box" in assinatura.parameters:
+                    kwargs["box"] = box_arr
+                mascaras, scores, _ = self.preditor.predict(**kwargs)
+            else:
+                mascaras, scores, _ = self.preditor.predict(
+                    box=np.asarray(caixa, dtype=np.float32),
+                    multimask_output=self.multimask,
+                )
+
+        self._sincronizar()
+        tempo_ms = (time.perf_counter() - inicio) * 1000
+        mascaras = np.asarray(mascaras).reshape(-1, altura, largura)
+        scores = np.asarray(scores, dtype=np.float32).reshape(-1)
+        melhor = int(np.argmax(scores))
+        mascara = (mascaras[melhor] > 0).astype(np.uint8)
         return Segmentacao(mascara=mascara, score=float(scores[melhor]), caixa=caixa, tempo_ms=tempo_ms)
 
     def predict_mask_from_bbox(self, bbox_xyxy: list | tuple | np.ndarray) -> np.ndarray:

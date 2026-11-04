@@ -1,0 +1,87 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "chart_sub_bar",
+  "position": {
+    "x": 460,
+    "y": 230,
+    "z": 1100,
+    "height": 250,
+    "width": 800,
+    "tabOrder": 1100
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Subestacoes"
+                    }
+                  },
+                  "Property": "instalacao"
+                }
+              },
+              "queryRef": "Dim_Subestacoes.instalacao",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total Inspeções"
+                }
+              },
+              "queryRef": "_Medidas.Total Inspeções"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "7c9e9b5413751406e075",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dim_Subestacoes"
+              }
+            },
+            "Property": "instalacao"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "6389b906e489c33e7d96",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Medidas"
+              }
+            },
+            "Property": "Total Inspeções"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

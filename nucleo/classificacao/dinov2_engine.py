@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import logging
 import threading
+from pathlib import Path
 from typing import Any, Sequence
 
 import cv2
@@ -35,6 +36,8 @@ IMAGENET_DESVIO = (0.229, 0.224, 0.225)
 COR_FUNDO_NEUTRO = (128, 128, 128)
 TEMPERATURA_SOFTMAX_PADRAO = 0.07
 CONFIANCA_MINIMA_AJUSTE = 0.60
+LIMIAR_CICLICO_NOCTIS_PADRAO = 0.65
+PASTA_PROTOTIPOS_PADRAO = Path(__file__).resolve().parents[2] / "modelos" / "dinov2" / "prototipos_subestacao.npz"
 
 CLASSES_PYRON: tuple[str, ...] = (
     "isolador",
@@ -145,6 +148,97 @@ def normalizar_tensor_imagenet(imagem_rgb: np.ndarray, dispositivo: torch.device
     return (tensor - media) / desvio
 
 
+def _normalizar_linhas_l2(matriz: np.ndarray) -> np.ndarray:
+    """Garante vetores L2-normalizados ao longo da última dimensão."""
+    arr = np.asarray(matriz, dtype=np.float32)
+    if arr.ndim == 1:
+        arr = arr[None, :]
+    normas = np.linalg.norm(arr, axis=-1, keepdims=True)
+    return arr / np.maximum(normas, 1e-12)
+
+
+def similaridade_noctis(
+    patches_consulta: np.ndarray,
+    patches_prototipo: np.ndarray,
+    limiar_ciclico: float = LIMIAR_CICLICO_NOCTIS_PADRAO,
+) -> float:
+    """Calcula similaridade entre bancos de patches via Cyclic Thresholding (NOCTIS, Gandyra et al. 2025).
+
+    Em estruturas repetitivas (aletas de buchas, isoladores e para-raios), o casamento simples (max-pooling)
+    colapsa múltiplos patches para o mesmo disco. O Cyclic Thresholding (CT) exige reciprocidade cíclica
+    (i -> j* -> i*) ou proximidade espacial recíproca combinada ao limiar mínimo de similaridade.
+    """
+    q = _normalizar_linhas_l2(patches_consulta)
+    p = _normalizar_linhas_l2(patches_prototipo)
+    if q.size == 0 or p.size == 0:
+        return 0.0
+
+    # Matriz de similaridade cruzada (N_q x N_p)
+    sim_matrix = np.matmul(q, p.T)
+    nq = sim_matrix.shape[0]
+
+    # Ida: para cada patch de consulta i, melhor patch de protótipo j*
+    j_melhor = np.argmax(sim_matrix, axis=1)
+    sim_ida = sim_matrix[np.arange(nq), j_melhor]
+
+    # Volta (ciclo): para cada j*, qual o melhor patch de consulta i*
+    i_melhor_por_p = np.argmax(sim_matrix, axis=0)
+    i_retorno = i_melhor_por_p[j_melhor]
+
+    # Distância cíclica normalizada no espaço de índices dos patches
+    if nq > 1:
+        dist_ciclica = np.abs(np.arange(nq, dtype=np.float32) - i_retorno.astype(np.float32)) / float(nq - 1)
+    else:
+        dist_ciclica = np.zeros(nq, dtype=np.float32)
+
+    tolerancia_ciclo = max(1.0 - float(limiar_ciclico), 0.10)
+    consistentes = (dist_ciclica <= tolerancia_ciclo) & (sim_ida >= float(limiar_ciclico))
+
+    if np.any(consistentes):
+        pesos_ciclo = 1.0 - 0.5 * (dist_ciclica[consistentes] / max(tolerancia_ciclo, 1e-6))
+        return float(np.clip(np.average(sim_ida[consistentes], weights=pesos_ciclo), -1.0, 1.0))
+
+    # Fallback suave: média dos top-25% patches mais similares ponderada pela consistência cíclica
+    k_top = max(1, nq // 4)
+    idx_top = np.argsort(sim_ida)[-k_top:]
+    fator_ciclo = np.clip(1.0 - 0.35 * dist_ciclica[idx_top], 0.5, 1.0)
+    return float(np.clip(np.mean(sim_ida[idx_top] * fator_ciclo), -1.0, 1.0))
+
+
+def calcular_anomalia_patches(
+    patches_consulta: np.ndarray,
+    patches_referencia: np.ndarray,
+    k: int = 3,
+) -> dict[str, Any]:
+    """Calcula anomalia estrutural zero/few-shot baseada em k-NN de patches (AnomalyDINO, 2025).
+
+    Para cada patch da consulta, mede a distância de cosseno (1 - similaridade) para os k patches
+    mais próximos na galeria de referência saudável.
+    """
+    q = _normalizar_linhas_l2(patches_consulta)
+    ref = _normalizar_linhas_l2(patches_referencia)
+    if q.size == 0 or ref.size == 0:
+        return {"score_anomalia": 0.0, "mapa_anomalia": [], "patch_mais_anomalo": 0}
+
+    sim_matrix = np.matmul(q, ref.T)
+    k_efetivo = max(1, min(int(k), ref.shape[0]))
+    # Maiores similaridades por patch de consulta
+    part = np.sort(sim_matrix, axis=1)[:, -k_efetivo:]
+    sim_knn = np.mean(part, axis=1)
+    distancias = np.clip(1.0 - sim_knn, 0.0, 1.0)  # distância de cosseno normalizada em [0, 1]
+
+    # Score global AnomalyDINO: média do top-2% (mínimo 1 patch) para capturar defeitos pontuais
+    n_cauda = max(1, int(distancias.size * 0.02))
+    score_global = float(np.mean(np.sort(distancias)[-n_cauda:]))
+    patch_max = int(np.argmax(distancias))
+
+    return {
+        "score_anomalia": round(score_global, 4),
+        "mapa_anomalia": [round(float(v), 4) for v in distancias],
+        "patch_mais_anomalo": patch_max,
+    }
+
+
 def gerar_padrao_sintetico(classe: str) -> np.ndarray:
     """Gera padrão visual sintético determinístico representativo da classe para a galeria de protótipos."""
     tam = TAMANHO_MINIMO
@@ -231,6 +325,8 @@ class DINOv2Classifier:
     """Classificador de alta precisão baseado em embeddings DINOv2 e galeria prototípica.
 
     Implementado sob padrão Singleton thread-safe com lazy loading dos pesos da rede.
+    Suporta tokens globais [CLS] e tokens espaciais de patches para correspondência NOCTIS
+    e detecção de anomalias estruturais AnomalyDINO.
     """
 
     _instancia: DINOv2Classifier | None = None
@@ -262,12 +358,18 @@ class DINOv2Classifier:
         dispositivo: str | torch.device | None = None,
         prototipos: dict[str, np.ndarray] | None = None,
         temperatura: float = TEMPERATURA_SOFTMAX_PADRAO,
+        prototipos_patches: dict[str, np.ndarray] | None = None,
     ) -> None:
         self.dispositivo = escolher_dispositivo(dispositivo)
         self.temperatura = float(temperatura)
         self._trava_operacao = threading.Lock()
         self._modelo = modelo
         self._prototipos: dict[str, np.ndarray] = dict(prototipos) if prototipos is not None else {}
+        self._prototipos_patches: dict[str, np.ndarray] = (
+            {k: _normalizar_linhas_l2(v) for k, v in prototipos_patches.items()}
+            if prototipos_patches is not None
+            else {}
+        )
 
         if self._modelo is not None and not self._prototipos:
             self._inicializar_prototipos()
@@ -297,28 +399,60 @@ class DINOv2Classifier:
             return self._modelo
 
     def _inicializar_prototipos(self) -> None:
-        """Gera a galeria inicial de vetores representativos para as classes elétricas."""
+        """Carrega galeria persistida em .npz se existir; caso contrário, gera protótipos base."""
+        if PASTA_PROTOTIPOS_PADRAO.is_file():
+            if self.carregar_galeria(PASTA_PROTOTIPOS_PADRAO):
+                return
+
         for classe in CLASSES_PYRON:
             padrao = gerar_padrao_sintetico(classe)
-            emb = self._inferir_embedding_bruto(padrao)
-            self._prototipos[classe] = emb
+            emb_cls, emb_patches, _ = self._inferir_features_brutas(padrao)
+            self._prototipos[classe] = emb_cls
+            self._prototipos_patches[classe] = emb_patches
 
-    def _inferir_embedding_bruto(self, imagem_rgb: np.ndarray) -> np.ndarray:
-        """Processa imagem pré-formatada pelo ViT e extrai embedding com L2 norm."""
+    def _inferir_features_brutas(self, imagem_rgb: np.ndarray) -> tuple[np.ndarray, np.ndarray, tuple[int, int]]:
+        """Extrai simultaneamente o token global [CLS] e os patch tokens densos L2-normalizados."""
         ajustada = ajustar_resolucao_vit(imagem_rgb)
+        h_aj, w_aj = ajustada.shape[:2]
+        grid_size = (h_aj // TAMANHO_PATCH, w_aj // TAMANHO_PATCH)
         tensor = normalizar_tensor_imagenet(ajustada, self.dispositivo)
         modelo = self._modelo if self._modelo is not None else self._garantir_modelo()
 
         with torch.no_grad():
+            if hasattr(modelo, "forward_features") and callable(getattr(modelo, "forward_features")):
+                feats = modelo.forward_features(tensor)
+                if isinstance(feats, dict) and "x_norm_clstoken" in feats and "x_norm_patchtokens" in feats:
+                    cls_t = feats["x_norm_clstoken"]
+                    patches_t = feats["x_norm_patchtokens"]
+                    cls_norm = torch.norm(cls_t, p=2, dim=-1, keepdim=True)
+                    cls_l2 = (cls_t / torch.clamp(cls_norm, min=1e-12)).squeeze(0).detach().cpu().numpy().astype(np.float32)
+
+                    p_norm = torch.norm(patches_t, p=2, dim=-1, keepdim=True)
+                    patches_l2 = (patches_t / torch.clamp(p_norm, min=1e-12)).squeeze(0).detach().cpu().numpy().astype(np.float32)
+                    return cls_l2, patches_l2, grid_size
+
             saida = modelo(tensor)
             if hasattr(saida, "shape") and len(saida.shape) > 2:
-                saida = saida[:, 0]
-            # Normalização Euclidiana (L2 norm)
-            norm = torch.norm(saida, p=2, dim=-1, keepdim=True)
-            saida_l2 = saida / torch.clamp(norm, min=1e-12)
-            emb_np = saida_l2.squeeze(0).detach().cpu().numpy().astype(np.float32)
+                cls_t = saida[:, 0]
+                patches_t = saida[:, 1:] if saida.shape[1] > 1 else saida
+            else:
+                cls_t = saida
+                # Fallback determinístico para mocks simples que só retornam [B, D]
+                num_patches = max(1, grid_size[0] * grid_size[1])
+                patches_t = cls_t.unsqueeze(1).repeat(1, min(num_patches, 16), 1)
 
-        return emb_np
+            norm = torch.norm(cls_t, p=2, dim=-1, keepdim=True)
+            cls_l2 = (cls_t / torch.clamp(norm, min=1e-12)).squeeze(0).detach().cpu().numpy().astype(np.float32)
+
+            p_norm = torch.norm(patches_t, p=2, dim=-1, keepdim=True)
+            patches_l2 = (patches_t / torch.clamp(p_norm, min=1e-12)).squeeze(0).detach().cpu().numpy().astype(np.float32)
+
+        return cls_l2, patches_l2, grid_size
+
+    def _inferir_embedding_bruto(self, imagem_rgb: np.ndarray) -> np.ndarray:
+        """Processa imagem pré-formatada pelo ViT e extrai embedding com L2 norm."""
+        cls_l2, _, _ = self._inferir_features_brutas(imagem_rgb)
+        return cls_l2
 
     def extrair_embedding(
         self,
@@ -331,7 +465,29 @@ class DINOv2Classifier:
         recorte = recortar_e_mascarar(imagem_rgb, bbox=bbox, mascara=mascara)
         return self._inferir_embedding_bruto(recorte)
 
-    def registrar_prototipo(self, classe: str, embedding: np.ndarray, peso: float = 1.0) -> None:
+    def extrair_features_completas(
+        self,
+        imagem_rgb: np.ndarray,
+        bbox: Sequence[float] | None = None,
+        mascara: np.ndarray | None = None,
+    ) -> dict[str, Any]:
+        """Extrai o token [CLS], os patch tokens espaciais e a grade ViT (H_p, W_p)."""
+        self._garantir_modelo()
+        recorte = recortar_e_mascarar(imagem_rgb, bbox=bbox, mascara=mascara)
+        cls_l2, patches_l2, grid_size = self._inferir_features_brutas(recorte)
+        return {
+            "cls": cls_l2,
+            "patches": patches_l2,
+            "grid_size": grid_size,
+        }
+
+    def registrar_prototipo(
+        self,
+        classe: str,
+        embedding: np.ndarray,
+        peso: float = 1.0,
+        patches: np.ndarray | None = None,
+    ) -> None:
         """Atualiza a galeria de protótipos incorporando novo vetor por média móvel L2-normalizada."""
         vetor = np.asarray(embedding, dtype=np.float32).ravel()
         norm = np.linalg.norm(vetor)
@@ -346,31 +502,134 @@ class DINOv2Classifier:
             else:
                 self._prototipos[classe] = vetor
 
+            if patches is not None:
+                self._atualizar_banco_patches_interno(classe, patches)
+
+    def _atualizar_banco_patches_interno(self, classe: str, patches: np.ndarray, max_patches: int = 256) -> None:
+        p_norm = _normalizar_linhas_l2(patches)
+        if classe in self._prototipos_patches and self._prototipos_patches[classe].size > 0:
+            combinado = np.vstack([self._prototipos_patches[classe], p_norm])
+            if combinado.shape[0] > max_patches:
+                passo = max(1, combinado.shape[0] // max_patches)
+                combinado = combinado[::passo][:max_patches]
+            self._prototipos_patches[classe] = combinado
+        else:
+            if p_norm.shape[0] > max_patches:
+                passo = max(1, p_norm.shape[0] // max_patches)
+                p_norm = p_norm[::passo][:max_patches]
+            self._prototipos_patches[classe] = p_norm
+
+    def salvar_galeria(self, caminho: Path | str | None = None) -> Path:
+        """Salva os protótipos [CLS] e bancos de patches em arquivo .npz comprimido."""
+        self._garantir_modelo()
+        destino = Path(caminho) if caminho is not None else PASTA_PROTOTIPOS_PADRAO
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        pacote: dict[str, np.ndarray] = {}
+        with self._trava_operacao:
+            for c, emb in self._prototipos.items():
+                pacote[f"cls_{c}"] = np.asarray(emb, dtype=np.float32)
+            for c, p in self._prototipos_patches.items():
+                pacote[f"patches_{c}"] = np.asarray(p, dtype=np.float32)
+        np.savez_compressed(destino, **pacote)
+        return destino
+
+    def carregar_galeria(self, caminho: Path | str | None = None) -> bool:
+        """Carrega protótipos reais persistidos em .npz."""
+        origem = Path(caminho) if caminho is not None else PASTA_PROTOTIPOS_PADRAO
+        if not origem.is_file():
+            return False
+        try:
+            with np.load(origem) as dados:
+                novos_cls: dict[str, np.ndarray] = {}
+                novos_patches: dict[str, np.ndarray] = {}
+                for chave in dados.files:
+                    if chave.startswith("cls_"):
+                        novos_cls[chave[4:]] = np.asarray(dados[chave], dtype=np.float32)
+                    elif chave.startswith("patches_"):
+                        novos_patches[chave[8:]] = _normalizar_linhas_l2(dados[chave])
+            if not novos_cls:
+                return False
+            with self._trava_operacao:
+                self._prototipos.update(novos_cls)
+                self._prototipos_patches.update(novos_patches)
+            return True
+        except Exception as erro:
+            log.warning("Não foi possível carregar galeria DINOv2 de %s: %s", origem, erro)
+            return False
+
     @property
     def prototipos(self) -> dict[str, np.ndarray]:
         """Dicionário imutável de leitura dos protótipos cadastrados."""
         self._garantir_modelo()
         return dict(self._prototipos)
 
+    @property
+    def prototipos_patches(self) -> dict[str, np.ndarray]:
+        """Dicionário de bancos de patch tokens por classe."""
+        self._garantir_modelo()
+        return dict(self._prototipos_patches)
+
+    def avaliar_anomalia_estrutural(
+        self,
+        imagem_rgb: np.ndarray,
+        classe: str | None = None,
+        bbox: Sequence[float] | None = None,
+        mascara: np.ndarray | None = None,
+        k: int = 3,
+    ) -> dict[str, Any]:
+        """Avalia anomalia estrutural na peça via k-NN de patch tokens (AnomalyDINO)."""
+        feats = self.extrair_features_completas(imagem_rgb, bbox=bbox, mascara=mascara)
+        classe_alvo = classe
+        if not classe_alvo:
+            res_cls = self.classificar(imagem_rgb, bbox=bbox, mascara=mascara)
+            classe_alvo = res_cls["classe"]
+
+        ref_patches = self._prototipos_patches.get(classe_alvo)
+        if ref_patches is None or ref_patches.size == 0:
+            proto_cls = self._prototipos.get(classe_alvo)
+            ref_patches = proto_cls[None, :] if proto_cls is not None else feats["patches"]
+
+        resultado = calcular_anomalia_patches(feats["patches"], ref_patches, k=k)
+        resultado["classe_referencia"] = classe_alvo
+        resultado["grid_size"] = list(feats["grid_size"])
+        return resultado
+
     def classificar(
         self,
         imagem_rgb: np.ndarray,
         bbox: Sequence[float] | None = None,
         mascara: np.ndarray | None = None,
+        usar_noctis: bool = False,
+        peso_noctis: float = 0.30,
+        limiar_ciclico: float = LIMIAR_CICLICO_NOCTIS_PADRAO,
     ) -> dict:
         """Classifica a região calculando similaridade de cosseno contra os protótipos e softmax calibrado.
+
+        Quando ``usar_noctis=True`` e há banco de patches para as classes, combina a similaridade
+        global [CLS] com a similaridade de patches filtrada por Cyclic Thresholding (NOCTIS).
 
         Retorna:
             dict com formato {"classe": str, "confianca": float, "nome": str, "scores": dict[str, float]}
         """
         self._garantir_modelo()
-        embedding = self.extrair_embedding(imagem_rgb, bbox=bbox, mascara=mascara)
+        recorte = recortar_e_mascarar(imagem_rgb, bbox=bbox, mascara=mascara)
+        embedding, patches_consulta, _ = self._inferir_features_brutas(recorte)
 
-        # Similaridade de cosseno entre vetores L2-normalizados (produto escalar)
+        peso_ct = float(np.clip(peso_noctis, 0.0, 1.0)) if usar_noctis else 0.0
+
+        # Similaridade de cosseno entre vetores L2-normalizados (+ NOCTIS opcional)
         scores_cosseno: dict[str, float] = {}
         for classe, proto in self._prototipos.items():
-            sim = float(np.dot(embedding, proto))
-            scores_cosseno[classe] = sim
+            sim_cls = float(np.dot(embedding, proto))
+            if peso_ct > 0.0 and classe in self._prototipos_patches:
+                sim_ct = similaridade_noctis(
+                    patches_consulta,
+                    self._prototipos_patches[classe],
+                    limiar_ciclico=limiar_ciclico,
+                )
+                scores_cosseno[classe] = (1.0 - peso_ct) * sim_cls + peso_ct * sim_ct
+            else:
+                scores_cosseno[classe] = sim_cls
 
         classes = list(scores_cosseno.keys())
         sims = np.array([scores_cosseno[c] for c in classes], dtype=np.float64)

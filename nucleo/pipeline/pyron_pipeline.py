@@ -17,7 +17,7 @@ from __future__ import annotations
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Sequence
+from typing import Any, Sequence
 
 import numpy as np
 
@@ -89,6 +89,121 @@ def estatisticas_termicas(matriz_termica: np.ndarray, mascara: np.ndarray) -> Es
         y_max=int(linhas[quente]),
         pixels=int(active_thermal_data.size),
     )
+
+
+def isolar_hotspot_defectsam(
+    matriz_termica: np.ndarray,
+    mascara_ativo: np.ndarray,
+    segmentador: SAM2Segmentor | None = None,
+    metric_ratio_m_por_px: float | None = None,
+    caixa_rgb: Sequence[float] | None = None,
+    forma_rgb: tuple[int, int] | None = None,
+) -> dict[str, Any] | None:
+    """Isola a sub-máscara exata do hotspot térmico dentro do ativo (DefectSAM).
+
+    Combina prompts espaciais de pontos no SAM 2 (pico térmico como positivo label=1 e ponto frio do
+    corpo como negativo label=0) com validação radiométrica de núcleo quente, estimando a área real
+    da anomalia em pixels e em cm².
+    """
+    temperatura = np.asarray(matriz_termica, dtype=np.float32)
+    if temperatura.ndim != 2:
+        return None
+
+    h_mat, w_mat = temperatura.shape
+    mask_mat = ajustar_mascara(mascara_ativo, (h_mat, w_mat))
+    dentro = (mask_mat == 1) & np.isfinite(temperatura)
+    if not dentro.any():
+        return None
+
+    valores = temperatura[dentro]
+    linhas, colunas = np.nonzero(dentro)
+    idx_quente = int(np.argmax(valores))
+    idx_frio = int(np.argmin(valores))
+
+    t_max = float(valores[idx_quente])
+    t_med = float(valores.mean())
+    t_min = float(valores[idx_frio])
+    t_std = float(valores.std())
+
+    x_quente, y_quente = int(colunas[idx_quente]), int(linhas[idx_quente])
+    x_frio, y_frio = int(colunas[idx_frio]), int(linhas[idx_frio])
+
+    # Núcleo radiométrico adaptativo dentro do corpo da peça
+    amplitude = max(t_max - t_med, 0.0)
+    if amplitude <= 0.2:
+        # Corpo termicamente uniforme: apenas o pixel de pico
+        nucleo_termico = np.zeros((h_mat, w_mat), dtype=np.uint8)
+        nucleo_termico[y_quente, x_quente] = 1
+    else:
+        limiar_quente = t_med + max(0.45 * amplitude, 1.2 * t_std)
+        limiar_quente = min(limiar_quente, t_max - 1e-4)
+        nucleo_termico = (dentro & (temperatura >= limiar_quente)).astype(np.uint8)
+
+    mascara_sam_mat = None
+    score_sam = 1.0
+    if segmentador is not None and getattr(segmentador, "_forma_quadro", None) is not None:
+        try:
+            h_rgb, w_rgb = forma_rgb or segmentador._forma_quadro
+            sx = w_rgb / max(w_mat, 1)
+            sy = h_rgb / max(h_mat, 1)
+            pontos = [
+                [float(x_quente * sx), float(y_quente * sy)],
+                [float(x_frio * sx), float(y_frio * sy)],
+            ]
+            rotulos = [1, 0]
+            seg_hs = segmentador.segmentar_com_pontos(pontos, rotulos, bbox_xyxy=caixa_rgb)
+            mascara_sam_mat = ajustar_mascara(seg_hs.mascara, (h_mat, w_mat))
+            score_sam = float(seg_hs.score)
+        except Exception:
+            mascara_sam_mat = None
+
+    if mascara_sam_mat is not None and np.any(mascara_sam_mat & nucleo_termico):
+        mascara_hotspot = (mascara_sam_mat & nucleo_termico & mask_mat).astype(np.uint8)
+    else:
+        mascara_hotspot = (nucleo_termico & mask_mat).astype(np.uint8)
+
+    if not np.any(mascara_hotspot):
+        mascara_hotspot[y_quente, x_quente] = 1
+
+    # Mantém a componente conexa que contém o pico térmico (x_quente, y_quente)
+    import cv2
+
+    num_labels, labels = cv2.connectedComponents(mascara_hotspot)
+    rotulo_pico = int(labels[y_quente, x_quente])
+    if rotulo_pico > 0:
+        mascara_hotspot = (labels == rotulo_pico).astype(np.uint8)
+
+    pixels_hs = int(mascara_hotspot.sum())
+    pixels_ativo = max(int(dentro.sum()), 1)
+    fracao = float(pixels_hs / pixels_ativo)
+    t_med_hs = float(temperatura[mascara_hotspot == 1].mean())
+
+    area_cm2 = None
+    if metric_ratio_m_por_px is not None and float(metric_ratio_m_por_px) > 0:
+        escala_cm = float(metric_ratio_m_por_px) * 100.0
+        area_cm2 = round(float(pixels_hs * (escala_cm**2)), 2)
+
+    ys_hs, xs_hs = np.nonzero(mascara_hotspot)
+    caixa_hotspot = [
+        int(xs_hs.min()),
+        int(ys_hs.min()),
+        int(xs_hs.max() + 1),
+        int(ys_hs.max() + 1),
+    ]
+
+    return {
+        "mascara_hotspot": mascara_hotspot,
+        "caixa_hotspot": caixa_hotspot,
+        "area_hotspot_px": pixels_hs,
+        "area_hotspot_cm2": area_cm2,
+        "fracao_area_ativo": round(fracao, 4),
+        "t_max_hotspot": round(t_max, 2),
+        "t_med_hotspot": round(t_med_hs, 2),
+        "elevacao_sobre_ativo_c": round(t_max - t_med, 2),
+        "x_max": x_quente,
+        "y_max": y_quente,
+        "score_defectsam": round(score_sam, 4),
+    }
 
 
 def exportar_mascara(mascara: np.ndarray, caminho: str | Path) -> Path:

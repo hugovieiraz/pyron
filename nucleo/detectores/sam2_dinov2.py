@@ -1,18 +1,19 @@
-"""Detector automático de ativos elétricos com modelos fundacionais (SAM 2 + DINOv2 + Criminisi).
+"""Detector automático de ativos elétricos com modelos fundacionais (Grounding DINO + SAM 2 + DINOv2 + Criminisi).
 
 Pipeline:
-1. SAM 2 (AutomaticMaskGenerator): descobre propostas de regiões e máscaras de ativos na cena.
-2. DINOv2 (ViT): classifica cada ativo (bucha, isolador, para-raio, transformador, conexão).
-3. Geometria Projetiva (Criminisi): calcula altura métrica H, largura média, diâmetro máx e área.
-4. Termografia Isolada: extrai Tmáx, Tmed e anomalias térmicas estritamente no corpo da peça.
+1. Grounding DINO (Open-Vocabulary) / SAM 2 (AutomaticMaskGenerator): descobre propostas de regiões e máscaras de ativos.
+2. DINOv2 (ViT) + NOCTIS (Cyclic Thresholding): classifica cada ativo com correspondência global e de patches.
+3. Geometria Projetiva (Criminisi / Telemetria) + D-NOCTIS: calcula altura H, diâmetro e pondera score geométrico 3D.
+4. Termografia Isolada + DefectSAM: extrai Tmáx, Tmed e isola a sub-máscara e área exata (cm²) de hotspots.
 """
 
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import asdict
 from pathlib import Path
-from typing import Sequence
+from typing import Any, Sequence
 
 import cv2
 import numpy as np
@@ -41,6 +42,8 @@ NOMES_ATIVOS = {
     "conexao": "Conexão",
     "radiador": "Radiador",
     "cabo": "Condutor/Cabo",
+    "tanque": "Tanque",
+    "estrutura": "Estrutura",
     "ponto_quente": "Ponto quente",
 }
 
@@ -52,6 +55,30 @@ PADROES_ALTURA = {
     "conexao": 0.50,
     "radiador": 1.20,
     "cabo": 1.00,
+    "tanque": 1.60,
+    "estrutura": 2.50,
+}
+
+PADROES_RAZAO_ASPECTO = {
+    "isolador": 2.8,
+    "bucha": 3.5,
+    "para_raio": 4.2,
+    "transformador": 1.1,
+    "conexao": 1.2,
+    "radiador": 2.2,
+    "cabo": 5.5,
+    "tanque": 1.1,
+    "estrutura": 3.0,
+}
+
+PROMPTS_GROUNDING_DINO: dict[str, str] = {
+    "electrical bushing": "bucha",
+    "ceramic insulator": "isolador",
+    "surge arrester": "para_raio",
+    "power transformer": "transformador",
+    "metal clamp connector": "conexao",
+    "cooling radiator": "radiador",
+    "overhead power cable": "cabo",
 }
 
 
@@ -87,37 +114,211 @@ def simplificar_contorno_binario(mascara: np.ndarray, epsilon: float = 1.0) -> l
     return [[float(p[0][0]), float(p[0][1])] for p in aproximado]
 
 
+def calcular_consistencia_geometrica(
+    altura_m: float | None,
+    razao_aspecto: float | None,
+    classe: str,
+    sigma_h: float = 0.65,
+    sigma_ar: float = 1.8,
+) -> float:
+    """Calcula o score de consistência geométrica 3D/métrica segundo D-NOCTIS (BMVC 2025).
+
+    Compara a altura física medida (H_medido em metros) e a razão de aspecto (H/W) com o
+    gabarito dimensional canônico da classe elétrica candidata.
+    """
+    h_ref = PADROES_ALTURA.get(classe, 1.0)
+    ar_ref = PADROES_RAZAO_ASPECTO.get(classe, 2.0)
+
+    penalidade = 0.0
+    peso_total = 0.0
+
+    if altura_m is not None and float(altura_m) > 0:
+        erro_rel_h = abs(float(altura_m) - h_ref) / max(sigma_h * max(h_ref, 0.30), 1e-4)
+        penalidade += 0.65 * erro_rel_h
+        peso_total += 0.65
+
+    if razao_aspecto is not None and float(razao_aspecto) > 0:
+        ar_val = max(float(razao_aspecto), 0.1)
+        erro_log_ar = abs(math.log(ar_val / max(ar_ref, 0.1))) / max(sigma_ar, 1e-4)
+        penalidade += 0.35 * erro_log_ar
+        peso_total += 0.35
+
+    if peso_total <= 0.0:
+        return 1.0
+
+    penalidade_norm = penalidade / peso_total
+    return float(np.clip(math.exp(-penalidade_norm), 0.01, 1.0))
+
+
+def fundir_scores_dnoctis(
+    scores_visuais: dict[str, float],
+    altura_m: float | None = None,
+    razao_aspecto: float | None = None,
+    peso_geometrico: float = 0.30,
+) -> dict[str, Any]:
+    """Funde as probabilidades visuais DINOv2 com o score de consistência geométrica 3D (D-NOCTIS).
+
+    Permite desambiguar componentes com textura semelhante mas escalas métricas distintas
+    (ex.: conector de 0,50 m vs. bucha de 1,25 m vs. transformador de 1,60 m).
+    """
+    if not scores_visuais:
+        return {
+            "classe": "isolador",
+            "confianca": 0.0,
+            "nome": "Isolador",
+            "scores": {},
+            "consistencia_geometrica": {},
+        }
+
+    lam = float(np.clip(peso_geometrico, 0.0, 0.85))
+    if altura_m is None and razao_aspecto is None:
+        lam = 0.0
+
+    scores_geom: dict[str, float] = {}
+    scores_combinados: dict[str, float] = {}
+
+    for c, s_vis in scores_visuais.items():
+        s_g = calcular_consistencia_geometrica(altura_m, razao_aspecto, c)
+        scores_geom[c] = round(s_g, 4)
+        scores_combinados[c] = (1.0 - lam) * float(s_vis) + lam * s_g
+
+    soma = sum(scores_combinados.values())
+    if soma > 0:
+        scores_norm = {c: round(v / soma, 4) for c, v in scores_combinados.items()}
+    else:
+        scores_norm = {c: round(float(v), 4) for c, v in scores_visuais.items()}
+
+    melhor_classe = max(scores_norm, key=lambda k: scores_norm[k])
+    melhor_conf = float(scores_norm[melhor_classe])
+
+    return {
+        "classe": melhor_classe,
+        "confianca": round(melhor_conf, 4),
+        "nome": NOMES_ATIVOS.get(melhor_classe, melhor_classe.capitalize()),
+        "scores": scores_norm,
+        "consistencia_geometrica": scores_geom,
+    }
+
+
+def propor_caixas_grounding_dino(
+    imagem_rgb: np.ndarray,
+    limiar_caixa: float = 0.25,
+    limiar_texto: float = 0.20,
+    modelo_id: str = "IDEA-Research/grounding-dino-tiny",
+    dispositivo: str | None = None,
+    detector_injetado: Any | None = None,
+) -> list[dict[str, Any]]:
+    """Gera propostas de caixas delimitadoras guiadas por texto via Grounding DINO (Apache 2.0).
+
+    Se ``detector_injetado`` for fornecido (ex.: em testes unitários), delega diretamente a ele.
+    Caso o modelo ``IDEA-Research/grounding-dino-tiny`` não esteja disponível localmente no cache
+    do ``transformers``, retorna lista vazia de forma silenciosa para acionar o fallback SAM 2.
+    """
+    rgb = np.asarray(imagem_rgb)
+    if rgb.ndim != 3 or rgb.shape[2] != 3:
+        return []
+
+    if detector_injetado is not None:
+        return list(detector_injetado(rgb, limiar_caixa=limiar_caixa, limiar_texto=limiar_texto))
+
+    try:
+        from PIL import Image
+        from transformers import AutoModelForZeroShotObjectDetection, AutoProcessor
+
+        dev = dispositivo or ("cuda" if torch.cuda.is_available() else "cpu")
+        processor = AutoProcessor.from_pretrained(modelo_id, local_files_only=True)
+        model = AutoModelForZeroShotObjectDetection.from_pretrained(modelo_id, local_files_only=True).to(dev)
+        model.eval()
+
+        texto_prompt = ". ".join(PROMPTS_GROUNDING_DINO.keys()) + "."
+        pil_img = Image.fromarray(rgb)
+        inputs = processor(images=pil_img, text=texto_prompt, return_tensors="pt").to(dev)
+
+        with torch.no_grad():
+            outputs = model(**inputs)
+
+        resultados = processor.post_process_grounded_object_detection(
+            outputs,
+            inputs.input_ids,
+            box_threshold=limiar_caixa,
+            text_threshold=limiar_texto,
+            target_sizes=[pil_img.size[::-1]],
+        )[0]
+
+        propostas: list[dict[str, Any]] = []
+        boxes = resultados["boxes"].detach().cpu().numpy()
+        scores = resultados["scores"].detach().cpu().numpy()
+        labels = resultados.get("text_labels") or resultados.get("labels") or []
+
+        for box, score, label in zip(boxes, scores, labels):
+            rotulo_str = str(label).strip().lower()
+            classe_sugerida = "isolador"
+            for chave_prompt, cls_pyron in PROMPTS_GROUNDING_DINO.items():
+                if chave_prompt in rotulo_str or rotulo_str in chave_prompt:
+                    classe_sugerida = cls_pyron
+                    break
+            propostas.append({
+                "caixa": [float(box[0]), float(box[1]), float(box[2]), float(box[3])],
+                "score_dino": float(score),
+                "prompt": rotulo_str,
+                "classe_sugerida": classe_sugerida,
+            })
+        return propostas
+    except Exception as e:
+        log.debug("Grounding DINO local indisponível (%s); usando fallback AutomaticMaskGenerator.", e)
+        return []
+
+
 class SAM2DINOv2Detector(Detector):
-    """Detector fundacional automático: segmenta com SAM 2, classifica com DINOv2 e mede dimensões."""
+    """Detector fundacional automático: Grounding DINO + SAM 2 + DINOv2 (NOCTIS / D-NOCTIS) + DefectSAM."""
 
     def __init__(
         self,
         caminho_pesos_sam2: Path | str | None = None,
         conf_minima: float = 0.40,
         iou_nms: float = 0.45,
+        usar_grounding_dino: bool = True,
+        usar_noctis: bool = True,
+        usar_dnoctis: bool = True,
+        usar_defectsam: bool = True,
+        grounding_detector: Any | None = None,
+        segmentador_sam2: Any | None = None,
     ) -> None:
         self.id = "sam2-dinov2"
         self.nome = "SAM 2 + DINOv2 (Identificação e Metrologia Automática)"
         self.tipo = "aprendizado"
-        self.arquitetura = "Meta SAM 2 (Hiera) + DINOv2 (ViT) + Criminisi Single View Metrology"
+        self.arquitetura = "Grounded-SAM 2 (Hiera) + DINOv2 (NOCTIS/D-NOCTIS) + Criminisi Metrology"
         self.descricao = (
-            "Descobre e segmenta os ativos elétricos da subestação automaticamente com SAM 2, "
-            "classifica com DINOv2 e calcula dimensões físicas reais e pureza térmica."
+            "Descobre e segmenta os ativos elétricos da subestação automaticamente com Grounded-SAM 2, "
+            "classifica com DINOv2 (NOCTIS/D-NOCTIS) e calcula dimensões físicas reais e pureza térmica."
         )
         self.classes = CLASSES_ATIVOS + ["ponto_quente"]
         self.nomes = NOMES_ATIVOS
         self.precisa_imagem = True
         self.conf_minima = conf_minima
         self.iou_nms = iou_nms
+        self.usar_grounding_dino = usar_grounding_dino
+        self.usar_noctis = usar_noctis
+        self.usar_dnoctis = usar_dnoctis
+        self.usar_defectsam = usar_defectsam
+        self._grounding_detector = grounding_detector
+        self._segmentador_sam2 = segmentador_sam2
         self._caminho_pesos = Path(caminho_pesos_sam2) if caminho_pesos_sam2 else Path("modelos/sam2/sam2.1_hiera_small.pt")
         self._mask_generator = None
         self.cartao = {
-            "treino": "SAM 2 (Meta AI) + DINOv2 ViT (Meta AI) pré-treinados em escala fundacional",
-            "parametros": {"conf_minima": conf_minima, "iou_nms": iou_nms},
+            "treino": "Grounding DINO + SAM 2 (Meta AI) + DINOv2 ViT (Meta AI) em escala fundacional",
+            "parametros": {
+                "conf_minima": conf_minima,
+                "iou_nms": iou_nms,
+                "usar_grounding_dino": usar_grounding_dino,
+                "usar_noctis": usar_noctis,
+                "usar_dnoctis": usar_dnoctis,
+                "usar_defectsam": usar_defectsam,
+            },
             "vantagens": [
                 "Identificação e segmentação de ativos inteiros sem depender de caixa manual.",
-                "Classificação zero-shot/few-shot com representações fundacionais DINOv2.",
-                "Cálculo automático de altura, largura média, diâmetro máximo e área projetada.",
+                "Classificação zero-shot/few-shot com representações DINOv2 + NOCTIS Cyclic Thresholding.",
+                "Desambiguação métrica 3D via D-NOCTIS e isolamento de área de hotspot via DefectSAM.",
             ],
             "limitacoes": [
                 "Demanda GPU CUDA para inferência ágil (segundos por imagem).",
@@ -143,6 +344,49 @@ class SAM2DINOv2Detector(Detector):
         )
         return self._mask_generator
 
+    def _obter_segmentador_caixa(self):
+        if self._segmentador_sam2 is not None:
+            return self._segmentador_sam2
+        from nucleo.segmentacao.sam2_engine import SAM2Segmentor
+
+        self._segmentador_sam2 = SAM2Segmentor(checkpoint=self._caminho_pesos)
+        return self._segmentador_sam2
+
+    def _gerar_mascaras_candidatas(self, rgb: np.ndarray) -> list[dict[str, Any]]:
+        """Tenta propostas guiadas por texto via Grounding DINO + SAM2Segmentor; fallback para AutomaticMaskGenerator."""
+        if self.usar_grounding_dino:
+            propostas = propor_caixas_grounding_dino(
+                rgb,
+                detector_injetado=self._grounding_detector,
+            )
+            if propostas:
+                try:
+                    seg = self._obter_segmentador_caixa()
+                    seg.set_frame(rgb)
+                    mascaras_guiadas: list[dict[str, Any]] = []
+                    for prop in propostas:
+                        cx = prop["caixa"]
+                        res_seg = seg.segmentar(cx)
+                        x0, y0, x1, y1 = res_seg.caixa
+                        mascaras_guiadas.append({
+                            "segmentation": res_seg.mascara,
+                            "area": int(res_seg.mascara.sum()),
+                            "bbox": [x0, y0, x1 - x0, y1 - y0],
+                            "predicted_iou": float(res_seg.score),
+                            "proposta_grounding": prop,
+                        })
+                    if mascaras_guiadas:
+                        return mascaras_guiadas
+                except Exception as e:
+                    log.warning("Fallback de Grounding DINO + SAM2Segmentor para AutomaticMaskGenerator: %s", e)
+
+        generator = self._obter_generator()
+        try:
+            return generator.generate(rgb)
+        except Exception as e:
+            log.warning("Falha no SAM2AutomaticMaskGenerator: %s. Utilizando fallback.", e)
+            return []
+
     def detectar(
         self,
         temperatura: np.ndarray,
@@ -163,7 +407,7 @@ class SAM2DINOv2Detector(Detector):
         from nucleo.classificacao.dinov2_engine import DINOv2Classifier
         from nucleo.metrologia.vanishing_points import VanishingGeometryEstimator
         from nucleo.metrologia.criminisi_metrology import ProjectiveMetrologyEngine
-        from nucleo.pipeline.pyron_pipeline import estatisticas_termicas
+        from nucleo.pipeline.pyron_pipeline import estatisticas_termicas, isolar_hotspot_defectsam
 
         if imagem is None:
             from nucleo import render
@@ -176,13 +420,8 @@ class SAM2DINOv2Detector(Detector):
         h_mat, w_mat = matriz.shape[:2]
         area_total = h_rgb * w_rgb
 
-        # 1. Geração automática de propostas de máscaras com SAM 2
-        generator = self._obter_generator()
-        try:
-            raw_masks = generator.generate(rgb)
-        except Exception as e:
-            log.warning("Falha no SAM2AutomaticMaskGenerator: %s. Utilizando fallback.", e)
-            raw_masks = []
+        # 1. Geração de propostas de máscaras (Grounding DINO + SAM 2 ou AutomaticMaskGenerator)
+        raw_masks = self._gerar_mascaras_candidatas(rgb)
 
         clf = DINOv2Classifier.obter_instancia()
         p_engine = ProjectiveMetrologyEngine(default_unit="m")
@@ -197,7 +436,7 @@ class SAM2DINOv2Detector(Detector):
             hz_y = float(h_rgb * 2.0)
             vz = (float(w_rgb / 2.0), -10000.0)
 
-        # 2. Filtragem, classificação DINOv2 e medição dos ativos candidatos
+        # 2. Filtragem, classificação DINOv2 (+ NOCTIS) e medição dos ativos candidatos
         candidatos = []
         for m_item in raw_masks:
             mask = m_item["segmentation"].astype(np.uint8)
@@ -213,8 +452,12 @@ class SAM2DINOv2Detector(Detector):
             if area > area_max or area < area_min:
                 continue
 
-            # Classificação DINOv2 com máscara
-            res_dino = clf.classificar(rgb, bbox=caixa_rgb, mascara=mask)
+            # Classificação DINOv2 com máscara e NOCTIS Cyclic Thresholding opcional
+            try:
+                res_dino = clf.classificar(rgb, bbox=caixa_rgb, mascara=mask, usar_noctis=self.usar_noctis)
+            except TypeError:
+                res_dino = clf.classificar(rgb, bbox=caixa_rgb, mascara=mask)
+
             classe = res_dino["classe"]
             conf = float(res_dino["confianca"])
 
@@ -231,6 +474,7 @@ class SAM2DINOv2Detector(Detector):
                 "confianca": conf,
                 "scores": res_dino.get("scores", {}),
                 "score_sam2": float(m_item.get("predicted_iou", 0.95)),
+                "proposta_grounding": m_item.get("proposta_grounding"),
             })
 
         # 3. Non-Maximum Suppression (NMS) baseado em IoU e confiança
@@ -246,7 +490,7 @@ class SAM2DINOv2Detector(Detector):
             if not sobreposto:
                 selecionados.append(cand)
 
-        # 4. Enriquecimento de cada ativo com contorno SVG, metrologia e termometria
+        # 4. Enriquecimento de cada ativo com contorno SVG, metrologia, D-NOCTIS e DefectSAM
         sx = w_mat / w_rgb
         sy = h_mat / h_rgb
         regioes_finais = []
@@ -263,7 +507,6 @@ class SAM2DINOv2Detector(Detector):
 
         for sel in selecionados:
             classe = sel["classe"]
-            contagem[classe] = contagem.get(classe, 0) + 1
             mask_rgb = sel["mask_rgb"]
             h_ref = PADROES_ALTURA.get(classe, 1.0)
 
@@ -275,7 +518,7 @@ class SAM2DINOv2Detector(Detector):
                 dim_res = p_engine.compute_dimensions_from_telemetry(
                     mask=mask_rgb,
                     distance_m=dist_m,
-                    camera_model=metadados.get("camera"),
+                    camera_model=metadados.get("camera") if metadados else None,
                     image_width=w_rgb,
                 )
             else:
@@ -286,6 +529,27 @@ class SAM2DINOv2Detector(Detector):
                     ref_height_meters=h_ref,
                     ref_points_y=pts_y,
                 )
+
+            # Fusão D-NOCTIS (Consistência Geométrica 3D) quando altura por telemetria ou aspect_ratio estão presentes
+            consistencia_geom = {}
+            if self.usar_dnoctis and sel.get("scores"):
+                altura_independente = float(dim_res["height_meters"]) if dist_m else None
+                ar_medido = float(dim_res.get("aspect_ratio", 0.0)) or None
+                fusao = fundir_scores_dnoctis(
+                    sel["scores"],
+                    altura_m=altura_independente,
+                    razao_aspecto=ar_medido,
+                    peso_geometrico=0.30 if dist_m else 0.15,
+                )
+                classe = fusao["classe"]
+                sel["classe"] = classe
+                sel["nome_classe"] = fusao["nome"]
+                sel["confianca"] = fusao["confianca"]
+                sel["scores"] = fusao["scores"]
+                consistencia_geom = fusao["consistencia_geometrica"]
+                h_ref = PADROES_ALTURA.get(classe, h_ref)
+
+            contagem[classe] = contagem.get(classe, 0) + 1
 
             # Redimensiona máscara e caixa para coordenadas da matriz térmica
             if (w_mat, h_mat) != (w_rgb, h_rgb):
@@ -305,6 +569,20 @@ class SAM2DINOv2Detector(Detector):
 
             # Pureza térmica dentro do ativo
             stat_termica = estatisticas_termicas(matriz, mask_mat)
+
+            # DefectSAM: sub-segmentação da mancha térmica (hotspot) dentro do ativo
+            hotspot_info = None
+            if self.usar_defectsam and stat_termica is not None:
+                hs_bruto = isolar_hotspot_defectsam(
+                    matriz,
+                    mask_mat,
+                    segmentador=self._segmentador_sam2,
+                    metric_ratio_m_por_px=dim_res.get("scale_y_m_per_px"),
+                    caixa_rgb=sel["caixa_rgb"],
+                    forma_rgb=(h_rgb, w_rgb),
+                )
+                if hs_bruto is not None:
+                    hotspot_info = {k: v for k, v in hs_bruto.items() if k != "mascara_hotspot"}
 
             geometria = {
                 "unit": "m",
@@ -340,6 +618,7 @@ class SAM2DINOv2Detector(Detector):
                     "score": round(sel["score_sam2"], 4),
                     "geometria": geometria,
                     "termica_isolada": asdict(stat_termica) if stat_termica else None,
+                    "hotspot_defectsam": hotspot_info,
                     "contorno": contorno,
                 },
                 "classificacao_dinov2": {
@@ -347,6 +626,7 @@ class SAM2DINOv2Detector(Detector):
                     "confianca": round(sel["confianca"], 4),
                     "nome": sel["nome_classe"],
                     "scores": sel["scores"],
+                    "consistencia_geometrica": consistencia_geom,
                 },
             })
 
@@ -356,7 +636,7 @@ class SAM2DINOv2Detector(Detector):
         for pq in pontos_quentes:
             cx = (pq.caixa[0] + pq.caixa[2]) / 2.0
             cy = (pq.caixa[1] + pq.caixa[3]) / 2.0
-            
+
             # Verifica se já está coberto por algum ativo detectado
             contido = False
             for reg in regioes_finais:
@@ -364,7 +644,7 @@ class SAM2DINOv2Detector(Detector):
                 if bx[0] <= cx <= bx[2] and bx[1] <= cy <= bx[3]:
                     contido = True
                     break
-            
+
             if not contido:
                 regioes_finais.append({
                     "id": None,

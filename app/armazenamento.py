@@ -196,6 +196,121 @@ TABELAS_V3 = (
     "CREATE INDEX IF NOT EXISTS idx_laudos_emitidos ON laudos_emitidos (emitido_em)",
 )
 
+# Views analíticas para conexão direta do Power BI Desktop / Tableau via SQLite ODBC (Star Schema local).
+VIEWS_BI = (
+    """CREATE VIEW IF NOT EXISTS vw_bi_inspecoes AS
+        SELECT a.id AS inspecao_id,
+               a.nome AS arquivo_original,
+               a.criado_em,
+               COALESCE(a.capturado_em, a.criado_em) AS capturado_em,
+               substr(COALESCE(a.capturado_em, a.criado_em), 1, 10) AS data_calendario,
+               i.id AS instalacao_id,
+               COALESCE(i.chave, 'sem-instalacao') AS instalacao_chave,
+               COALESCE(i.nome, 'Não informada') AS instalacao,
+               e.id AS equipamento_id,
+               COALESCE(e.chave, 'sem-equipamento') AS equipamento_chave,
+               COALESCE(e.nome, 'Não informado') AS equipamento,
+               COALESCE(a.fonte, 'manual') AS fonte,
+               COALESCE(a.radiometrica, 0) AS radiometrica,
+               a.modelo,
+               a.severidade,
+               CASE a.severidade
+                   WHEN 'imediato' THEN 5
+                   WHEN 'urgente' THEN 4
+                   WHEN 'programar' THEN 3
+                   WHEN 'atencao' THEN 2
+                   WHEN 'normal' THEN 1
+                   ELSE 0
+               END AS severidade_ordem,
+               a.t_max_cena,
+               a.t_min_cena,
+               CASE WHEN a.t_max_cena IS NOT NULL AND a.ambiente_c IS NOT NULL
+                    THEN ROUND(a.t_max_cena - a.ambiente_c, 2) END AS delta_t_ambiente_c,
+               a.maior_pct_mta,
+               a.ambiente_c,
+               a.carga_pct,
+               pm.camera,
+               pm.emissividade,
+               pm.distancia_m,
+               pm.temp_refletida_c,
+               pm.umidade_relativa,
+               pm.resolucao_sensor,
+               '/api/analises/' || a.id || '/miniatura.png' AS miniatura_url,
+               '/api/analises/' || a.id || '/imagem.png' AS termograma_url
+        FROM analises a
+        LEFT JOIN equipamentos e ON e.id = a.equipamento_id
+        LEFT JOIN instalacoes i ON i.id = e.instalacao_id
+        LEFT JOIN parametros_medicao pm ON pm.analise_id = a.id""",
+    """CREATE VIEW IF NOT EXISTS vw_bi_regioes AS
+        SELECT r.analise_id AS inspecao_id,
+               r.ordem,
+               COALESCE(r.regiao_id, 'r' || r.ordem) AS regiao_id,
+               COALESCE(a.capturado_em, a.criado_em) AS capturado_em,
+               COALESCE(i.nome, 'Não informada') AS instalacao,
+               COALESCE(e.nome, 'Não informado') AS equipamento,
+               COALESCE(e.chave, 'sem-equipamento') AS equipamento_chave,
+               r.nome AS regiao_nome,
+               COALESCE(r.classe, 'componente') AS classe_componente,
+               r.origem,
+               r.confianca,
+               r.t_max,
+               r.t_med,
+               r.t_min,
+               r.dt_corrigido,
+               r.pct_mta,
+               COALESCE(r.severidade, 'normal') AS severidade,
+               r.x_max,
+               r.y_max
+        FROM regioes r
+        JOIN analises a ON a.id = r.analise_id
+        LEFT JOIN equipamentos e ON e.id = a.equipamento_id
+        LEFT JOIN instalacoes i ON i.id = e.instalacao_id""",
+    """CREATE VIEW IF NOT EXISTS vw_bi_pendencias_logistica AS
+        SELECT p.analise_id AS inspecao_id,
+               p.status AS status_manutencao,
+               p.ordem_servico,
+               COALESCE(i.nome, 'Não informada') AS subestacao_instalacao,
+               COALESCE(e.nome, 'Não informado') AS equipamento,
+               COALESCE(e.chave, 'sem-equipamento') AS equipamento_chave,
+               COALESCE(
+                   (SELECT r.nome FROM regioes r WHERE r.analise_id = p.analise_id AND r.severidade = p.severidade ORDER BY r.pct_mta DESC, r.t_max DESC LIMIT 1),
+                   'Componente Geral'
+               ) AS peca_a_reparar_substituir,
+               COALESCE(
+                   (SELECT r.classe FROM regioes r WHERE r.analise_id = p.analise_id AND r.severidade = p.severidade ORDER BY r.pct_mta DESC, r.t_max DESC LIMIT 1),
+                   'componente'
+               ) AS classe_componente,
+               p.severidade,
+               a.t_max_cena AS t_max_detectada_c,
+               a.maior_pct_mta AS pct_mta_atingido,
+               substr(COALESCE(a.capturado_em, a.criado_em), 1, 10) AS data_deteccao,
+               p.prazo AS data_limite,
+               CAST(ROUND(julianday(p.prazo) - julianday('now', 'localtime')) AS INTEGER) AS dias_restantes_para_reparo,
+               CASE
+                   WHEN p.status NOT IN ('aberta', 'programada') THEN 'CONCLUÍDO / FORA DA FILA'
+                   WHEN date(p.prazo) < date('now', 'localtime') THEN 'VENCIDO - PARADA URGENTE'
+                   WHEN julianday(p.prazo) - julianday('now', 'localtime') <= 7 THEN 'CRÍTICO - REQUER COMPRA IMEDIATA (ATÉ 7 DIAS)'
+                   WHEN julianday(p.prazo) - julianday('now', 'localtime') <= 30 THEN 'PROGRAMAR COMPRA (PRÓXIMOS 30 DIAS)'
+                   WHEN julianday(p.prazo) - julianday('now', 'localtime') <= 60 THEN 'PLANEJAMENTO TRIMESTRAL (31-60 DIAS)'
+                   ELSE 'ROTINA PREVENTIVA (> 60 DIAS)'
+               END AS janela_logistica_prioridade,
+               p.responsavel AS equipe_responsavel,
+               p.nota AS nota_tecnica
+        FROM pendencias p
+        JOIN analises a ON a.id = p.analise_id
+        LEFT JOIN equipamentos e ON e.id = a.equipamento_id
+        LEFT JOIN instalacoes i ON i.id = e.instalacao_id""",
+    """CREATE VIEW IF NOT EXISTS vw_bi_kpis AS
+        SELECT (SELECT COUNT(*) FROM instalacoes) AS total_subestacoes_ativas,
+               (SELECT COUNT(*) FROM equipamentos) AS total_ativos_monitorados,
+               (SELECT COUNT(*) FROM analises) AS total_inspecoes_realizadas,
+               (SELECT COUNT(*) FROM pendencias WHERE status IN ('aberta', 'programada')) AS total_reparos_pendentes,
+               (SELECT COUNT(*) FROM pendencias WHERE status IN ('aberta', 'programada') AND date(prazo) < date('now', 'localtime')) AS reparos_vencidos,
+               (SELECT COUNT(*) FROM pendencias WHERE status IN ('aberta', 'programada') AND julianday(prazo) - julianday('now', 'localtime') <= 7) AS reparos_urgencia_7_dias,
+               (SELECT COUNT(*) FROM alertas WHERE status = 'pendente') AS alertas_nao_atendidos,
+               (SELECT COUNT(*) FROM laudos_emitidos) AS total_laudos_emitidos""",
+)
+
 ARQUIVOS = {"original": "imagens/{id}.jpg", "foto": "imagens/{id}_foto.jpg", "matriz": "matrizes/{id}.npy"}
 
 
@@ -229,8 +344,9 @@ class Armazenamento:
             (pasta / "imagens").mkdir(parents=True, exist_ok=True)
             (pasta / "matrizes").mkdir(parents=True, exist_ok=True)
         self.banco = pasta / "inspecoes.sqlite"
-        with self._conexao():
-            pass  # cria ou atualiza o esquema
+        with self._conexao() as c:
+            for sql in VIEWS_BI:
+                c.execute(sql)  # garante as views de BI mesmo em bancos já na versão 3
 
     @contextmanager
     def _conexao(self):
@@ -270,7 +386,7 @@ class Armazenamento:
                     for nome, tipo in colunas.items():
                         if nome not in existentes:
                             c.execute(f"ALTER TABLE {tabela} ADD COLUMN {nome} {tipo}")
-                for sql in TABELAS_V3:
+                for sql in (*TABELAS_V3, *VIEWS_BI):
                     c.execute(sql)
             if versao < 2:  # reindexa depois de todas as colunas existirem (o índice grava o autor da v3)
                 for (dados,) in c.execute("SELECT dados FROM analises").fetchall():

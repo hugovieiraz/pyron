@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p4_chart_comp",
+  "position": {
+    "x": 650,
+    "y": 140,
+    "z": 500,
+    "height": 260,
+    "width": 610,
+    "tabOrder": 500
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Regioes_ROI"
+                    }
+                  },
+                  "Property": "classe_componente"
+                }
+              },
+              "queryRef": "Fato_Regioes_ROI.classe_componente",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total Regiões ROI"
+                }
+              },
+              "queryRef": "_Medidas.Total Regiões ROI"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

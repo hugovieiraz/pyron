@@ -1,0 +1,72 @@
+table _Medidas
+	lineageTag: 7574f638-d67f-41b2-a05a-4e2d5fb45a6b
+
+	measure 'Total Inspeções' = COUNTROWS(Fato_Inspecoes)
+		formatString: #,0
+		displayFolder: 01. KPIs Gerais
+		lineageTag: 0c657924-0051-4b9e-b260-a9be7877b63f
+
+	measure 'Inspeções Radiométricas' = CALCULATE(COUNTROWS(Fato_Inspecoes), Fato_Inspecoes[radiometrica] = 1)
+		formatString: #,0
+		displayFolder: 01. KPIs Gerais
+		lineageTag: fcfc9a50-f976-43fd-8bc8-8004cc905d5c
+
+	measure 'Inspeções Críticas' = CALCULATE(COUNTROWS(Fato_Inspecoes), Fato_Inspecoes[severidade] IN {"imediato", "urgente"})
+		formatString: #,0
+		displayFolder: 02. Criticidade & Risco
+		lineageTag: 35cdc119-3e1c-441a-8884-6228ee31a331
+
+	measure 'Taxa Criticidade %' = DIVIDE([Inspeções Críticas], [Total Inspeções], 0)
+		formatString: 0.0%
+		displayFolder: 02. Criticidade & Risco
+		lineageTag: b88afb0c-92f4-4e0a-a0d2-cde3e511457f
+
+	measure 'Temperatura Máxima Global' = MAX(Fato_Inspecoes[t_max_cena])
+		formatString: 0.0 "°C"
+		displayFolder: 03. Métricas Térmicas
+		lineageTag: 2ba39a32-5766-408d-a01d-b26e642b7f02
+
+	measure 'Maior % MTA Atingido' = MAX(Fato_Inspecoes[maior_pct_mta])
+		formatString: 0.0"%"
+		displayFolder: 03. Métricas Térmicas
+		lineageTag: 7a2598d2-504c-4e41-b50d-0f2064401632
+
+	measure 'Total Ordens de Serviço' = COUNTROWS(Fato_Pendencias_OS)
+		formatString: #,0
+		displayFolder: 04. Logística de OS
+		lineageTag: cb09018c-75b2-4900-a274-5596fef3ef6b
+
+	measure 'OS Vencidas' = CALCULATE(COUNTROWS(Fato_Pendencias_OS), Fato_Pendencias_OS[dias_restantes_para_reparo] < 0, Fato_Pendencias_OS[status_manutencao] <> "corrigida")
+		formatString: #,0
+		displayFolder: 04. Logística de OS
+		lineageTag: 4e62b8fc-9f59-46b5-981d-9ef9f9769cf8
+
+	measure 'Taxa Resolução OS' = DIVIDE(CALCULATE(COUNTROWS(Fato_Pendencias_OS), Fato_Pendencias_OS[status_manutencao] = "corrigida"), COUNTROWS(Fato_Pendencias_OS), 0)
+		formatString: 0.0%
+		displayFolder: 04. Logística de OS
+		lineageTag: b7fdf680-faba-4ebe-bb61-25759787bb57
+
+	measure 'Total Regiões ROI' = COUNTROWS(Fato_Regioes_ROI)
+		formatString: #,0
+		displayFolder: 05. IA & Visão Computacional
+		lineageTag: 50fec5b0-d36d-4122-b20c-83250365b20f
+
+	measure 'Confiança Média IA' = AVERAGEX(FILTER(Fato_Regioes_ROI, Fato_Regioes_ROI[confianca] > 0), Fato_Regioes_ROI[confianca])
+		formatString: 0.0%
+		displayFolder: 05. IA & Visão Computacional
+		lineageTag: 76141e30-3b8b-4ad2-a46e-531114364287
+
+	column Coluna_Auxiliar
+		dataType: string
+		isHidden
+		lineageTag: 0e15c686-72da-4c03-80f6-030c806a76d1
+		sourceColumn: Coluna_Auxiliar
+
+	partition _Medidas = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [Coluna_Auxiliar = text], {{"Pyron"}})
+				in
+				    Fonte
+

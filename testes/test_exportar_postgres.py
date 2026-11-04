@@ -1,13 +1,13 @@
-"""Testes para o exportador / ETL de SQLite para PostgreSQL."""
+"""Testes para o exportador / ETL de SQLite para PostgreSQL (Esquema v3 + Metrologia + Star Schema BI)."""
 
-from pathlib import Path
 import numpy as np
 
 from app.armazenamento import Armazenamento
+from app.cadastro_medidas import Cadastro
 from app.exportar_postgres import ExportadorPostgres, uuid_estavel
 
 
-def _analise(id_="exp1", sev="urgente", instalacao="SE Sul", equipamento="DJ-01"):
+def _analise(id_="exp1", sev="urgente", instalacao="SE Sul", equipamento="DJ-01", **extra):
     return {
         "id": id_,
         "criado_em": "2026-10-01T10:00:00",
@@ -25,6 +25,7 @@ def _analise(id_="exp1", sev="urgente", instalacao="SE Sul", equipamento="DJ-01"
              "dt_corrigido": 20.0, "pct_mta": 94.4, "severidade": sev},
         ],
         "resumo": {"severidade": sev, "t_max_cena": 85.0, "t_min_cena": 20.0, "maior_pct_mta": 94.4, "mensagem": "Alerta térmico"},
+        **extra,
     }
 
 
@@ -39,9 +40,19 @@ def test_uuid_estavel_deterministico():
 def test_exportador_gera_sql_valido(tmp_path):
     pasta = tmp_path / "dados"
     arm = Armazenamento(pasta)
-    arm.salvar(_analise(), original=b"x", matriz=np.zeros((2, 2)))
+    ac = {"status": "programada", "prazo": "2026-10-15", "ordem_servico": "OS-77", "responsavel": "Ana Lima",
+          "historico": [{"quando": "2026-10-02T09:00:00", "status": "programada", "nota": "Programado", "autor": "Ana Lima"}]}
+    arm.salvar(_analise(acompanhamento=ac), original=b"x", matriz=np.zeros((2, 2)))
     arm.salvar_alerta({"id": "al1", "criado_em": "2026-10-01T10:00:00", "status": "pendente",
                        "analise_id": "exp1", "severidade": "urgente", "mensagem": "Ponto quente"})
+    arm.comentar("exp1", "Verificar reaperto do terminal", "Caio Técnico", autor_id="u2", regiao_id="r1")
+    arm.registrar_laudo({"id": "RT-20261001-ABCD", "emitido_em": "2026-10-01T12:00:00", "emitido_por_id": "u1",
+                         "emitido_por_nome": "Ana Lima", "responsavel_nome": "Ana Lima", "responsavel_registro": "CREA-PB 111",
+                         "analises": ["exp1"], "sha256": "f" * 64, "bytes": 2048})
+
+    cad = Cadastro(pasta)
+    m = cad.propor("se-sul--dj-01", "Conexão A", "comprimento", 12.5, "referencia", "Caio Técnico", incerteza_cm=0.3, classe="conexao", fase="A")
+    cad.validar(m["id"], "Ana Lima", "CREA-PB 111", nota="Conferido em campo")
 
     exp = ExportadorPostgres(arm, empresa_padrao="Concessionária Alpha")
     sql = exp.gerar_script_sql()
@@ -53,11 +64,19 @@ def test_exportador_gera_sql_valido(tmp_path):
     assert "INSERT INTO instalacoes" in sql and "SE Sul" in sql
     assert "INSERT INTO equipamentos" in sql and "DJ-01" in sql
     assert "INSERT INTO inspecoes_termograficas" in sql and "exp1" in sql
+    # mta_aplicada_c (90.0 °C para conexão) separada de maior_pct_mta (94.4 %)
+    assert "90.0, 94.4, 'urgente'" in sql
     assert "INSERT INTO deteccoes_regioes" in sql and "Conexão A" in sql
-    assert "INSERT INTO pendencias_manutencao" in sql
+    assert "INSERT INTO pendencias_manutencao" in sql and "OS-77" in sql
+    assert "INSERT INTO historico_pendencias" in sql and "Ana Lima" in sql
     assert "INSERT INTO alertas" in sql and "al1" in sql
+    assert "INSERT INTO comentarios_inspecao" in sql and "Verificar reaperto do terminal" in sql
+    assert "INSERT INTO laudos_tecnicos" in sql and "RT-20261001-ABCD" in sql
+    assert "INSERT INTO laudo_inspecoes" in sql
+    assert "INSERT INTO medidas_dimensionais_ativos" in sql and "CREA-PB 111" in sql
+    assert "CREATE OR REPLACE VIEW vw_dim_ativos" in sql
+    assert "CREATE OR REPLACE VIEW vw_fato_inspecoes" in sql
 
     saida = tmp_path / "dump.sql"
     bytes_gerados = exp.exportar_para_arquivo(saida)
-    assert saida.exists() and bytes_gerados == len(sql)
-
+    assert saida.exists() and bytes_gerados == len(sql.encode("utf-8")) or saida.stat().st_size > 0

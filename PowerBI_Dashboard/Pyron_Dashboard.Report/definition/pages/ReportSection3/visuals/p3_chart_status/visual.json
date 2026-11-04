@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p3_chart_status",
+  "position": {
+    "x": 20,
+    "y": 140,
+    "z": 400,
+    "height": 260,
+    "width": 420,
+    "tabOrder": 400
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "status_manutencao"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.status_manutencao",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total Ordens de Serviço"
+                }
+              },
+              "queryRef": "_Medidas.Total Ordens de Serviço"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

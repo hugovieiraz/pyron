@@ -1,0 +1,127 @@
+table Fato_Pendencias_OS
+	lineageTag: 6e354f07-d664-4061-9c55-9a17c12d88bc
+
+	column inspecao_id
+		dataType: string
+		lineageTag: 20037536-eaa7-49a4-8073-9cf87f04b150
+		summarizeBy: none
+		sourceColumn: inspecao_id
+
+	column status_manutencao
+		dataType: string
+		lineageTag: dc0c0303-0da2-4ca0-bb14-1a94bce60ffd
+		summarizeBy: none
+		sourceColumn: status_manutencao
+
+	column ordem_servico
+		dataType: string
+		lineageTag: 4055cbbc-6272-4e64-b6eb-b602e29f4e8a
+		summarizeBy: none
+		sourceColumn: ordem_servico
+
+	column subestacao_instalacao
+		dataType: string
+		lineageTag: 1e669a8e-d4f9-4a80-b3b6-f0c673e5f982
+		summarizeBy: none
+		sourceColumn: subestacao_instalacao
+
+	column equipamento
+		dataType: string
+		lineageTag: ebb1ee83-3a31-43f5-aa4b-df3748f666de
+		summarizeBy: none
+		sourceColumn: equipamento
+
+	column equipamento_chave
+		dataType: string
+		lineageTag: f20997e4-d4f2-4e34-bb04-641fcff165dd
+		summarizeBy: none
+		sourceColumn: equipamento_chave
+
+	column peca_a_reparar_substituir
+		dataType: string
+		lineageTag: fb411a6d-1e02-4000-8b6c-cf6a1e5c4eb8
+		summarizeBy: none
+		sourceColumn: peca_a_reparar_substituir
+
+	column classe_componente
+		dataType: string
+		lineageTag: 541a11ad-f3c7-4396-9c8e-8556cce7fc20
+		summarizeBy: none
+		sourceColumn: classe_componente
+
+	column severidade
+		dataType: string
+		lineageTag: 54982d67-e7f8-49a3-8d25-335a618e3c1e
+		summarizeBy: none
+		sourceColumn: severidade
+
+	column t_max_detectada_c
+		dataType: double
+		lineageTag: d8ec2f51-97b3-4e4c-b564-d5194ca696fc
+		summarizeBy: sum
+		sourceColumn: t_max_detectada_c
+
+	column pct_mta_atingido
+		dataType: double
+		lineageTag: 1ad34178-9be1-42c2-a4c5-2ba688938ace
+		summarizeBy: none
+		sourceColumn: pct_mta_atingido
+
+	column data_deteccao
+		dataType: string
+		lineageTag: 06907002-2ed1-4c8f-9db0-518ae8b46876
+		summarizeBy: none
+		sourceColumn: data_deteccao
+
+	column data_limite
+		dataType: string
+		lineageTag: 3aaed2df-0fe9-442f-9d75-afbfd1f11d82
+		summarizeBy: none
+		sourceColumn: data_limite
+
+	column dias_restantes_para_reparo
+		dataType: int64
+		lineageTag: c2b1712c-5a79-4880-bdc2-18abc834ac1a
+		summarizeBy: sum
+		sourceColumn: dias_restantes_para_reparo
+
+	column janela_logistica_prioridade
+		dataType: string
+		lineageTag: 4aeb9579-4075-4313-bc09-809bec9b6e6e
+		summarizeBy: none
+		sourceColumn: janela_logistica_prioridade
+
+	column equipe_responsavel
+		dataType: string
+		lineageTag: 8c91abe2-7bb3-4566-b4ff-f5b6531c97cd
+		summarizeBy: none
+		sourceColumn: equipe_responsavel
+
+	column nota_tecnica
+		dataType: string
+		lineageTag: 26623cc1-81dc-4eee-9eb0-385d585f718b
+		summarizeBy: none
+		sourceColumn: nota_tecnica
+
+	partition Fato_Pendencias_OS = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [inspecao_id = text, status_manutencao = text, ordem_servico = text, subestacao_instalacao = text, equipamento = text, equipamento_chave = text, peca_a_reparar_substituir = text, classe_componente = text, severidade = text, t_max_detectada_c = number, pct_mta_atingido = number, data_deteccao = text, data_limite = text, dias_restantes_para_reparo = Int64.Type, janela_logistica_prioridade = text, equipe_responsavel = text, nota_tecnica = text], {
+				        {"8d8cd4ec7d8f48e8a0beeeacd34a1a55", "aberta", "OS-2026-6154", "SE Patos Oeste", "TR-03 (Autotransformador 500 kV)", "se-patos-oeste--tr-03-autotransformador-500-kv", "Terminal Adjacente (Fase B)", "terminal_superior", "imediato", 88.58470153808594, 260.47104673061347, "2026-09-16", "2026-09-23", -41, "VENCIDO - PARADA URGENTE", "Equipe Manutenção Sul", "Inspeção periódica. Identificado aquecimento em Terminal Superior."},
+				        {"b03eb080873e4bd0b75af410f76c2c5b", "corrigida", "OS-2026-2107", "SE Campina Grande II", "PR-01 (Para-raios Fase A)", "se-campina-grande-ii--pr-01-para-raios-fase-a", "Conexão", "conexao", "imediato", 101.55519104003906, 214.9933197241574, "2026-09-27", "2026-10-04", -30, "CONCLUÍDO / FORA DA FILA", "Mariana Costa", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"a4fb8a64dfcd4826852b84d959332209", "aberta", "OS-2026-1843", "SE Santa Rita Norte", "SEC-03 (Seccionadora)", "se-santa-rita-norte--sec-03-seccionadora", "Terminal Adjacente (Fase B)", "conexao", "imediato", 119.65655517578124, 107.72170776243236, "2026-08-23", "2026-08-30", -65, "VENCIDO - PARADA URGENTE", "Carlos Silva (Eng. Eletricista)", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"8c63c2352ea24a25adbc8e16e7b3e5ef", "programada", "OS-2026-9017", "SE Patos Oeste", "TR-03 (Autotransformador 500 kV)", "se-patos-oeste--tr-03-autotransformador-500-kv", "Terminal Adjacente (Fase B)", "conexao", "programar", 43.85576629638672, 71.05046482950658, "2026-09-05", "2026-10-05", -29, "VENCIDO - PARADA URGENTE", "Carlos Silva (Eng. Eletricista)", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"feb77a6624a04f64a6b073ec0d268215", "aberta", "OS-2026-8081", "SE Patos Oeste", "TR-03 (Autotransformador 500 kV)", "se-patos-oeste--tr-03-autotransformador-500-kv", "Terminal Adjacente (Fase B)", "terminal_inferior", "imediato", 96.30183410644533, 139.89332092412047, "2026-08-12", "2026-08-19", -76, "VENCIDO - PARADA URGENTE", "Carlos Silva (Eng. Eletricista)", "Inspeção periódica. Identificado aquecimento em Terminal Inferior."},
+				        {"250e9176be904a1192b9682ed09771ca", "programada", "OS-2026-5955", "SE Santa Rita Norte", "PR-02 (Para-raios Fase B)", "se-santa-rita-norte--pr-02-para-raios-fase-b", "Bucha Fase A", "bucha", "imediato", 74.03836822509766, 232.51299745774665, "2026-09-16", "2026-09-23", -41, "VENCIDO - PARADA URGENTE", "Equipe Manutenção Sul", "Inspeção periódica. Identificado aquecimento em Bucha Fase A."},
+				        {"d361f996fe7647d48f2528cb9b5244cc", "programada", "OS-2026-1515", "SE Santa Rita Norte", "TR-02 (Transformador 69/13.8 kV)", "se-santa-rita-norte--tr-02-transformador-69-13-8-kv", "Terminal Adjacente (Fase B)", "terminal_superior", "urgente", 59.90578842163086, 72.43147245287912, "2026-10-08", "2026-10-15", -19, "VENCIDO - PARADA URGENTE", "Carlos Silva (Eng. Eletricista)", "Inspeção periódica. Identificado aquecimento em Terminal Superior."},
+				        {"0bf30e0078f148a1aad6b550fc879e0a", "corrigida", "OS-2026-2192", "SE Campina Grande II", "TR-01 (Transformador 230/69 kV)", "se-campina-grande-ii--tr-01-transformador-230-69-kv", "Conexão", "conexao", "imediato", 93.36133575439452, 164.22946169237144, "2026-07-20", "2026-07-27", -99, "CONCLUÍDO / FORA DA FILA", "Mariana Costa", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"3f69d888e33b4fcaacc7f03ce9f031da", "aberta", "OS-2026-6164", "SE Patos Oeste", "BANCO-CAP-01 (Banco de Capacitores)", "se-patos-oeste--banco-cap-01-banco-de-capacitores", "Terminal Adjacente (Fase B)", "conexao", "imediato", 137.38491821289062, 201.1235757165872, "2026-08-29", "2026-09-05", -59, "VENCIDO - PARADA URGENTE", "Equipe Manutenção Sul", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"ba073fa5c06c417cbf4fad0cc4647799", "aberta", "OS-2026-9601", "SE Campina Grande II", "PR-01 (Para-raios Fase A)", "se-campina-grande-ii--pr-01-para-raios-fase-a", "Conexão", "conexao", "imediato", 115.00094604492188, 233.2880690392516, "2026-08-20", "2026-08-27", -68, "VENCIDO - PARADA URGENTE", "Equipe Manutenção Sul", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"f6a88c245ff541a0a7037c6016561fe9", "aberta", "OS-2026-8788", "SE Patos Oeste", "BANCO-CAP-01 (Banco de Capacitores)", "se-patos-oeste--banco-cap-01-banco-de-capacitores", "Conexão", "conexao", "programar", 46.74423599243164, 71.01795626504641, "2026-08-18", "2026-09-17", -47, "VENCIDO - PARADA URGENTE", "Equipe Manutenção Sul", "Inspeção periódica. Identificado aquecimento em Conexão."},
+				        {"7e4c0a434beb4a2a81b625e852d74c28", "aberta", "OS-2026-6665", "SE Campina Grande II", "TR-01 (Transformador 230/69 kV)", "se-campina-grande-ii--tr-01-transformador-230-69-kv", "Terminal Adjacente (Fase B)", "terminal_superior", "imediato", 137.42999267578125, 338.194740080664, "2026-10-01", "2026-10-08", -26, "VENCIDO - PARADA URGENTE", "Equipe Manutenção Sul", "Inspeção periódica. Identificado aquecimento em Terminal Superior."},
+				        {"279a7ffda05b42a0801d44298ae078a9", "aberta", "", "Não informada", "Não informado", "sem-equipamento", "Ponto quente 1", "ponto_quente", "imediato", 260.79302978515625, 289.77003309461804, "2019-06-05", "2019-06-06", -2707, "VENCIDO - PARADA URGENTE", "", ""}
+				    })
+				in
+				    Fonte
+

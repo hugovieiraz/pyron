@@ -21,37 +21,47 @@ from datetime import datetime
 from pathlib import Path
 
 BANCO = "inspecoes.sqlite"
+BANCO_MEDIDAS = "cadastro_medidas.sqlite"
+BANCOS = (BANCO, BANCO_MEDIDAS)
 # Fora do backup: vídeos e treinos (grandes, refazíveis), backups antigos, o perfil do Edge onde a
 # interface roda ("janela": ~500 MB de componentes que o próprio Edge baixa, e arquivos que ele trava
 # com a janela aberta) e o certificado do celular ("celular": chave privada, refeita sozinha).
 FORA = {"videos", "treinos", "backups", "__pycache__", "janela", "celular"}
-RESTAURAVEIS = {"config.json", "logo.png", "monitor_vistos.json", "imagens", "matrizes", "avaliacoes"}
+RESTAURAVEIS = {"config.json", "logo.png", "monitor_vistos.json", "imagens", "matrizes", "avaliacoes", "medicao"}
 
 
 def _arquivos(pasta: Path):
     for p in sorted(pasta.rglob("*")):
         rel = p.relative_to(pasta)
-        # o banco vai pela API de backup; os arquivos -wal e -shm do modo WAL são do banco aberto, não se copiam
-        if p.is_dir() or rel.parts[0] in FORA or p.name.startswith(BANCO) or p.suffix in (".tmp", ".log"):
+        # os bancos vão pela API de backup; os arquivos -wal e -shm do modo WAL são do banco aberto, não se copiam
+        if p.is_dir() or rel.parts[0] in FORA or p.name.startswith(BANCOS) or p.suffix in (".tmp", ".log"):
             continue
         yield p, rel
 
 
+def _copiar_banco(origem_arq: Path, destino_arq: Path, limpar_sessoes: bool = False) -> None:
+    origem, destino = sqlite3.connect(origem_arq), sqlite3.connect(destino_arq)
+    try:
+        with destino:
+            origem.backup(destino)
+            if limpar_sessoes:
+                _sem_sessoes(destino)
+    finally:
+        origem.close()
+        destino.close()
+
+
 def gerar(pasta: Path) -> bytes:
-    """Zip com os dados de ``pasta`` (o banco copiado de forma consistente)."""
+    """Zip com os dados de ``pasta`` (os bancos copiados de forma consistente)."""
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
-        banco = pasta / BANCO
-        if banco.exists():
-            with tempfile.TemporaryDirectory() as tmp:
-                copia = Path(tmp) / BANCO
-                origem, destino = sqlite3.connect(banco), sqlite3.connect(copia)
-                with destino:
-                    origem.backup(destino)
-                    _sem_sessoes(destino)
-                origem.close()
-                destino.close()
-                z.write(copia, BANCO)
+        with tempfile.TemporaryDirectory() as tmp:
+            for nome_banco in BANCOS:
+                banco = pasta / nome_banco
+                if banco.exists():
+                    copia = Path(tmp) / nome_banco
+                    _copiar_banco(banco, copia, limpar_sessoes=(nome_banco == BANCO))
+                    z.write(copia, nome_banco)
         for p, rel in _arquivos(pasta):
             z.write(p, rel.as_posix())
         z.writestr("LEIA-ME.txt", f"Backup do Pyron gerado em {datetime.now():%d/%m/%Y %H:%M}.\n"
@@ -101,14 +111,11 @@ def restaurar(pasta: Path, dados: bytes) -> dict:
         finally:
             con.close()
         # O banco é trocado por dentro (API de backup do SQLite), sem apagar o arquivo que o programa usa.
-        src, dst = sqlite3.connect(origem / BANCO), sqlite3.connect(pasta / BANCO)
-        try:
-            src.backup(dst)
-            with dst:
-                _sem_sessoes(dst)
-        finally:
-            src.close()
-            dst.close()
+        _copiar_banco(origem / BANCO, pasta / BANCO, limpar_sessoes=True)
+        if (origem / BANCO_MEDIDAS).exists():
+            _copiar_banco(origem / BANCO_MEDIDAS, pasta / BANCO_MEDIDAS, limpar_sessoes=False)
+        elif (pasta / BANCO_MEDIDAS).exists():
+            (pasta / BANCO_MEDIDAS).unlink(missing_ok=True)
         for nome in RESTAURAVEIS:
             alvo = pasta / nome
             if alvo.is_dir():

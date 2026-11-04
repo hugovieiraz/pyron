@@ -1,0 +1,58 @@
+table Dim_Subestacoes
+	lineageTag: 31461e0b-1c6d-44f9-9c94-b869755d48db
+
+	column subestacao_id
+		dataType: int64
+		lineageTag: cf6430fe-0a6c-4baa-976a-3b2bff07ca04
+		summarizeBy: none
+		sourceColumn: subestacao_id
+
+	column instalacao_chave
+		dataType: string
+		lineageTag: 60913dbb-f794-43c8-8ced-da0b638aba1c
+		summarizeBy: none
+		sourceColumn: instalacao_chave
+
+	column instalacao
+		dataType: string
+		lineageTag: 50bdfe02-31c3-4d9f-9c99-5988e70b6bc5
+		summarizeBy: none
+		sourceColumn: instalacao
+
+	column municipio
+		dataType: string
+		lineageTag: b963af36-2beb-4fff-8053-27597bd03d21
+		summarizeBy: none
+		sourceColumn: municipio
+
+	column estado
+		dataType: string
+		lineageTag: 24935784-cce9-4ee5-a58c-f21ddbac1353
+		summarizeBy: none
+		sourceColumn: estado
+
+	column tensao_nominal_kv
+		dataType: int64
+		lineageTag: 934ef602-0ac6-4735-8a30-e7668327f106
+		summarizeBy: sum
+		sourceColumn: tensao_nominal_kv
+
+	column status
+		dataType: string
+		lineageTag: 7369385a-9f43-4786-9ad6-20d5221fe57e
+		summarizeBy: none
+		sourceColumn: status
+
+	partition Dim_Subestacoes = m
+		mode: import
+		source =
+				let
+				    Fonte = #table(type table [subestacao_id = Int64.Type, instalacao_chave = text, instalacao = text, municipio = text, estado = text, tensao_nominal_kv = Int64.Type, status = text], {
+				        {1, "se-patos-oeste", "SE Patos Oeste", "Patos", "Paraíba", 500, "Ativa"},
+				        {2, "se-campina-grande-ii", "SE Campina Grande II", "Campina Grande", "Paraíba", 230, "Ativa"},
+				        {3, "se-santa-rita-norte", "SE Santa Rita Norte", "Santa Rita", "Paraíba", 69, "Ativa"},
+				        {0, "sem-instalacao", "Não informada", "Bancada / Laboratório", "Paraíba", 0, "P&D / Testes"}
+				    })
+				in
+				    Fonte
+

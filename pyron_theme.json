@@ -1,0 +1,88 @@
+{
+  "name": "Pyron Enterprise - NBR 15866",
+  "dataColors": [
+    "#DC2626",
+    "#EA580C",
+    "#D97706",
+    "#EAB308",
+    "#16A34A",
+    "#2563EB",
+    "#0284C7",
+    "#64748B"
+  ],
+  "background": "#F8FAFC",
+  "foreground": "#0F172A",
+  "tableAccent": "#2563EB",
+  "good": "#16A34A",
+  "neutral": "#D97706",
+  "bad": "#DC2626",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#E2E8F0" } },
+            "radius": 8
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#CBD5E1" } },
+            "preset": "Custom",
+            "shadowColor": { "solid": { "color": "#000000" } },
+            "shadowTransparency": 95,
+            "shadowBlur": 6,
+            "shadowAngle": 90,
+            "shadowDistance": 2
+          }
+        ],
+        "background": [
+          {
+            "show": true,
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 0
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI Semibold",
+            "fontSize": 11,
+            "fontColor": { "solid": { "color": "#0F172A" } }
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": { "solid": { "color": "#F8FAFC" } },
+            "transparency": 0
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [
+          {
+            "fontFamily": "Segoe UI",
+            "fontSize": 24,
+            "color": { "solid": { "color": "#0F172A" } }
+          }
+        ],
+        "categoryLabels": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI",
+            "fontSize": 10,
+            "color": { "solid": { "color": "#64748B" } }
+          }
+        ]
+      }
+    }
+  }
+}

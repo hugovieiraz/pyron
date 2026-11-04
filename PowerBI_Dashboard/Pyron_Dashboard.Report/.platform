@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Pyron_Dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0a46fc68-ee49-4c10-80fb-4b2904c73a39"
+  }
+}

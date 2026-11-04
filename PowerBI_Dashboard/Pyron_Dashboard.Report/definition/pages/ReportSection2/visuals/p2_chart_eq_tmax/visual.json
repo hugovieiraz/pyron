@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p2_chart_eq_tmax",
+  "position": {
+    "x": 20,
+    "y": 140,
+    "z": 500,
+    "height": 280,
+    "width": 610,
+    "tabOrder": 500
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "equipamento"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.equipamento",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Temperatura Máxima Global"
+                }
+              },
+              "queryRef": "_Medidas.Temperatura Máxima Global"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

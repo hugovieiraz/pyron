@@ -1,0 +1,141 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p2_table_insp",
+  "position": {
+    "x": 20,
+    "y": 435,
+    "z": 700,
+    "height": 265,
+    "width": 1240,
+    "tabOrder": 700
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "arquivo_original"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.arquivo_original"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "data_calendario"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.data_calendario"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "instalacao"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.instalacao"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "equipamento"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.equipamento"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "severidade"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.severidade"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "t_max_cena"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.t_max_cena"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "delta_t_ambiente_c"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.delta_t_ambiente_c"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "maior_pct_mta"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.maior_pct_mta"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "camera"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.camera"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

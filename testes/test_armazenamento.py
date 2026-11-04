@@ -292,3 +292,30 @@ def test_reindexar_conserta_o_que_um_pyron_antigo_gravou(tmp_path):
     assert _linhas(arm, "SELECT COUNT(*) FROM pendencias") == [(0,)]
     assert _linhas(arm, "SELECT severidade FROM regioes WHERE ordem = 0") == [("normal",)]
 
+
+def test_views_bi_sqlite_prontas_para_power_bi(tmp_path):
+    arm = Armazenamento(tmp_path)
+    arm.salvar(_analise("a1", sev="urgente", instalacao="SE Campina Grande II", equipamento="TR-01"),
+               original=b"jpeg", matriz=np.zeros((3, 3)))
+    arm.salvar_alerta({"id": "al1", "criado_em": "2026-10-01T10:00:00", "status": "pendente",
+                       "analise_id": "a1", "severidade": "urgente"})
+    arm.registrar_laudo({"id": "RT-20261001-01", "emitido_em": "2026-10-01T11:00:00", "emitido_por_id": "u1",
+                         "emitido_por_nome": "Ana", "responsavel_nome": "Ana", "responsavel_registro": "CREA 111",
+                         "analises": ["a1"], "sha256": "abc123", "bytes": 1024})
+
+    (insp,) = _linhas(arm, "SELECT inspecao_id, instalacao, equipamento, severidade, severidade_ordem, "
+                           "delta_t_ambiente_c, miniatura_url FROM vw_bi_inspecoes")
+    assert insp == ("a1", "SE Campina Grande II", "TR-01", "urgente", 4, 63.5, "/api/analises/a1/miniatura.png")
+
+    regs = _linhas(arm, "SELECT regiao_id, classe_componente, t_max, pct_mta, severidade FROM vw_bi_regioes ORDER BY ordem")
+    assert regs[0] == ("r1", "conexao", 88.5, 98.3, "urgente")
+
+    (pend,) = _linhas(arm, "SELECT subestacao_instalacao, equipamento, peca_a_reparar_substituir, severidade, data_limite "
+                           "FROM vw_bi_pendencias_logistica")
+    assert pend == ("SE Campina Grande II", "TR-01", "Conexão A", "urgente", "2026-10-07")
+
+    (kpis,) = _linhas(arm, "SELECT total_subestacoes_ativas, total_ativos_monitorados, total_inspecoes_realizadas, "
+                           "total_reparos_pendentes, alertas_nao_atendidos, total_laudos_emitidos FROM vw_bi_kpis")
+    assert kpis == (1, 1, 1, 1, 1, 1)
+
+

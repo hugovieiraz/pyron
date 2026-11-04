@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p2_chart_cam",
+  "position": {
+    "x": 650,
+    "y": 140,
+    "z": 600,
+    "height": 280,
+    "width": 610,
+    "tabOrder": 600
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "camera"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.camera",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total Inspeções"
+                }
+              },
+              "queryRef": "_Medidas.Total Inspeções"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p4_chart_mod",
+  "position": {
+    "x": 20,
+    "y": 140,
+    "z": 400,
+    "height": 260,
+    "width": 610,
+    "tabOrder": 400
+  },
+  "visual": {
+    "visualType": "clusteredColumnChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Inspecoes"
+                    }
+                  },
+                  "Property": "modelo"
+                }
+              },
+              "queryRef": "Fato_Inspecoes.modelo",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total Inspeções"
+                }
+              },
+              "queryRef": "_Medidas.Total Inspeções"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

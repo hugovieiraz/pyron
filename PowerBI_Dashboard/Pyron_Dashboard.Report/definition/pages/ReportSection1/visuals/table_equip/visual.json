@@ -1,0 +1,102 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "table_equip",
+  "position": {
+    "x": 20,
+    "y": 495,
+    "z": 1200,
+    "height": 205,
+    "width": 1240,
+    "tabOrder": 1200
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Equipamentos"
+                    }
+                  },
+                  "Property": "equipamento_id"
+                }
+              },
+              "queryRef": "Dim_Equipamentos.equipamento_id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Equipamentos"
+                    }
+                  },
+                  "Property": "instalacao"
+                }
+              },
+              "queryRef": "Dim_Equipamentos.instalacao"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Equipamentos"
+                    }
+                  },
+                  "Property": "equipamento"
+                }
+              },
+              "queryRef": "Dim_Equipamentos.equipamento"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Equipamentos"
+                    }
+                  },
+                  "Property": "inspecoes"
+                }
+              },
+              "queryRef": "Dim_Equipamentos.inspecoes"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Equipamentos"
+                    }
+                  },
+                  "Property": "maior_t_max_cena"
+                }
+              },
+              "queryRef": "Dim_Equipamentos.maior_t_max_cena"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Equipamentos"
+                    }
+                  },
+                  "Property": "maior_pct_mta"
+                }
+              },
+              "queryRef": "Dim_Equipamentos.maior_pct_mta"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

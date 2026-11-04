@@ -1,7 +1,7 @@
-"""Exportador / ETL: extrai dados do SQLite local (esquema v2) para PostgreSQL ou script SQL.
+"""Exportador / ETL: extrai dados do SQLite local (esquema v3 + cadastro de medidas) para PostgreSQL ou script SQL.
 
 Gera comandos SQL (INSERT ... ON CONFLICT) ou executa diretamente em conexão PostgreSQL
-(via psycopg ou asyncpg se disponíveis).
+(via psycopg ou asyncpg se disponíveis), incluindo a camada Star Schema para Power BI / Tableau.
 
 Uso via linha de comando:
     python -m app.exportar_postgres                      # Gera dump exportacao_pyron.sql
@@ -13,8 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
-import sys
+import sqlite3
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -46,7 +45,7 @@ def escape_sql(valor) -> str:
 
 
 DDL_POSTGRES = """-- =============================================================================
--- ESTRUTURA DO BANCO DE DADOS (DDL IDEMPOTENTE)
+-- ESTRUTURA DO BANCO DE DADOS (DDL IDEMPOTENTE - ESQUEMA V3 + METROLOGIA + BI)
 -- =============================================================================
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
@@ -243,6 +242,7 @@ CREATE TABLE IF NOT EXISTS inspecoes_termograficas (
     criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     sincronizado_nuvem_em TIMESTAMPTZ,
     origem_captura VARCHAR(40) NOT NULL DEFAULT 'upload_flir',
+    radiometrica BOOLEAN DEFAULT TRUE,
     arquivo_original_nome VARCHAR(255) NOT NULL,
     imagem_termica_uri TEXT NOT NULL,
     imagem_visivel_uri TEXT,
@@ -252,16 +252,24 @@ CREATE TABLE IF NOT EXISTS inspecoes_termograficas (
     t_min_cena_c NUMERIC(6, 2),
     t_max_cena_c NUMERIC(6, 2),
     t_media_cena_c NUMERIC(6, 2),
+    ambiente_c NUMERIC(6, 2),
+    carga_pct NUMERIC(6, 2),
     hotspot_global_x INTEGER,
     hotspot_global_y INTEGER,
     t_referencia_c NUMERIC(6, 2),
     tipo_referencia tipo_referencia_delta_t,
     delta_t_global_c NUMERIC(6, 2),
     mta_aplicada_c NUMERIC(6, 2),
+    maior_pct_mta NUMERIC(6, 2),
     severidade tipo_severidade NOT NULL,
     acoes_recomendadas TEXT,
     observacoes TEXT
 );
+
+ALTER TABLE inspecoes_termograficas ADD COLUMN IF NOT EXISTS radiometrica BOOLEAN DEFAULT TRUE;
+ALTER TABLE inspecoes_termograficas ADD COLUMN IF NOT EXISTS ambiente_c NUMERIC(6, 2);
+ALTER TABLE inspecoes_termograficas ADD COLUMN IF NOT EXISTS carga_pct NUMERIC(6, 2);
+ALTER TABLE inspecoes_termograficas ADD COLUMN IF NOT EXISTS maior_pct_mta NUMERIC(6, 2);
 
 CREATE TABLE IF NOT EXISTS parametros_radiometricos_flir (
     inspecao_id UUID PRIMARY KEY REFERENCES inspecoes_termograficas(id) ON DELETE CASCADE,
@@ -302,10 +310,13 @@ CREATE TABLE IF NOT EXISTS deteccoes_regioes (
     t_max_c NUMERIC(6, 2),
     t_media_c NUMERIC(6, 2),
     delta_t_regiao_c NUMERIC(6, 2),
+    pct_mta_regiao NUMERIC(6, 2),
     hotspot_x INTEGER,
     hotspot_y INTEGER,
     severidade_regiao tipo_severidade NOT NULL
 );
+
+ALTER TABLE deteccoes_regioes ADD COLUMN IF NOT EXISTS pct_mta_regiao NUMERIC(6, 2);
 
 CREATE TABLE IF NOT EXISTS alertas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -347,6 +358,7 @@ CREATE TABLE IF NOT EXISTS historico_pendencias (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     pendencia_id UUID NOT NULL REFERENCES pendencias_manutencao(id) ON DELETE CASCADE,
     usuario_id UUID REFERENCES usuarios_responsaveis(id),
+    autor_nome VARCHAR(150),
     status_anterior status_pendencia,
     status_novo status_pendencia NOT NULL,
     ordem_servico_informada VARCHAR(100),
@@ -354,25 +366,79 @@ CREATE TABLE IF NOT EXISTS historico_pendencias (
     registrado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+ALTER TABLE historico_pendencias ADD COLUMN IF NOT EXISTS autor_nome VARCHAR(150);
+
+CREATE TABLE IF NOT EXISTS comentarios_inspecao (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    codigo_legado VARCHAR(100) UNIQUE,
+    inspecao_id UUID NOT NULL REFERENCES inspecoes_termograficas(id) ON DELETE CASCADE,
+    regiao_id VARCHAR(100),
+    autor_id VARCHAR(100),
+    autor_nome VARCHAR(150) NOT NULL,
+    texto TEXT NOT NULL,
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS laudos_tecnicos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     numero_relatorio VARCHAR(60) UNIQUE NOT NULL,
     empresa_id UUID NOT NULL REFERENCES empresas(id) ON DELETE RESTRICT,
     instalacao_id UUID REFERENCES instalacoes(id) ON DELETE RESTRICT,
-    responsavel_tecnico_id UUID NOT NULL REFERENCES usuarios_responsaveis(id),
+    responsavel_tecnico_id UUID REFERENCES usuarios_responsaveis(id),
+    responsavel_nome VARCHAR(255),
+    responsavel_registro VARCHAR(80),
+    emitido_por_nome VARCHAR(255),
     codigo_art VARCHAR(80),
-    versao_emissor VARCHAR(30) NOT NULL,
+    versao_emissor VARCHAR(30) NOT NULL DEFAULT '0.9.0',
     criterios_utilizados JSONB NOT NULL DEFAULT '{}'::JSONB,
     pdf_storage_uri TEXT NOT NULL,
+    pdf_sha256 CHAR(64),
+    pdf_bytes BIGINT,
     html_storage_uri TEXT,
     emitido_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE laudos_tecnicos ALTER COLUMN responsavel_tecnico_id DROP NOT NULL;
+ALTER TABLE laudos_tecnicos ADD COLUMN IF NOT EXISTS responsavel_nome VARCHAR(255);
+ALTER TABLE laudos_tecnicos ADD COLUMN IF NOT EXISTS responsavel_registro VARCHAR(80);
+ALTER TABLE laudos_tecnicos ADD COLUMN IF NOT EXISTS emitido_por_nome VARCHAR(255);
+ALTER TABLE laudos_tecnicos ADD COLUMN IF NOT EXISTS pdf_sha256 CHAR(64);
+ALTER TABLE laudos_tecnicos ADD COLUMN IF NOT EXISTS pdf_bytes BIGINT;
 
 CREATE TABLE IF NOT EXISTS laudo_inspecoes (
     laudo_id UUID NOT NULL REFERENCES laudos_tecnicos(id) ON DELETE CASCADE,
     inspecao_id UUID NOT NULL REFERENCES inspecoes_termograficas(id) ON DELETE RESTRICT,
     ordem_exibicao INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (laudo_id, inspecao_id)
+);
+
+CREATE TABLE IF NOT EXISTS cameras_calibradas (
+    nome VARCHAR(120) PRIMARY KEY,
+    tipo VARCHAR(60) NOT NULL,
+    perfil JSONB NOT NULL DEFAULT '{}'::JSONB,
+    criado_em TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    atualizado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS medidas_dimensionais_ativos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    codigo_legado INTEGER UNIQUE,
+    equipamento_chave VARCHAR(200) NOT NULL,
+    componente VARCHAR(150) NOT NULL,
+    classe_componente VARCHAR(80),
+    fase VARCHAR(20),
+    medida VARCHAR(40) NOT NULL,
+    valor_cm NUMERIC(10, 3) NOT NULL,
+    incerteza_cm NUMERIC(10, 3),
+    metodo VARCHAR(40) NOT NULL,
+    origem JSONB NOT NULL DEFAULT '{}'::JSONB,
+    status VARCHAR(30) NOT NULL,
+    criado_em TIMESTAMPTZ NOT NULL,
+    criado_por VARCHAR(150) NOT NULL,
+    validado_por VARCHAR(150),
+    registro_validador VARCHAR(80),
+    validado_em TIMESTAMPTZ,
+    nota TEXT
 );
 
 CREATE TABLE IF NOT EXISTS sessoes_video (
@@ -425,7 +491,22 @@ CREATE INDEX IF NOT EXISTS idx_inspecoes_instalacao_severidade ON inspecoes_term
 CREATE INDEX IF NOT EXISTS idx_deteccoes_classe_severidade ON deteccoes_regioes (classe_componente, severidade_regiao);
 CREATE INDEX IF NOT EXISTS idx_pendencias_status_limite ON pendencias_manutencao (status, data_limite ASC);
 CREATE INDEX IF NOT EXISTS idx_alertas_status_criado ON alertas (status, criado_em DESC);
+CREATE INDEX IF NOT EXISTS idx_comentarios_inspecao ON comentarios_inspecao (inspecao_id, criado_em);
+CREATE INDEX IF NOT EXISTS idx_medidas_equipamento_status ON medidas_dimensionais_ativos (equipamento_chave, status);
 """
+
+
+def _mta_da_inspecao(dados: dict, regs: list[tuple]) -> float | None:
+    """Obtém a MTA aplicável em °C da região mais crítica da inspeção."""
+    for r in dados.get("regioes") or []:
+        if r.get("mta_c") is not None:
+            return float(r["mta_c"])
+    for r in regs:
+        classe_canon = referencias.classe_da_biblioteca(r[2] or "componente")
+        info = referencias.COMPONENTES_PADRAO.get(classe_canon) or {}
+        if info.get("mta_c") is not None:
+            return float(info["mta_c"])
+    return None
 
 
 class ExportadorPostgres:
@@ -505,7 +586,6 @@ class ExportadorPostgres:
                 eq_uuid_map[e_id] = u_id
                 u_inst = inst_uuid_map.get(e_inst_id)
                 if not u_inst:
-                    # Instalação fantasma se não houver
                     u_inst = uuid_estavel("instalacao:sem-instalacao")
                     linhas.append(
                         f"INSERT INTO instalacoes (id, empresa_id, codigo_instalacao, nome) "
@@ -527,14 +607,15 @@ class ExportadorPostgres:
                 "FROM analises"
             ).fetchall()
 
+            inspecoes_validas = set()
             for a_row in ans:
                 (a_id, capturado, criado, e_id, fonte, radiom, mod_nome,
                  t_max, t_min, pct_mta, amb, carga, arq_nome, sev, dados_json) = a_row
+                inspecoes_validas.add(a_id)
                 u_inspecao = uuid_estavel(f"inspecao:{a_id}")
                 u_eq = eq_uuid_map.get(e_id)
 
                 if not u_eq:
-                    # Garantir equipamento genérico
                     u_inst_geral = uuid_estavel("instalacao:sem-instalacao")
                     u_eq = uuid_estavel("equipamento:avulso")
                     linhas.append(
@@ -550,25 +631,33 @@ class ExportadorPostgres:
 
                 dados = json.loads(dados_json) if dados_json else {}
                 resumo = dados.get("resumo") or {}
-                meta = dados.get("metadados") or {}
-                delta_t = (t_max - amb) if (t_max is not None and amb is not None) else None
+                delta_t = round(t_max - amb, 2) if (t_max is not None and amb is not None) else None
+
+                regs = c.execute(
+                    "SELECT ordem, regiao_id, classe, x0, y0, x1, y1, t_max, t_med, t_min, x_max, y_max, "
+                    "dt_corrigido, confianca, severidade, nome, pct_mta FROM regioes WHERE analise_id = ? ORDER BY ordem",
+                    (a_id,)
+                ).fetchall()
+                mta_c = _mta_da_inspecao(dados, regs)
 
                 linhas.append(
                     f"INSERT INTO inspecoes_termograficas ("
                     f"id, codigo_legado, instalacao_id, equipamento_id, norma_id, capturado_em, criado_em, "
-                    f"origem_captura, arquivo_original_nome, imagem_termica_uri, matriz_temperatura_uri, "
-                    f"t_min_cena_c, t_max_cena_c, t_media_cena_c, t_referencia_c, delta_t_global_c, "
-                    f"mta_aplicada_c, severidade, acoes_recomendadas, observacoes) VALUES ("
+                    f"origem_captura, radiometrica, arquivo_original_nome, imagem_termica_uri, matriz_temperatura_uri, "
+                    f"t_min_cena_c, t_max_cena_c, t_media_cena_c, ambiente_c, carga_pct, t_referencia_c, delta_t_global_c, "
+                    f"mta_aplicada_c, maior_pct_mta, severidade, acoes_recomendadas, observacoes) VALUES ("
                     f"{escape_sql(u_inspecao)}, {escape_sql(a_id)}, "
                     f"(SELECT instalacao_id FROM equipamentos WHERE id = {escape_sql(u_eq)}), "
                     f"{escape_sql(u_eq)}, {escape_sql(norma_id)}, {escape_sql(capturado or criado)}, {escape_sql(criado)}, "
-                    f"{escape_sql(fonte or 'upload_flir')}, {escape_sql(arq_nome)}, "
+                    f"{escape_sql(fonte or 'upload_flir')}, {escape_sql(True if radiom is None else bool(radiom))}, {escape_sql(arq_nome)}, "
                     f"{escape_sql(f'imagens/{a_id}.jpg')}, {escape_sql(f'matrizes/{a_id}.npy')}, "
-                    f"{escape_sql(t_min)}, {escape_sql(t_max)}, {escape_sql((t_max + t_min)/2 if (t_max and t_min) else None)}, "
-                    f"{escape_sql(amb)}, {escape_sql(delta_t)}, {escape_sql(pct_mta)}, {escape_sql(sev)}, "
+                    f"{escape_sql(t_min)}, {escape_sql(t_max)}, {escape_sql((t_max + t_min)/2 if (t_max is not None and t_min is not None) else None)}, "
+                    f"{escape_sql(amb)}, {escape_sql(carga)}, {escape_sql(amb)}, {escape_sql(delta_t)}, "
+                    f"{escape_sql(mta_c)}, {escape_sql(pct_mta)}, {escape_sql(sev)}, "
                     f"{escape_sql(resumo.get('mensagem'))}, {escape_sql('; '.join(resumo.get('avisos') or []))}) "
                     f"ON CONFLICT (codigo_legado) DO UPDATE SET severidade = EXCLUDED.severidade, "
-                    f"t_max_cena_c = EXCLUDED.t_max_cena_c;"
+                    f"t_max_cena_c = EXCLUDED.t_max_cena_c, mta_aplicada_c = EXCLUDED.mta_aplicada_c, "
+                    f"maior_pct_mta = EXCLUDED.maior_pct_mta, ambiente_c = EXCLUDED.ambiente_c, carga_pct = EXCLUDED.carga_pct;"
                 )
 
                 # Parâmetros radiométricos
@@ -584,11 +673,6 @@ class ExportadorPostgres:
                     )
 
                 # Regiões / Detecções
-                regs = c.execute(
-                    "SELECT ordem, regiao_id, classe, x0, y0, x1, y1, t_max, t_med, t_min, x_max, y_max, "
-                    "dt_corrigido, confianca, severidade, nome FROM regioes WHERE analise_id = ? ORDER BY ordem",
-                    (a_id,)
-                ).fetchall()
                 for r in regs:
                     u_reg = uuid_estavel(f"regiao:{a_id}:{r[0]}")
                     classe_canon = referencias.classe_da_biblioteca(r[2] or "componente")
@@ -596,16 +680,17 @@ class ExportadorPostgres:
                         f"INSERT INTO deteccoes_regioes ("
                         f"id, inspecao_id, indice_regiao, classe_componente, rotulo_regiao, confianca_ml, "
                         f"bbox_x_min, bbox_y_min, bbox_x_max, bbox_y_max, t_min_c, t_max_c, t_media_c, "
-                        f"delta_t_regiao_c, hotspot_x, hotspot_y, severidade_regiao) VALUES ("
+                        f"delta_t_regiao_c, pct_mta_regiao, hotspot_x, hotspot_y, severidade_regiao) VALUES ("
                         f"{escape_sql(u_reg)}, {escape_sql(u_inspecao)}, {r[0]}, {escape_sql(classe_canon)}, "
                         f"{escape_sql(r[15] or classe_canon)}, {escape_sql(r[13])}, "
                         f"{escape_sql(r[3] or 0)}, {escape_sql(r[4] or 0)}, {escape_sql(r[5] or 0)}, {escape_sql(r[6] or 0)}, "
                         f"{escape_sql(r[9])}, {escape_sql(r[7])}, {escape_sql(r[8])}, {escape_sql(r[12])}, "
-                        f"{escape_sql(r[10])}, {escape_sql(r[11])}, {escape_sql(r[14] or 'normal')}) "
-                        f"ON CONFLICT (id) DO NOTHING;"
+                        f"{escape_sql(r[16])}, {escape_sql(r[10])}, {escape_sql(r[11])}, {escape_sql(r[14] or 'normal')}) "
+                        f"ON CONFLICT (id) DO UPDATE SET severidade_regiao = EXCLUDED.severidade_regiao, "
+                        f"t_max_c = EXCLUDED.t_max_c, pct_mta_regiao = EXCLUDED.pct_mta_regiao;"
                     )
 
-                # Pendências
+                # Pendências e Histórico de Pendências (Esquema v3 com autor)
                 pend = c.execute(
                     "SELECT severidade, status, prazo, prazo_padrao, ordem_servico, responsavel, nota "
                     "FROM pendencias WHERE analise_id = ?", (a_id,)
@@ -623,8 +708,24 @@ class ExportadorPostgres:
                         f"{escape_sql('Geral')}, {escape_sql(t_max)}, {escape_sql(capturado or criado)}, "
                         f"{escape_sql(bool(pend[3]))}, {escape_sql(pend[2])}, {escape_sql(pend[1])}, "
                         f"{escape_sql(pend[4])}, {escape_sql(pend[6])}) "
-                        f"ON CONFLICT (id) DO NOTHING;"
+                        f"ON CONFLICT (id) DO UPDATE SET status = EXCLUDED.status, data_limite = EXCLUDED.data_limite, "
+                        f"ordem_servico_codigo = EXCLUDED.ordem_servico_codigo, responsavel_nome = EXCLUDED.responsavel_nome, "
+                        f"nota_tecnica = EXCLUDED.nota_tecnica;"
                     )
+                    hists = c.execute(
+                        "SELECT ordem, quando, status, nota, autor FROM historico_pendencias WHERE analise_id = ? ORDER BY ordem",
+                        (a_id,)
+                    ).fetchall()
+                    for h_ordem, h_quando, h_status, h_nota, h_autor in hists:
+                        u_hist = uuid_estavel(f"hist_pendencia:{a_id}:{h_ordem}")
+                        linhas.append(
+                            f"INSERT INTO historico_pendencias ("
+                            f"id, pendencia_id, autor_nome, status_novo, comentario, registrado_em) VALUES ("
+                            f"{escape_sql(u_hist)}, {escape_sql(u_pend)}, {escape_sql(h_autor)}, "
+                            f"{escape_sql(h_status or 'aberta')}, {escape_sql(h_nota)}, "
+                            f"{escape_sql(h_quando or criado)}) "
+                            f"ON CONFLICT (id) DO NOTHING;"
+                        )
 
             linhas.append("")
 
@@ -632,8 +733,10 @@ class ExportadorPostgres:
             linhas.append("-- 7. Alertas")
             als = c.execute("SELECT id, criado_em, status, analise_id, severidade, dados FROM alertas").fetchall()
             for al_id, al_criado, al_status, al_analise_id, al_sev, al_dados_json in als:
+                if not al_analise_id or al_analise_id not in inspecoes_validas:
+                    continue
                 u_alerta = uuid_estavel(f"alerta:{al_id}")
-                u_insp = uuid_estavel(f"inspecao:{al_analise_id}") if al_analise_id else None
+                u_insp = uuid_estavel(f"inspecao:{al_analise_id}")
                 al_dados = json.loads(al_dados_json) if al_dados_json else {}
                 msg = al_dados.get("mensagem") or al_dados.get("resumo") or "Alerta térmico"
                 linhas.append(
@@ -646,11 +749,113 @@ class ExportadorPostgres:
                     f"{escape_sql(msg)}, {escape_sql(al_criado)}) "
                     f"ON CONFLICT (codigo_legado) DO NOTHING;"
                 )
+            linhas.append("")
 
-        linhas.append("")
+            # 8. Comentários técnicos (Esquema v3)
+            linhas.append("-- 8. Comentários técnicos (Esquema v3)")
+            coms = c.execute(
+                "SELECT id, analise_id, regiao_id, autor_id, autor_nome, criado_em, texto FROM comentarios ORDER BY criado_em"
+            ).fetchall()
+            for c_id, c_analise_id, c_regiao_id, c_autor_id, c_autor_nome, c_criado_em, c_texto in coms:
+                if c_analise_id not in inspecoes_validas:
+                    continue
+                u_com = uuid_estavel(f"comentario:{c_id}")
+                u_insp = uuid_estavel(f"inspecao:{c_analise_id}")
+                linhas.append(
+                    f"INSERT INTO comentarios_inspecao ("
+                    f"id, codigo_legado, inspecao_id, regiao_id, autor_id, autor_nome, texto, criado_em) VALUES ("
+                    f"{escape_sql(u_com)}, {escape_sql(c_id)}, {escape_sql(u_insp)}, {escape_sql(c_regiao_id)}, "
+                    f"{escape_sql(c_autor_id)}, {escape_sql(c_autor_nome)}, {escape_sql(c_texto)}, {escape_sql(c_criado_em)}) "
+                    f"ON CONFLICT (codigo_legado) DO NOTHING;"
+                )
+            linhas.append("")
+
+            # 9. Laudos Emitidos (Esquema v3)
+            linhas.append("-- 9. Laudos Emitidos (Auditoria v3)")
+            laudos = c.execute(
+                "SELECT id, emitido_em, emitido_por_id, emitido_por_nome, responsavel_nome, "
+                "responsavel_registro, analises, sha256, bytes FROM laudos_emitidos ORDER BY emitido_em"
+            ).fetchall()
+            for l_id, l_em, l_por_id, l_por_nome, l_resp_nome, l_resp_reg, l_analises_json, l_sha, l_bytes in laudos:
+                u_laudo = uuid_estavel(f"laudo:{l_id}")
+                linhas.append(
+                    f"INSERT INTO laudos_tecnicos ("
+                    f"id, numero_relatorio, empresa_id, responsavel_nome, responsavel_registro, "
+                    f"emitido_por_nome, pdf_storage_uri, pdf_sha256, pdf_bytes, emitido_em) VALUES ("
+                    f"{escape_sql(u_laudo)}, {escape_sql(l_id)}, {escape_sql(self.empresa_id)}, "
+                    f"{escape_sql(l_resp_nome)}, {escape_sql(l_resp_reg)}, {escape_sql(l_por_nome)}, "
+                    f"{escape_sql(f'laudos/{l_id}.pdf')}, {escape_sql(l_sha)}, {escape_sql(l_bytes)}, {escape_sql(l_em)}) "
+                    f"ON CONFLICT (numero_relatorio) DO NOTHING;"
+                )
+                try:
+                    ids_laudo = json.loads(l_analises_json) if l_analises_json else []
+                except json.JSONDecodeError:
+                    ids_laudo = []
+                for ordem_idx, aid in enumerate(ids_laudo, start=1):
+                    if aid in inspecoes_validas:
+                        u_insp = uuid_estavel(f"inspecao:{aid}")
+                        linhas.append(
+                            f"INSERT INTO laudo_inspecoes (laudo_id, inspecao_id, ordem_exibicao) "
+                            f"VALUES ({escape_sql(u_laudo)}, {escape_sql(u_insp)}, {ordem_idx}) "
+                            f"ON CONFLICT (laudo_id, inspecao_id) DO NOTHING;"
+                        )
+            linhas.append("")
+
+        # 10. Metrologia e Calibração (cadastro_medidas.sqlite, se existir)
+        banco_medidas = self.arm.pasta / "cadastro_medidas.sqlite"
+        if banco_medidas.exists():
+            linhas.append("-- 10. Metrologia e Câmeras Calibradas (cadastro_medidas.sqlite)")
+            con_m = sqlite3.connect(banco_medidas)
+            try:
+                tem_cameras = con_m.execute(
+                    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='cameras'"
+                ).fetchone()
+                if tem_cameras:
+                    for nome_cam, tipo_cam, perfil_json, cr_em, at_em in con_m.execute(
+                        "SELECT nome, tipo, perfil, criado_em, atualizado_em FROM cameras ORDER BY nome"
+                    ).fetchall():
+                        perfil_obj = json.loads(perfil_json) if perfil_json else {}
+                        linhas.append(
+                            f"INSERT INTO cameras_calibradas (nome, tipo, perfil, criado_em, atualizado_em) "
+                            f"VALUES ({escape_sql(nome_cam)}, {escape_sql(tipo_cam)}, {escape_sql(perfil_obj)}, "
+                            f"{escape_sql(cr_em)}, {escape_sql(at_em)}) "
+                            f"ON CONFLICT (nome) DO UPDATE SET tipo = EXCLUDED.tipo, perfil = EXCLUDED.perfil, "
+                            f"atualizado_em = EXCLUDED.atualizado_em;"
+                        )
+                tem_medidas = con_m.execute(
+                    "SELECT 1 FROM sqlite_master WHERE type='table' AND name='medidas'"
+                ).fetchone()
+                if tem_medidas:
+                    for m_row in con_m.execute(
+                        "SELECT id, equipamento_chave, componente, classe, fase, medida, valor_cm, incerteza_cm, "
+                        "metodo, origem, status, criado_em, criado_por, validado_por, registro_validador, validado_em, nota "
+                        "FROM medidas ORDER BY id"
+                    ).fetchall():
+                        (mid, eq_ch, comp, cl, fase, med, val, inc, met, orig_json, st,
+                         cr_em, cr_por, val_por, reg_val, val_em, nota) = m_row
+                        u_med = uuid_estavel(f"medida_dimensional:{mid}")
+                        orig_obj = json.loads(orig_json) if orig_json else {}
+                        linhas.append(
+                            f"INSERT INTO medidas_dimensionais_ativos ("
+                            f"id, codigo_legado, equipamento_chave, componente, classe_componente, fase, medida, "
+                            f"valor_cm, incerteza_cm, metodo, origem, status, criado_em, criado_por, "
+                            f"validado_por, registro_validador, validado_em, nota) VALUES ("
+                            f"{escape_sql(u_med)}, {mid}, {escape_sql(eq_ch)}, {escape_sql(comp)}, {escape_sql(cl)}, "
+                            f"{escape_sql(fase)}, {escape_sql(med)}, {escape_sql(val)}, {escape_sql(inc)}, "
+                            f"{escape_sql(met)}, {escape_sql(orig_obj)}, {escape_sql(st)}, {escape_sql(cr_em)}, "
+                            f"{escape_sql(cr_por)}, {escape_sql(val_por)}, {escape_sql(reg_val)}, {escape_sql(val_em)}, "
+                            f"{escape_sql(nota)}) "
+                            f"ON CONFLICT (codigo_legado) DO UPDATE SET status = EXCLUDED.status, "
+                            f"validado_por = EXCLUDED.validado_por, registro_validador = EXCLUDED.registro_validador, "
+                            f"validado_em = EXCLUDED.validado_em, nota = EXCLUDED.nota;"
+                        )
+            finally:
+                con_m.close()
+            linhas.append("")
+
         linhas.append("COMMIT;")
         linhas.append("")
-        # Incluir views analíticas de BI e Logística/Suprimentos se o arquivo de views existir
+        # Incluir views analíticas de BI e Star Schema (Power BI / Tableau / Grafana) se o arquivo existir
         caminho_views = Path(__file__).resolve().parents[1] / "docs" / "views_dashboard_bi.sql"
         if caminho_views.exists():
             linhas.append(caminho_views.read_text(encoding="utf-8"))
@@ -692,4 +897,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

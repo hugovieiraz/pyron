@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p3_chart_equipe",
+  "position": {
+    "x": 460,
+    "y": 140,
+    "z": 500,
+    "height": 260,
+    "width": 800,
+    "tabOrder": 500
+  },
+  "visual": {
+    "visualType": "clusteredBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fato_Pendencias_OS"
+                    }
+                  },
+                  "Property": "equipe_responsavel"
+                }
+              },
+              "queryRef": "Fato_Pendencias_OS.equipe_responsavel",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Total Ordens de Serviço"
+                }
+              },
+              "queryRef": "_Medidas.Total Ordens de Serviço"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

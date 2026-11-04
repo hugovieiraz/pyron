@@ -82,11 +82,36 @@ O **Metabase** é a opção mais produtiva para compras e diretoria:
 
 ---
 
-## 4. Passo a Passo Rápido: Power BI Desktop (Gratuito)
+## 4. Passo a Passo Rápido: Power BI Desktop (Gratuito — PostgreSQL ou SQLite Local)
 
-1. Baixe gratuitamente o **Power BI Desktop**.
-2. Clique em **Obter Dados** $\rightarrow$ **Banco de Dados PostgreSQL**.
-3. Insira o servidor e o banco de dados.
-4. Selecione as tabelas/views que começam com `vw_`.
-5. Arraste os campos de data limite e equipamento para criar um gráfico de Gantt ou tabela de prioridade com formatação condicional (Vermelho para $\le$ 7 dias, Laranja para 30 dias).
+### Opção A: Conectado ao PostgreSQL (Modo Servidor / Nuvem)
+1. Gere e aplique o banco com `python -m app.exportar_postgres --url postgresql://usuario:senha@localhost:5432/pyron`.
+2. No **Power BI Desktop**, clique em **Obter Dados** → **Banco de Dados PostgreSQL**.
+3. Insira o servidor (`localhost:5432`) e o banco (`pyron`).
+4. Para um dashboard executivo imediato, selecione as 4 views prontas:
+   - `vw_logistica_suprimentos_reparos`
+   - `vw_demanda_compras_pecas`
+   - `vw_engenharia_saude_ativos`
+   - `vw_kpis_estrategicos_diretoria`
+5. Para modelagem dimensional completa (**Star Schema**), selecione:
+   - Dimensões: `vw_dim_ativos`, `vw_dim_componentes`
+   - Fatos: `vw_fato_inspecoes`, `vw_fato_deteccoes`, `vw_fato_pendencias`
+6. Na coluna `miniatura_api_url` ou `termograma_api_url` de `vw_fato_inspecoes`, mude a **Categoria de Dados** no Power BI para **URL da Imagem** (*Image URL*) para exibir o termograma diretamente nas tabelas e *tooltips*.
+
+### Opção B: Conectado Direto ao SQLite Local (`inspecoes.sqlite` — Sem Servidor)
+O banco local `app/dados_app/inspecoes.sqlite` já possui as views `vw_bi_inspecoes`, `vw_bi_regioes`, `vw_bi_pendencias_logistica`, `vw_bi_kpis` e `vw_equipamentos`. Você pode carregá-las no Power BI Desktop via **ODBC SQLite** ou sem instalar driver nenhum usando **Obter Dados → Script do Python**:
+
+```python
+import sqlite3
+import pandas as pd
+
+caminho = r"D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii\app\dados_app\inspecoes.sqlite"
+with sqlite3.connect(caminho) as con:
+    vw_bi_inspecoes = pd.read_sql_query("SELECT * FROM vw_bi_inspecoes", con)
+    vw_bi_regioes = pd.read_sql_query("SELECT * FROM vw_bi_regioes", con)
+    vw_bi_pendencias_logistica = pd.read_sql_query("SELECT * FROM vw_bi_pendencias_logistica", con)
+    vw_bi_kpis = pd.read_sql_query("SELECT * FROM vw_bi_kpis", con)
+    vw_equipamentos = pd.read_sql_query("SELECT * FROM vw_equipamentos", con)
+```
+
 
