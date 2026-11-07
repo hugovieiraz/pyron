@@ -13,6 +13,21 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 07/11/2026 · Hugo: Controle Inteligente e o Pyron.exe
+
+- Feito: pesquisa, sem mudança de código. No registro de Integridade de Código (29/09 a 07/11), o Controle
+  Inteligente bloqueou o `Pyron.exe` sem assinatura 8 vezes (11/10, 26/10, 30/10 e 07/11 às 13:48). O `pythonw.exe`
+  do `.venv` (assinado pela PSF) nunca foi bloqueado; pacotes do `.venv` (onnx 43 vezes, torch, ml_dtypes, vernier,
+  hotcoco) só até 12/10. Atalho "Abrir Pyron" recriado na área de trabalho por `lancador/atalho.py`: abriu na 8765,
+  janela do Edge, nenhum bloqueio.
+- Para o outro: na máquina do Gabriel o Controle Inteligente está desligado, então lá o `.exe`, o Tauri e os kernels
+  Mojo sempre abrem; a prova só vale numa máquina com ele ligado. Assinatura sem pagar: Artifact Signing (Azure) só
+  aceita pessoa física dos EUA e do Canadá; SignPath Foundation é grátis só para código aberto com licença OSI (o
+  repositório não tem licença); a Microsoft Store é grátis para pessoa física desde 09/2025 e assina o MSIX na
+  publicação. Pago: certificado OV, cerca de US$ 150 a 300 por ano.
+- Pendente (Hugo): escolher entre MSIX pela Store, certificado OV ou continuar com o atalho; se for SignPath, ver com
+  a Embrapii se o código pode ser aberto.
+
 ## 07/11/2026 · Hugo: curadoria técnica e roteiro da apresentação
 
 - Feito: pesquisa sem mudança de código. `docs/apresentacao/curadoria.md` (bibliotecas com versão, fórmula de
