@@ -13,6 +13,15 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 07/11/2026 · Hugo: repositório com endereço novo
+
+- Feito: o GitHub passou a responder pelo endereço novo, https://github.com/hugovieiraz/pyron (o antigo,
+  `Pyron---Embrapii`, ainda redireciona). Remoto `origin` trocado nesta máquina e o endereço atualizado em
+  CLAUDE.md, site/index.html, docs/manual/gerar_manual.py e docs/08_arquitetura_banco_dados_pyron_cloud.md.
+- Para o outro: rode `git remote set-url origin https://github.com/hugovieiraz/pyron.git` na sua máquina. O caminho
+  local em docs/v09/medidas-f4/paridade-dml.json ficou como estava (é a pasta da sua máquina, registro de medida).
+- Pendente: nada.
+
 ## 07/11/2026 · Hugo: Medição com caixa do SAM e os dois modelos
 
 - Feito: Medição › Medir volta a ter "Caixa em volta" (modo padrão). O usuário arrasta um retângulo (ou clica dois

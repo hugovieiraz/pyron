@@ -143,7 +143,7 @@ todo mundo que trabalha no repositório, então só entra nele o que está no re
   `python app/iniciar.py --porta 8790 --sem-navegador --dados <pasta>`.
 - Ao terminar cada etapa, resumir em 3 linhas o que foi feito e o que ficou pendente.
 - Commit e push: autorizados desde a 0.7 para as mudanças feitas (ver a seção 5). O repositório é
-  https://github.com/hugovieiraz/Pyron---Embrapii.
+  https://github.com/hugovieiraz/pyron.
 - O dataset ScienceDB 10185 é só para estudo (CC BY-NC-SA): as imagens em si não vão para o
   repositório. Capturas de tela que mostram essas imagens (manual) podem ir, com o crédito e a
   licença no README (decisão do usuário: o projeto é compartilhado para estudo).
