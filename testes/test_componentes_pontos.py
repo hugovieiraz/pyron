@@ -73,6 +73,74 @@ def test_lista_oferece_um_outro_ou_os_dois(tmp_path) -> None:
     assert "ponto_quente" in combinado.classes and "aletas_isoladoras" in combinado.classes
 
 
+def test_resolve_modelo_termico_e_marca_principais(monkeypatch) -> None:
+    from app import servidor
+
+    def treinado(id_: str, otimizacao: dict | None = None) -> detectores.Detector:
+        cartao = {"id": id_, "classes": ["para_raio"]}
+        if otimizacao:
+            cartao["otimizacao"] = otimizacao
+        return detectores.Detector(id_, id_, "aprendizado", "teste", "", ["para_raio"], cartao=cartao)
+
+    pontos = detectores.obter("pontos-quentes")
+    sam2 = detectores.Detector("sam2-dinov2", "SAM 2", "aprendizado", "teste", "", [], cartao={})
+    modelo = treinado("para-raios")
+    rapido = treinado("para-raios-int8", {"origem": "para-raios"})
+    combinados = [detectores.Combinado(d, pontos) for d in (modelo, rapido)]
+    instalados = [pontos, detectores.obter("pontos-quentes-sam2"), sam2, modelo, rapido, *combinados]
+    config = {"modelo_ativo": "pontos-quentes"}
+    monkeypatch.setattr(servidor, "_config", lambda: config)
+    monkeypatch.setattr(servidor.detectores, "listar", lambda _: instalados)
+    monkeypatch.setattr(servidor, "_onde_modelo_ativo", lambda: None)
+    monkeypatch.setattr(servidor.provedores, "situacao", lambda: {})
+
+    assert servidor._modelo_termico() == "para-raios+pontos-quentes"
+    resposta = servidor.modelos()
+    assert resposta["ativo"] == "para-raios+pontos-quentes"
+    principais = {m["id"] for m in resposta["modelos"] if m.get("principal")}
+    assert principais == {"para-raios+pontos-quentes"}
+
+    config["modelo_ativo"] = "para-raios-int8+pontos-quentes"
+    assert servidor._modelo_termico() == "para-raios-int8+pontos-quentes"
+    instalados = [pontos, detectores.obter("pontos-quentes-sam2"), sam2, rapido, combinados[1]]
+    resposta = servidor.modelos()
+    # só o INT8 instalado: ele é o ativo e é o que a tela mostra (antes a tela mostrava a regra sozinha)
+    assert resposta["ativo"] == "para-raios-int8+pontos-quentes"
+    assert {m["id"] for m in resposta["modelos"] if m.get("principal")} == {"para-raios-int8+pontos-quentes"}
+    instalados = [pontos, detectores.obter("pontos-quentes-sam2"), sam2, modelo, rapido, *combinados]
+    config["modelo_ativo"] = "para-raios"
+    monkeypatch.setattr(servidor, "_salvar_config", lambda _: None)
+    servidor.definir_ativo({"id": "para-raios"})
+    assert config["modelo_ativo"] == "para-raios+pontos-quentes"
+
+    instalados = [pontos, detectores.obter("pontos-quentes-sam2"), sam2]
+    config["modelo_ativo"] = "pontos-quentes"
+    resposta = servidor.modelos()
+    assert servidor._modelo_termico() == "pontos-quentes"
+    assert {m["id"] for m in resposta["modelos"] if m.get("principal")} == {"pontos-quentes"}
+
+
+def test_ponto_quente_normal_some_e_anormal_permanece(monkeypatch) -> None:
+    from app import servidor
+
+    for temperatura, esperado in ((25.0, False), (100.0, True)):
+        matriz = np.full((20, 20), 25.0)
+        matriz[8:12, 8:12] = temperatura
+        analise_regiao = {
+            "id": "pq", "nome": "Ponto quente 1", "classe": "ponto_quente",
+            "caixa": [8, 8, 12, 12], "origem": "modelo:pontos-quentes",
+        }
+        a = {"condicoes": {}, "regioes": [analise_regiao]}
+        servidor._calcular(a, matriz)
+        if esperado:
+            assert a["regioes"][0]["severidade"] not in ("normal", "sem_medida")
+        servidor._remover_pontos_quentes_sem_anomalia(a, matriz)
+        assert bool(a["regioes"]) is esperado
+        # O marcador e a temperatura máxima continuam vindo da matriz toda.
+        assert a["resumo"]["t_max_cena"] == pytest.approx(temperatura)
+        assert a["resumo"]["ponto_mais_quente"]["t_max"] == pytest.approx(temperatura)
+
+
 @pytest.fixture()
 def cliente(tmp_path, monkeypatch):
     from fastapi.testclient import TestClient
@@ -96,9 +164,8 @@ def test_analise_com_os_dois_juntos(cliente, sessao_falsa) -> None:  # noqa: F81
     a = cliente.post("/api/analises", files={"arquivo": ("teste.jpg", _termograma_flir(), "image/jpeg")}).json()
     assert a["modelo"]["tipo"] == "combinado"
     classes = sorted(r["classe"] for r in a["regioes"])
-    assert classes == ["aletas_isoladoras", "ponto_quente"]  # a peça (modelo) e o calor (regra)
-    pq = next(r for r in a["regioes"] if r["classe"] == "ponto_quente")
-    assert pq["componente"]["classe"] == "aletas_isoladoras"
+    # o ponto quente cai dentro da peça: fica só a peça, e o ponto mais quente é o dela (pedido do Hugo, 03/11/2026)
+    assert classes == ["aletas_isoladoras"]
     assert a["resumo"]["ponto_mais_quente"]["t_max"] == pytest.approx(45.0, abs=0.1)
     assert a["resumo"]["ponto_mais_quente"]["componente"]["classe"] == "aletas_isoladoras"
 
@@ -109,3 +176,45 @@ def test_analise_com_os_dois_juntos(cliente, sessao_falsa) -> None:  # noqa: F81
     # só o modelo de peças: sem ponto quente
     r = cliente.post(f"/api/analises/{a['id']}/detectar", json={"modelo": cartao["id"]}).json()
     assert [x["classe"] for x in r["regioes"]] == ["aletas_isoladoras"]
+
+
+# ---------------------------------------------------------------- para-raio: partes em faixas e ponto quente só fora das peças
+
+D = detectores.Deteccao
+
+
+def test_partes_do_para_raio_viram_faixas_sem_sobreposicao() -> None:
+    """Caixas como as do RF-DETR na FLIR2614: aletas quase do tamanho do para-raio, terminais entrando nelas."""
+    saida = detectores.organizar_para_raios([
+        D("para_raio", [53, 44, 76, 122], 0.96),
+        D("aletas_isoladoras", [54, 40, 75, 115], 0.94),
+        D("aletas_isoladoras", [55, 60, 74, 100], 0.50),  # repetida, menos confiante: sai
+        D("terminal_superior", [56, 44, 71, 51], 0.85),
+        D("terminal_inferior", [56, 114, 74, 122], 0.75),
+    ])
+    por_classe = {d.classe: d for d in saida}
+    assert len(saida) == 4 and all(d.grupo == 0 for d in saida)
+    assert por_classe["aletas_isoladoras"].caixa == [54, 51, 75, 114]  # entre os terminais e dentro do para-raio
+    assert por_classe["terminal_superior"].caixa[3] <= por_classe["aletas_isoladoras"].caixa[1]
+    assert por_classe["aletas_isoladoras"].caixa[3] <= por_classe["terminal_inferior"].caixa[1]
+
+
+def test_para_raios_numerados_da_esquerda_e_sem_repetido() -> None:
+    saida = detectores.organizar_para_raios([
+        D("para_raio", [100, 10, 120, 90], 0.9),
+        D("para_raio", [10, 10, 30, 90], 0.8),
+        D("para_raio", [11, 12, 30, 88], 0.7),  # o mesmo da esquerda
+        D("terminal_superior", [102, 10, 118, 20], 0.8),
+        D("terminal_superior", [200, 10, 210, 20], 0.8),  # fora de qualquer para-raio: passa sem grupo
+    ])
+    pr = [d for d in saida if d.classe == "para_raio"]
+    assert [d.caixa[0] for d in pr] == [10, 100] and [d.grupo for d in pr] == [0, 1]
+    ts = sorted((d for d in saida if d.classe == "terminal_superior"), key=lambda d: d.caixa[0])
+    assert [d.grupo for d in ts] == [1, None]
+
+
+def test_ponto_quente_dentro_da_peca_sai() -> None:
+    pecas = [D("para_raio", [50, 40, 80, 120], 0.9)]
+    pontos = [D("ponto_quente", [52, 100, 62, 118], 0.9), D("ponto_quente", [90, 30, 100, 60], 0.9), D("ponto_quente", [37, 118, 63, 139], 0.9)]
+    fora = detectores.pontos_fora_das_pecas(pontos, pecas)
+    assert [d.caixa for d in fora] == [[90, 30, 100, 60], [37, 118, 63, 139]]
