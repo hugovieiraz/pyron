@@ -24,7 +24,10 @@ Modelo de entrada (curta; o detalhe fica no commit):
   Mojo sempre abrem; a prova só vale numa máquina com ele ligado. Assinatura sem pagar: Artifact Signing (Azure) só
   aceita pessoa física dos EUA e do Canadá; SignPath Foundation é grátis só para código aberto com licença OSI (o
   repositório não tem licença); a Microsoft Store é grátis para pessoa física desde 09/2025 e assina o MSIX na
-  publicação. Pago: certificado OV, cerca de US$ 150 a 300 por ano.
+  publicação. Pago: certificado OV, cerca de US$ 150 a 300 por ano. Store fechada: "Private audience" no Partner
+  Center (só quem tem o e-mail da conta Microsoft pessoal no grupo vê e instala; até 10.000 por grupo; conta de
+  trabalho ou escola não serve). Publicou como público uma vez, não volta a privado: a primeira submissão já tem de
+  ser privada.
 - Pendente (Hugo): escolher entre MSIX pela Store, certificado OV ou continuar com o atalho; se for SignPath, ver com
   a Embrapii se o código pode ser aberto.
 
