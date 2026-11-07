@@ -415,3 +415,18 @@ def test_video_comparar_guarda_video_e_registra(comparacao, monkeypatch, tmp_pat
     assert entrada["origem"] == "video" and entrada["foto"] == corpo["foto"]
     assert entrada["resultados"]["da3"]["sem_referencia"]["comprimento_cm"] == 33.0
     assert entrada["video"]["codigo"] == corpo["video"]
+
+
+def test_contorno_pela_caixa_sem_medir_nem_guardar(cliente, tmp_path):
+    cli, foto = cliente
+    x0, y0 = _px(-1.05, -1.05, 3.0)
+    x1, y1 = _px(-0.15, 1.05, 3.0)
+    r = cli.post("/api/medicao/contorno", files={"arquivo": ("foto.png", foto, "image/png")},
+                 data={"pista": json.dumps({"caixa": [x0, y0, x1, y1]})})
+    assert r.status_code == 200, r.text
+    c = r.json()
+    assert c["contorno"] and c["tamanho_imagem"] == [W, H]
+    assert "comprimento_cm" not in c and "id" not in c
+    assert not (tmp_path / "dados_app" / "medicao").exists()
+    r = cli.post("/api/medicao/contorno", files={"arquivo": ("foto.png", foto, "image/png")}, data={"pista": json.dumps({"caixa": [10, 10, 5, 5]})})
+    assert r.status_code == 422

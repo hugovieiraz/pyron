@@ -13,6 +13,22 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 07/11/2026 · Hugo: Medição com caixa do SAM e os dois modelos
+
+- Feito: Medição › Medir volta a ter "Caixa em volta" (modo padrão). O usuário arrasta um retângulo (ou clica dois
+  cantos), o SAM 2.1 contorna o objeto por `POST /api/medicao/contorno` (rota nova, `nucleo.medicao.contornar()`,
+  não mede nem guarda nada), e o usuário clica as duas pontas do que quer medir; perto do contorno a ponta encosta
+  nele. A distância sai nos dois modelos de profundidade, sem e com o post-it: `/api/medicao/comparar` sem `modelo`
+  e sem `registrar`, numa tabela Depth Anything 3 / MoGe-2 × sem / com referência. Em destaque fica o valor do modelo
+  padrão. "Duas pontas" (sem contorno) e "Retângulo de referência" continuam.
+- Para o outro: o software continua sem medir altura nem largura sozinho; quem escolhe é o usuário pelas pontas.
+  Nada é guardado (só a foto na faixa, como antes). Medido em 07/11 na RTX 3050: geladeira real com post-it, topo ao
+  pé, DA3 192,3 cm sem e 168,9 cm com o post-it; MoGe-2 169,4 sem e 171,4 com; contorno do SAM em 4,5 s; os dois
+  modelos juntos em 30 s na primeira medida da foto. Revisão do diff pelo Codex (alethe): um defeito corrigido (clique
+  preso ao trocar de modo durante o contorno).
+- Pendente (Hugo): conferir o tempo dos dois modelos em sequência no uso real; se pesar, voltar a só o modelo padrão
+  com a tabela a pedido.
+
 ## 07/11/2026 · Hugo: Controle Inteligente e o Pyron.exe
 
 - Feito: pesquisa, sem mudança de código. No registro de Integridade de Código (29/09 a 07/11), o Controle

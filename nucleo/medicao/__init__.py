@@ -417,6 +417,24 @@ def medir(imagem, pista: dict, referencia: dict | None = None, modelo: str | Non
     return medidor(modelo).medir(imagem, pista, referencia)
 
 
+def contornar(imagem, caixa) -> dict:
+    """Só o contorno do SAM 2.1 do objeto dentro de ``caixa`` (x0, y0, x1, y1), sem profundidade nem medida.
+
+    É a guia da tela: o usuário vê o objeto que o SAM achou e marca ele mesmo as duas pontas do que quer medir.
+    """
+    from nucleo.medicao.profundidade import abrir
+
+    bruto = imagem if isinstance(imagem, (bytes, bytearray)) else None
+    img = abrir(imagem)
+    chave = hashlib.sha1(bruto if bruto is not None else img.tobytes()).hexdigest()  # a mesma chave do medir: o SAM reaproveita a codificação
+    t0 = time.perf_counter()
+    mascara, nota = medidor().segmentador.mascara_por_caixa(img, caixa, chave=chave)
+    if not mascara.any():
+        raise ValueError("nenhum objeto achado dentro da caixa")
+    return {"contorno": contorno(mascara), "nota": round(float(nota), 3), "tamanho_imagem": [img.width, img.height],
+            "tempo_ms": round((time.perf_counter() - t0) * 1000, 1)}
+
+
 CAMPOS_COMPARACAO = ("comprimento_cm", "largura_cm", "espessura_cm", "altura_cm", "distancia_cm", "incerteza_cm", "metodo",
                      "forma", "vertical", "lente", "fator_escala", "referencia_ignorada", "no_plano_da_referencia", "tempos_ms", "cotas")
 
