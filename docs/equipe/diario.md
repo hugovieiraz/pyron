@@ -13,6 +13,20 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 07/11/2026 · Hugo: curadoria técnica e roteiro da apresentação
+
+- Feito: pesquisa sem mudança de código. `docs/apresentacao/curadoria.md` (bibliotecas com versão, fórmula de
+  Planck, caminho estimado pela barra, FastAPI, celular, medição, modelo de para-raios, interface, o que já foi
+  otimizado, o que ainda dá para otimizar e o horizonte) e `docs/apresentacao/roteiro.md` (esboço em texto de
+  uma apresentação de 50 min, 33 slides, ainda em discussão com o Hugo).
+- Para o outro: tempos medidos em 07/11 na RTX 3050, que podem ser reaproveitados: leitura radiométrica 9 ms;
+  estimada pela barra 1,5 s (quase tudo OCR); RF-DETR 483 ms na CPU, 329 ms em INT8, 71 ms no DirectML;
+  severidade 1,8 ms; `armazenamento.listar()` com 6.000 inspeções 884 ms e 12 MB, contra 58 ms lendo só as
+  colunas indexadas. Suíte completa: 458 passaram, 9 pulados. Achados: duas versões do OpenCV no `.venv` do
+  Hugo (5.0 e headless 4.10) e `nucleo/aceleradores/bin/` vazio (os kernels Mojo rodam sempre a reserva NumPy).
+- Pendente (Hugo): aprovar o roteiro antes de montar os slides. Pendente (Gabriel): dizer se os kernels Mojo
+  vão ser compilados e assinados ou se saem.
+
 ## 03/11/2026 · Hugo: ponto quente em bolinha e partes do para-raio
 
 - Feito: pedido do Hugo. (1) No combinado para-raios + pontos quentes, ponto quente que cai dentro de uma peça sai
