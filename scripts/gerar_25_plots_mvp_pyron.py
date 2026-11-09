@@ -47,7 +47,7 @@ PASTA_SAIDA.mkdir(parents=True, exist_ok=True)
 PASTA_ARTEFATOS = Path(r"C:\Users\gabri\.gemini\antigravity\brain\ba092d85-8de4-438e-a0fb-02a5e744c683")
 PASTA_ARTEFATOS.mkdir(parents=True, exist_ok=True)
 
-# Paleta Obsidian Frost & Pyron Industrial
+# Paleta Pyron Industrial (Dark)
 BG = "#10141A"
 PANEL = "#181C22"
 PANEL_HIGH = "#262A31"

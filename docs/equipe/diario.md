@@ -13,6 +13,12 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 09/11/2026 · Gabriel: descarte e remoção da identidade visual Obsidian Frost
+
+- Feito: remoção de todos os arquivos e referências ao estilo Obsidian Frost no projeto. Deletados o arquivo de estilo customizado em .agents/skills/ppt-master/references/visual-styles/obsidian-frost.md, o projeto do deck e seus 12 slides DrawingML em projects/pyron_mvp_ppt169_20261107/, e os arquivos associados da apresentação em presentacao_mvp/ (pyron_mvp_obsidian_frost.pptx, isualizar_apresentacao.html, brir-apresentacao.cmd, prompt_ppt_master_pyron.md).
+- Para o outro: o estilo Obsidian Frost foi integralmente descartado e não será mais utilizado na identidade visual do Pyron. A skill ppt-master permanece limpa com seus estilos padrão.
+- Pendente: nenhuma pendência.
+
 ## 09/11/2026 · Gabriel: recriação da interface do Pyron e Painel BI interativo no FigCraft via MCP
 
 - Feito: recriação completa da interface do Pyron (`app/interface/`) no FigCraft via MCP (`D:\Backup_SSD_C\pyron-interface.figcraft` e `docs/interface/pyron-interface.figcraft`), com evolução da tela `01 · Painel` para formato Business Intelligence: retirada a seção "Importadas por último" e criado o Component Set interativo `Painel BI · Atenção por Operação` com 4 variantes de cross-filter (`Operação=Todas (6)`, `Transformação (3)`, `Proteção (2)`, `Manobra (1)`), gráfico de pizza/donut por operação com fatias destacadas, barras de progresso de `% da MTA` e interações `onClick -> changeTo (smartAnimate 220ms)` nas fatias, pílulas e cartões de operação (além de clique em `Inspecionar →` navegando para `02 · Análise Termográfica`).
@@ -59,8 +65,10 @@ Modelo de entrada (curta; o detalhe fica no commit):
 
 - Feito: fast-forward da `main` local (`36bd868..d5295e3`, +36 commits) e merge limpo na branch `v09-f5-desktop`. Comparação da metrologia do Pyron (`nucleo/medicao/`) com o projeto `Detector-de-medidas` (`measurement.py`) e integração completa de `metrology.py`, `run_metrology.py` e `test_metrology.py` (17/17 testes passando) em `types_def.py`, `measurement.py`, `visualizer.py`, `main.py`, `run_video.py` e `server_cam.py`.
 - Para o outro: nenhum código do Pyron foi alterado além do merge de `origin/main`.
-- Pendente (Gabriel): responder sobre os kernels Mojo em `nucleo/aceleradores/bin/` (compilar/assinar ou remover).
-
+- Pendente (Gabriel): responder sobre os kernels Mojo em `nucleo/aceleradores/bin/` (compilar/assinar ou remover).
+
+
+
 ## 07/11/2026 · Hugo: repositório com endereço novo
 
 - Feito: o GitHub passou a responder pelo endereço novo, https://github.com/hugovieiraz/pyron (o antigo,
@@ -102,7 +110,8 @@ Modelo de entrada (curta; o detalhe fica no commit):
   trabalho ou escola não serve). Publicou como público uma vez, não volta a privado: a primeira submissão já tem de
   ser privada.
 - Pendente (Hugo): escolher entre MSIX pela Store, certificado OV ou continuar com o atalho; se for SignPath, ver com
-  a Embrapii se o código pode ser aberto.
+  a Embrapii se o código pode ser aberto.
+
 
 ## 07/11/2026 · Hugo: curadoria técnica e roteiro da apresentação
 
