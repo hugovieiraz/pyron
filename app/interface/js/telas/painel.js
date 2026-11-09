@@ -165,9 +165,27 @@ function painelBiOperacoes(dados) {
 
     // 3. Legenda Interativa de Operações
     const cardsLegenda = el("div", { class: "bi-legendas" },
-      criarCardOp("transformacao", P.biOpTransfNome, P.biOpTransfResumo, "50 % (3)", "var(--op-transf)"),
-      criarCardOp("protecao", P.biOpProtNome, P.biOpProtResumo, "33 % (2)", "var(--op-prot)"),
-      criarCardOp("manobra", P.biOpManobNome, P.biOpManobResumo, "17 % (1)", "var(--op-manob)"));
+      criarCardOp(
+        "transformacao",
+        P.biOpTransfNome || "Transformação de Potência (230/69 kV e 500 kV)",
+        P.biOpTransfResumo || "TR-01, TR-03, TR-02 · Pico 137,4 °C (338 % MTA) · 2 Imediato, 1 Urgente",
+        "50 % (3)",
+        "var(--op-transf)"
+      ),
+      criarCardOp(
+        "protecao",
+        P.biOpProtNome || "Proteção e Descarga Atmosférica (Para-raios ZnO)",
+        P.biOpProtResumo || "PR-01, PR-02 · Pico 85,7 °C (233 % MTA) · 2 Imediato (IEC 60099-5)",
+        "33 % (2)",
+        "var(--op-prot)"
+      ),
+      criarCardOp(
+        "manobra",
+        P.biOpManobNome || "Manobra e Seccionamento (Seccionadoras / Barramento)",
+        P.biOpManobResumo || "SEC-03 · Pico 46,7 °C (58 % MTA) · 1 Programar (NBR 15866)",
+        "17 % (1)",
+        "var(--op-manob)"
+      ));
 
     const corpoGrafico = el("div", { class: "bi-corpo-grafico" }, donut, cardsLegenda);
 
@@ -231,11 +249,11 @@ function comporAtivosBi({ lista }) {
 }
 
 function criarDonutSvg(contagem, total, filtroAtual, aoClicarFatia) {
-  const c = 339.292; // 2 * PI * 54
-  // 50% = 169.65 | 33.3% = 113.1 | 16.7% = 56.54
-  const l1 = 169.65;
-  const l2 = 113.1;
-  const l3 = 56.54;
+  const raio = 70;
+  const c = 2 * Math.PI * raio; // ~439.823
+  const l1 = total ? (contagem.transformacao / total) * c : 0;
+  const l2 = total ? (contagem.protecao / total) * c : 0;
+  const l3 = total ? (contagem.manobra / total) * c : 0;
 
   let valorCentro = String(total);
   let subCentro = P.biAtivosCriticos || "ATIVOS CRÍTICOS";
@@ -244,62 +262,48 @@ function criarDonutSvg(contagem, total, filtroAtual, aoClicarFatia) {
   if (filtroAtual === "manobra") { valorCentro = String(contagem.manobra); subCentro = "MANOBRA / SEC."; }
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", "0 0 160 160");
+  svg.setAttribute("viewBox", "0 0 180 180");
   svg.setAttribute("class", "bi-donut-svg");
 
   const bgCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  bgCircle.setAttribute("cx", "80");
-  bgCircle.setAttribute("cy", "80");
-  bgCircle.setAttribute("r", "54");
+  bgCircle.setAttribute("cx", "90");
+  bgCircle.setAttribute("cy", "90");
+  bgCircle.setAttribute("r", String(raio));
   bgCircle.setAttribute("stroke", "var(--superficie-3)");
-  bgCircle.setAttribute("stroke-width", "22");
+  bgCircle.setAttribute("stroke-width", "18");
   bgCircle.setAttribute("fill", "none");
   svg.appendChild(bgCircle);
 
   const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  g.setAttribute("transform", "rotate(-90 80 80)");
+  g.setAttribute("transform", "rotate(-90 90 90)");
 
   // Fatia Transformação
-  const s1 = criarFatiaSvg("54", `${l1} ${c - l1}`, "0", "var(--op-transf)", "transformacao", filtroAtual, aoClicarFatia);
+  const s1 = criarFatiaSvg(String(raio), `${l1} ${c - l1}`, "0", "var(--op-transf)", "transformacao", filtroAtual, aoClicarFatia);
   // Fatia Proteção
-  const s2 = criarFatiaSvg("54", `${l2} ${c - l2}`, `-${l1}`, "var(--op-prot)", "protecao", filtroAtual, aoClicarFatia);
+  const s2 = criarFatiaSvg(String(raio), `${l2} ${c - l2}`, `-${l1}`, "var(--op-prot)", "protecao", filtroAtual, aoClicarFatia);
   // Fatia Manobra
-  const s3 = criarFatiaSvg("54", `${l3} ${c - l3}`, `-${l1 + l2}`, "var(--op-manob)", "manobra", filtroAtual, aoClicarFatia);
+  const s3 = criarFatiaSvg(String(raio), `${l3} ${c - l3}`, `-${l1 + l2}`, "var(--op-manob)", "manobra", filtroAtual, aoClicarFatia);
 
   g.appendChild(s1);
   g.appendChild(s2);
   g.appendChild(s3);
   svg.appendChild(g);
 
-  // Textos Centrais
-  const tVal = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  tVal.setAttribute("x", "80");
-  tVal.setAttribute("y", "76");
-  tVal.setAttribute("text-anchor", "middle");
-  tVal.setAttribute("class", "donut-centro-val");
-  tVal.textContent = valorCentro;
-  svg.appendChild(tVal);
+  const centro = el("div", { class: "bi-donut-centro" },
+    el("b", { class: "donut-centro-val" }, valorCentro),
+    el("span", { class: "donut-centro-sub" }, subCentro));
 
-  const tSub = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  tSub.setAttribute("x", "80");
-  tSub.setAttribute("y", "95");
-  tSub.setAttribute("text-anchor", "middle");
-  tSub.setAttribute("class", "donut-centro-sub");
-  tSub.textContent = subCentro;
-  svg.appendChild(tSub);
-
-  const wrapper = el("div", { class: "bi-donut-container" }, svg);
-  return wrapper;
+  return el("div", { class: "bi-donut-container" }, svg, centro);
 }
 
 function criarFatiaSvg(raio, dasharray, offset, cor, opId, filtroAtual, aoClicarFatia) {
   const circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-  circ.setAttribute("cx", "80");
-  circ.setAttribute("cy", "80");
+  circ.setAttribute("cx", "90");
+  circ.setAttribute("cy", "90");
   circ.setAttribute("r", raio);
   circ.setAttribute("fill", "none");
   circ.setAttribute("stroke", cor);
-  circ.setAttribute("stroke-width", "22");
+  circ.setAttribute("stroke-width", "18");
   circ.setAttribute("stroke-dasharray", dasharray);
   circ.setAttribute("stroke-dashoffset", offset);
 
@@ -363,7 +367,7 @@ function avisoConfiguracao(config) {
 }
 
 function proximas(comAgenda) {
-  const lista = [...comAgenda].sort((a, b) => a.proxima_inspecao.data.localeCompare(b.proxima_inspecao.data)).slice(0, 5);
+  const lista = [...comAgenda].sort((a, b) => a.proxima_inspecao.data.localeCompare(b.proxima_inspecao.data)).slice(0, 3);
   const cab = el("div", { class: "titulo-bloco" }, el("h2", {}, P.proximas), el("a", { href: endereco("equipamentos") }, P.verEquipamentos));
   if (!lista.length) return el("section", { class: "bloco-lado" }, cab, el("p", { class: "nota" }, P.semAgenda));
   return el("section", { class: "bloco-lado" }, cab, el("ul", { class: "lista-proximas" }, lista.map((e) => {

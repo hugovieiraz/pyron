@@ -13,12 +13,24 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
-## 09/11/2026 · Gabriel: Painel Inicial evoluído para formato BI com Cross-Filter por Operação no Frontend
-
-- Feito: implementação no frontend oficial (`app/interface/`) do componente interativo `Painel BI · Atenção por Operação`, baseado na modelagem do FigCraft. Retirada a seção "Importadas por último" e incluídos no `app/interface/js/telas/painel.js`: cabeçalho BI com chips de filtro rápido (Todas, Transformação, Proteção, Manobra), gráfico Donut SVG vetorial interativo com fatias reativas e centro dinâmico, cartões clicáveis da legenda de operação com contagem e percentual, e lista de ativos com traço lateral na cor da severidade, tag da operação, barra de progresso horizontal do % da MTA, temperatura em destaque (Cascadia Mono) e botão de ação direta "Inspecionar →" para a tela de Análise Termográfica (#analise). Adicionados os tokens semânticos das operações em `app/interface/tokens.css` (tema claro e escuro) e os estilos em `app/interface/telas.css` respeitando 100% o sistema de tokens.
-- Para o outro: suíte estrita de design e interface `testes/test_interface_nova.py` executada com todos os 18 testes passando (sem cores literais em hex, apenas tokens de escala e durabilidade). A navegação em "Inspecionar →" já direciona para `#analise` passando o ID da inspeção do ativo.
-- Pendente: nenhuma pendência.
-
+## 09/11/2026 · Gabriel: revisão visual e correção de alinhamento/textos no Painel BI
+
+- Feito: corrigido o posicionamento das chaves `bi*` em `app/interface/textos.js` (movidas de `TEXTOS.inspecoes` para `TEXTOS.painel`, preenchendo os títulos e resumos técnicos dos cartões `.bi-card-op`), refatorado o centro do gráfico Donut SVG em `app/interface/js/telas/painel.js` com camada HTML `.bi-donut-centro` e `viewBox="0 0 180 180"` (`r=70`) para eliminar sobreposição com o anel em todas as variantes de filtro, e alinhadas as 7 colunas de `.bi-item-ativo` e a responsividade vertical de `.pagina.tela-painel` e `.coluna-lado` em `app/interface/telas.css`.
+- Para o outro: validado visualmente via Playwright em `1366x820` e `1920x1080` (temas claro e escuro) e com 18/18 testes passando em `testes/test_interface_nova.py`.
+- Pendente: nenhuma pendência.
+
+## 09/11/2026 · Gabriel: Painel Inicial evoluído para formato BI com Cross-Filter por Operação no Frontend
+
+
+
+- Feito: implementação no frontend oficial (`app/interface/`) do componente interativo `Painel BI · Atenção por Operação`, baseado na modelagem do FigCraft. Retirada a seção "Importadas por último" e incluídos no `app/interface/js/telas/painel.js`: cabeçalho BI com chips de filtro rápido (Todas, Transformação, Proteção, Manobra), gráfico Donut SVG vetorial interativo com fatias reativas e centro dinâmico, cartões clicáveis da legenda de operação com contagem e percentual, e lista de ativos com traço lateral na cor da severidade, tag da operação, barra de progresso horizontal do % da MTA, temperatura em destaque (Cascadia Mono) e botão de ação direta "Inspecionar →" para a tela de Análise Termográfica (#analise). Adicionados os tokens semânticos das operações em `app/interface/tokens.css` (tema claro e escuro) e os estilos em `app/interface/telas.css` respeitando 100% o sistema de tokens.
+
+- Para o outro: suíte estrita de design e interface `testes/test_interface_nova.py` executada com todos os 18 testes passando (sem cores literais em hex, apenas tokens de escala e durabilidade). A navegação em "Inspecionar →" já direciona para `#analise` passando o ID da inspeção do ativo.
+
+- Pendente: nenhuma pendência.
+
+
+
 ## 09/11/2026 · Gabriel: descarte e remoção da identidade visual Obsidian Frost
 
 
