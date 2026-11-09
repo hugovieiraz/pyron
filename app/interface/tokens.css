@@ -59,6 +59,18 @@
   --serie-3: #8C6A1F;
   --serie-4: var(--n-600);
   --grafico-grade: var(--n-300);
+  --op-transf: var(--cobalto-600);
+  --op-transf-fundo: var(--cobalto-50);
+  --op-transf-borda: var(--cobalto-200);
+  --op-transf-texto: var(--cobalto-800);
+  --op-prot: #0F7F8C;
+  --op-prot-fundo: #E6F5F7;
+  --op-prot-borda: #B0DFE5;
+  --op-prot-texto: #0A525B;
+  --op-manob: var(--programar);
+  --op-manob-fundo: var(--programar-fundo);
+  --op-manob-borda: #F9D0AF;
+  --op-manob-texto: var(--programar-texto);
 
   /* ---------------------------------------------------------------- papéis (60-30-10) */
   --fundo: var(--branco);
@@ -248,6 +260,15 @@
   --foco: var(--cobalto-400);
   --hover: #222832;
   --info: var(--cobalto-400); --info-fundo: #16243D; --info-texto: var(--cobalto-200);
+  --op-transf-fundo: #16243D;
+  --op-transf-borda: #2B4A80;
+  --op-transf-texto: var(--cobalto-200);
+  --op-prot-fundo: #12282B;
+  --op-prot-borda: #1B454A;
+  --op-prot-texto: #4FD1DE;
+  --op-manob-fundo: #331A0B;
+  --op-manob-borda: #613414;
+  --op-manob-texto: #FDBA74;
   --normal-fundo: #0F2B20;    --normal-texto: #7FDCB2;
   --atencao: #D9A92A;         --atencao-fundo: #2E2508;   --atencao-texto: #F1D27A;
   --programar-fundo: #36210E; --programar-texto: #F7B37A;

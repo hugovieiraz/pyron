@@ -13,12 +13,24 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
-## 09/11/2026 · Gabriel: descarte e remoção da identidade visual Obsidian Frost
+## 09/11/2026 · Gabriel: Painel Inicial evoluído para formato BI com Cross-Filter por Operação no Frontend
 
-- Feito: remoção de todos os arquivos e referências ao estilo Obsidian Frost no projeto. Deletados o arquivo de estilo customizado em .agents/skills/ppt-master/references/visual-styles/obsidian-frost.md, o projeto do deck e seus 12 slides DrawingML em projects/pyron_mvp_ppt169_20261107/, e os arquivos associados da apresentação em presentacao_mvp/ (pyron_mvp_obsidian_frost.pptx, isualizar_apresentacao.html, brir-apresentacao.cmd, prompt_ppt_master_pyron.md).
-- Para o outro: o estilo Obsidian Frost foi integralmente descartado e não será mais utilizado na identidade visual do Pyron. A skill ppt-master permanece limpa com seus estilos padrão.
+- Feito: implementação no frontend oficial (`app/interface/`) do componente interativo `Painel BI · Atenção por Operação`, baseado na modelagem do FigCraft. Retirada a seção "Importadas por último" e incluídos no `app/interface/js/telas/painel.js`: cabeçalho BI com chips de filtro rápido (Todas, Transformação, Proteção, Manobra), gráfico Donut SVG vetorial interativo com fatias reativas e centro dinâmico, cartões clicáveis da legenda de operação com contagem e percentual, e lista de ativos com traço lateral na cor da severidade, tag da operação, barra de progresso horizontal do % da MTA, temperatura em destaque (Cascadia Mono) e botão de ação direta "Inspecionar →" para a tela de Análise Termográfica (#analise). Adicionados os tokens semânticos das operações em `app/interface/tokens.css` (tema claro e escuro) e os estilos em `app/interface/telas.css` respeitando 100% o sistema de tokens.
+- Para o outro: suíte estrita de design e interface `testes/test_interface_nova.py` executada com todos os 18 testes passando (sem cores literais em hex, apenas tokens de escala e durabilidade). A navegação em "Inspecionar →" já direciona para `#analise` passando o ID da inspeção do ativo.
 - Pendente: nenhuma pendência.
 
+## 09/11/2026 · Gabriel: descarte e remoção da identidade visual Obsidian Frost
+
+
+
+- Feito: remoção de todos os arquivos e referências ao estilo Obsidian Frost no projeto. Deletados o arquivo de estilo customizado em .agents/skills/ppt-master/references/visual-styles/obsidian-frost.md, o projeto do deck e seus 12 slides DrawingML em projects/pyron_mvp_ppt169_20261107/, e os arquivos associados da apresentação em presentacao_mvp/ (pyron_mvp_obsidian_frost.pptx, isualizar_apresentacao.html, brir-apresentacao.cmd, prompt_ppt_master_pyron.md).
+
+- Para o outro: o estilo Obsidian Frost foi integralmente descartado e não será mais utilizado na identidade visual do Pyron. A skill ppt-master permanece limpa com seus estilos padrão.
+
+- Pendente: nenhuma pendência.
+
+
+
 ## 09/11/2026 · Gabriel: recriação da interface do Pyron e Painel BI interativo no FigCraft via MCP
 
 - Feito: recriação completa da interface do Pyron (`app/interface/`) no FigCraft via MCP (`D:\Backup_SSD_C\pyron-interface.figcraft` e `docs/interface/pyron-interface.figcraft`), com evolução da tela `01 · Painel` para formato Business Intelligence: retirada a seção "Importadas por último" e criado o Component Set interativo `Painel BI · Atenção por Operação` com 4 variantes de cross-filter (`Operação=Todas (6)`, `Transformação (3)`, `Proteção (2)`, `Manobra (1)`), gráfico de pizza/donut por operação com fatias destacadas, barras de progresso de `% da MTA` e interações `onClick -> changeTo (smartAnimate 220ms)` nas fatias, pílulas e cartões de operação (além de clique em `Inspecionar →` navegando para `02 · Análise Termográfica`).

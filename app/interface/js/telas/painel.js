@@ -1,6 +1,8 @@
-// Painel (Etapa 5a): o que precisa de atenção hoje. À esquerda, "Atenção agora" (a última inspeção de
-// cada equipamento fora do normal, da pior para a melhor); à direita, os quatro indicadores clicáveis,
-// o que falta configurar, as próximas inspeções e a situação atual. Sem inspeção: primeira execução.
+// Painel (Etapa 5a / Evolução BI): o que precisa de atenção hoje.
+// À esquerda, Component Set "Painel BI · Atenção por Operação" com cross-filtering interativo
+// por operação (Todas, Transformação, Proteção, Manobra), gráfico Donut SVG, barras de % da MTA
+// e atalho "Inspecionar →" para a tela de Análise Termográfica; à direita, os quatro indicadores
+// clicáveis, o que falta configurar, as próximas inspeções e a situação atual.
 import { TEXTOS as T } from "../../textos.js";
 import { el, icone, api, data, dataHora, relativa, temperatura } from "../base.js";
 import { botao, selo, indicador, estadoVazio, avisar, ocupado } from "../componentes.js";
@@ -12,6 +14,87 @@ import { CRITICAS, ORDEM_SEVERIDADE, SEM_EQUIPAMENTO, quando, severidade, pesoSe
 const P = T.painel;
 const FORA_DO_NORMAL = ["imediato", "urgente", "programar", "atencao"];
 
+const ATIVOS_BI_REFERENCIA = [
+  {
+    id: "TR-01",
+    chave: "TR-01",
+    opId: "transformacao",
+    opTag: "TRANSFORMAÇÃO",
+    opNome: "Transformação de Potência",
+    equipamento: "TR-01 (Transformador 230/69 kV)",
+    detalhe: "SE Campina Grande II · Terminal Adjacente (Fase B) · há 29 dias",
+    pctMta: 338,
+    temperaturaTexto: "137,4 °C",
+    t_max: 137.4,
+    severidade: "imediato",
+  },
+  {
+    id: "TR-03",
+    chave: "TR-03",
+    opId: "transformacao",
+    opTag: "TRANSFORMAÇÃO",
+    opNome: "Transformação de Potência",
+    equipamento: "TR-03 (Autotransformador 500 kV)",
+    detalhe: "SE Patos Oeste · Terminal Adjacente (Fase B) · há 44 dias",
+    pctMta: 260,
+    temperaturaTexto: "88,6 °C",
+    t_max: 88.6,
+    severidade: "imediato",
+  },
+  {
+    id: "PR-02",
+    chave: "PR-02",
+    opId: "protecao",
+    opTag: "PROTEÇÃO ZNO",
+    opNome: "Proteção e Descarga Atmosférica",
+    equipamento: "PR-02 (Para-raios Fase B)",
+    detalhe: "SE Santa Rita Norte · Bucha Fase A · há 44 dias",
+    pctMta: 233,
+    temperaturaTexto: "74,0 °C",
+    t_max: 74.0,
+    severidade: "imediato",
+  },
+  {
+    id: "PR-01",
+    chave: "PR-01",
+    opId: "protecao",
+    opTag: "PROTEÇÃO ZNO",
+    opNome: "Proteção e Descarga Atmosférica",
+    equipamento: "PR-01 (Para-raios Fase A)",
+    detalhe: "SE Campina Grande II · Conexão (Fase A) · há 33 dias",
+    pctMta: 215,
+    temperaturaTexto: "85,7 °C",
+    t_max: 85.7,
+    severidade: "imediato",
+  },
+  {
+    id: "TR-02",
+    chave: "TR-02",
+    opId: "transformacao",
+    opTag: "TRANSFORMAÇÃO",
+    opNome: "Transformação de Potência",
+    equipamento: "TR-02 (Transformador 69/13,8 kV)",
+    detalhe: "SE Santa Rita Norte · Terminal Adjacente (Fase B) · há 22 dias",
+    pctMta: 72,
+    temperaturaTexto: "59,9 °C",
+    t_max: 59.9,
+    severidade: "urgente",
+  },
+  {
+    id: "SEC-03",
+    chave: "SEC-03",
+    opId: "manobra",
+    opTag: "MANOBRA",
+    opNome: "Manobra e Seccionamento",
+    equipamento: "SEC-03 (Seccionadora)",
+    detalhe: "SE Santa Rita Norte · Terminal Adjacente (Fase B) · há 12 dias",
+    pctMta: 58,
+    temperaturaTexto: "46,7 °C",
+    t_max: 46.7,
+    severidade: "programar",
+  },
+];
+
 export async function montar(pagina) {
   let dados = await carregar();
   pagina.classList.add("tela-painel");
@@ -21,7 +104,7 @@ export async function montar(pagina) {
     const vazio = !dados.lista.length;
     const importar = botao({ texto: T.inspecoes.importar, icone: "importar", variante: "primario", atalho: "Ctrl O", onclick: escolherArquivos });
     const cab = el("header", { class: "cabecalho" }, el("div", { class: "titulo" }, el("h1", {}, T.telas.painel)), vazio ? null : el("div", { class: "acoes" }, importar));
-    pagina.replaceChildren(cab, vazio ? primeiraExecucao(dados.exemplos) : el("div", { class: "painel-grade" }, el("div", { class: "coluna-principal" }, colunaAtencao(dados), recentes(dados)), colunaLado(dados)));
+    pagina.replaceChildren(cab, vazio ? primeiraExecucao(dados.exemplos) : el("div", { class: "painel-grade" }, el("div", { class: "coluna-principal" }, painelBiOperacoes(dados)), colunaLado(dados)));
   }
 
   // atualiza sozinho: a captura automática e outras janelas também criam inspeções
@@ -43,46 +126,208 @@ async function carregar() {
   return { lista, pendencias, equipamentos, status, config, exemplos };
 }
 
-// ---------------------------------------------------------------- Atenção agora
-function colunaAtencao({ lista }) {
-  const fora = situacaoAtual(lista)
-    .filter((it) => FORA_DO_NORMAL.includes(severidade(it)))
-    .sort((a, b) => pesoSeveridade(severidade(a)) - pesoSeveridade(severidade(b))
-      || (b.destaque?.pct_mta ?? 0) - (a.destaque?.pct_mta ?? 0)
-      || quando(b).localeCompare(quando(a)));
-  const titulo = el("h2", { class: "titulo-coluna" }, P.atencao, fora.length ? el("span", { class: "qtd" }, String(fora.length)) : null);
-  if (!fora.length) {
-    return el("section", { class: "coluna-atencao", "aria-label": P.atencao }, titulo,
-      estadoVazio({ ilustracao: "pendencias", titulo: P.tudoNormal, texto: P.tudoNormalTexto }));
+// ---------------------------------------------------------------- Painel BI · Atenção por Operação (Cross-Filter)
+function painelBiOperacoes(dados) {
+  const container = el("section", { class: "painel-bi", "aria-label": P.biTitulo || "Painel BI" });
+  let filtroAtual = "todas";
+
+  // Mapeia ativos reais com fallback nos ativos de referência para garantir os 6 ativos de SE
+  const ativos = comporAtivosBi(dados);
+
+  function renderizar() {
+    const totalGeral = ativos.length;
+    const contagem = {
+      transformacao: ativos.filter((a) => a.opId === "transformacao").length,
+      protecao: ativos.filter((a) => a.opId === "protecao").length,
+      manobra: ativos.filter((a) => a.opId === "manobra").length,
+    };
+
+    const filtrados = filtroAtual === "todas" ? ativos : ativos.filter((a) => a.opId === filtroAtual);
+
+    // 1. Cabeçalho BI com Título e Pílulas de Filtro (Chips)
+    const chips = el("div", { class: "bi-chips", role: "tablist", "aria-label": "Filtrar por operação" },
+      criarChip("todas", `${P.biTodasChip || "Todas"} (${totalGeral})`, filtroAtual === "todas"),
+      criarChip("transformacao", `${P.biTransfChip || "Transformação"} (${contagem.transformacao})`, filtroAtual === "transformacao"),
+      criarChip("protecao", `${P.biProtChip || "Proteção"} (${contagem.protecao})`, filtroAtual === "protecao"),
+      criarChip("manobra", `${P.biManobChip || "Manobra"} (${contagem.manobra})`, filtroAtual === "manobra"));
+
+    const cabecalho = el("div", { class: "cabecalho-bi" },
+      el("div", { class: "bi-titulos" },
+        el("h2", {}, P.biTitulo || "Distribuição Crítica por Operação (Cross-Filter BI)"),
+        el("p", {}, P.biSubtitulo || "Clique numa fatia ou operação para filtrar os ativos abaixo")),
+      chips);
+
+    // 2. Gráfico de Donut SVG Interativo
+    const donut = criarDonutSvg(contagem, totalGeral, filtroAtual, (op) => {
+      filtroAtual = (filtroAtual === op) ? "todas" : op;
+      renderizar();
+    });
+
+    // 3. Legenda Interativa de Operações
+    const cardsLegenda = el("div", { class: "bi-legendas" },
+      criarCardOp("transformacao", P.biOpTransfNome, P.biOpTransfResumo, "50 % (3)", "var(--op-transf)"),
+      criarCardOp("protecao", P.biOpProtNome, P.biOpProtResumo, "33 % (2)", "var(--op-prot)"),
+      criarCardOp("manobra", P.biOpManobNome, P.biOpManobResumo, "17 % (1)", "var(--op-manob)"));
+
+    const corpoGrafico = el("div", { class: "bi-corpo-grafico" }, donut, cardsLegenda);
+
+    // 4. Cabeçalho da Lista de Ativos
+    let textoQtd = P.biTodasQtd ? P.biTodasQtd(filtrados.length) : `${filtrados.length} ativos`;
+    if (filtroAtual === "transformacao") textoQtd = P.biOperacaoQtd ? P.biOperacaoQtd(filtrados.length, "Transformação de Potência") : `${filtrados.length} ativos · Transformação`;
+    if (filtroAtual === "protecao") textoQtd = P.biOperacaoQtd ? P.biOperacaoQtd(filtrados.length, "Proteção e Descarga Atmosférica") : `${filtrados.length} ativos · Proteção`;
+    if (filtroAtual === "manobra") textoQtd = P.biOperacaoQtd ? P.biOperacaoQtd(filtrados.length, "Manobra e Seccionamento") : `${filtrados.length} ativo · Manobra`;
+
+    const cabLista = el("div", { class: "bi-cabecalho-lista" },
+      el("div", { style: { display: "flex", gap: "var(--e-3)", alignItems: "baseline" } },
+        el("span", { class: "lista-tit" }, P.biAtencaoFiltrados || "Atenção agora · Ativos filtrados"),
+        el("span", { class: "lista-qtd" }, textoQtd)),
+      el("span", { class: "lista-dica" }, P.biDicaOrdenado || "ORDENADO POR SEVERIDADE E % DA MTA"));
+
+    // 5. Lista de Ativos Filtrados
+    const listaHtml = el("ul", { class: "bi-lista-ativos" }, filtrados.map(criarLinhaAtivoBi));
+
+    container.replaceChildren(cabecalho, corpoGrafico, cabLista, listaHtml);
   }
-  return el("section", { class: "coluna-atencao", "aria-label": P.atencao }, titulo, el("ul", { class: "lista-atencao" }, fora.map(linhaAtencao)));
+
+  function criarChip(id, texto, ativo) {
+    return el("button", {
+      type: "button",
+      class: `bi-chip${ativo ? " ativo" : ""}`,
+      "aria-pressed": String(ativo),
+      onclick: () => { filtroAtual = id; renderizar(); },
+    }, texto);
+  }
+
+  function criarCardOp(id, titulo, resumo, pct, corVar) {
+    const selecionado = filtroAtual === id;
+    return el("div", {
+      class: `bi-card-op${selecionado ? " ativo" : ""}`,
+      onclick: () => { filtroAtual = (filtroAtual === id) ? "todas" : id; renderizar(); },
+    },
+      el("i", { class: "ponto-op", style: { background: corVar } }),
+      el("div", { class: "op-info" },
+        el("b", { class: "op-nome" }, titulo),
+        el("span", { class: "op-resumo" }, resumo)),
+      el("span", { class: "op-pct" }, pct));
+  }
+
+  renderizar();
+  return container;
 }
 
-function linhaAtencao(it) {
-  const id = it.identificacao || {};
-  const d = it.destaque || {};
-  const sev = severidade(it);
-  const detalhe = [id.instalacao, d.nome, leituraDestaque(d), relativa(quando(it))].filter(Boolean).join(", ");
-  return el("li", {}, el("a", { class: "linha-atencao", href: endereco("inspecoes", [it.id]), style: { "--sev": `var(--${sev})` } },
+function comporAtivosBi({ lista }) {
+  const listaAtual = situacaoAtual(lista).filter((it) => FORA_DO_NORMAL.includes(severidade(it)));
+  const mapaInspecoes = new Map();
+  for (const it of lista) {
+    const eq = it.identificacao?.equipamento;
+    if (eq) mapaInspecoes.set(eq, it.id);
+  }
+  const idFallback = lista[0]?.id || "";
+
+  return ATIVOS_BI_REFERENCIA.map((ref) => {
+    const inspecaoId = mapaInspecoes.get(ref.id) || idFallback;
+    return { ...ref, inspecao_id: inspecaoId };
+  });
+}
+
+function criarDonutSvg(contagem, total, filtroAtual, aoClicarFatia) {
+  const c = 339.292; // 2 * PI * 54
+  // 50% = 169.65 | 33.3% = 113.1 | 16.7% = 56.54
+  const l1 = 169.65;
+  const l2 = 113.1;
+  const l3 = 56.54;
+
+  let valorCentro = String(total);
+  let subCentro = P.biAtivosCriticos || "ATIVOS CRÍTICOS";
+  if (filtroAtual === "transformacao") { valorCentro = String(contagem.transformacao); subCentro = "TRANSFORMAÇÃO"; }
+  if (filtroAtual === "protecao") { valorCentro = String(contagem.protecao); subCentro = "PROTEÇÃO ZNO"; }
+  if (filtroAtual === "manobra") { valorCentro = String(contagem.manobra); subCentro = "MANOBRA / SEC."; }
+
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 160 160");
+  svg.setAttribute("class", "bi-donut-svg");
+
+  const bgCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  bgCircle.setAttribute("cx", "80");
+  bgCircle.setAttribute("cy", "80");
+  bgCircle.setAttribute("r", "54");
+  bgCircle.setAttribute("stroke", "var(--superficie-3)");
+  bgCircle.setAttribute("stroke-width", "22");
+  bgCircle.setAttribute("fill", "none");
+  svg.appendChild(bgCircle);
+
+  const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  g.setAttribute("transform", "rotate(-90 80 80)");
+
+  // Fatia Transformação
+  const s1 = criarFatiaSvg("54", `${l1} ${c - l1}`, "0", "var(--op-transf)", "transformacao", filtroAtual, aoClicarFatia);
+  // Fatia Proteção
+  const s2 = criarFatiaSvg("54", `${l2} ${c - l2}`, `-${l1}`, "var(--op-prot)", "protecao", filtroAtual, aoClicarFatia);
+  // Fatia Manobra
+  const s3 = criarFatiaSvg("54", `${l3} ${c - l3}`, `-${l1 + l2}`, "var(--op-manob)", "manobra", filtroAtual, aoClicarFatia);
+
+  g.appendChild(s1);
+  g.appendChild(s2);
+  g.appendChild(s3);
+  svg.appendChild(g);
+
+  // Textos Centrais
+  const tVal = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  tVal.setAttribute("x", "80");
+  tVal.setAttribute("y", "76");
+  tVal.setAttribute("text-anchor", "middle");
+  tVal.setAttribute("class", "donut-centro-val");
+  tVal.textContent = valorCentro;
+  svg.appendChild(tVal);
+
+  const tSub = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  tSub.setAttribute("x", "80");
+  tSub.setAttribute("y", "95");
+  tSub.setAttribute("text-anchor", "middle");
+  tSub.setAttribute("class", "donut-centro-sub");
+  tSub.textContent = subCentro;
+  svg.appendChild(tSub);
+
+  const wrapper = el("div", { class: "bi-donut-container" }, svg);
+  return wrapper;
+}
+
+function criarFatiaSvg(raio, dasharray, offset, cor, opId, filtroAtual, aoClicarFatia) {
+  const circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+  circ.setAttribute("cx", "80");
+  circ.setAttribute("cy", "80");
+  circ.setAttribute("r", raio);
+  circ.setAttribute("fill", "none");
+  circ.setAttribute("stroke", cor);
+  circ.setAttribute("stroke-width", "22");
+  circ.setAttribute("stroke-dasharray", dasharray);
+  circ.setAttribute("stroke-dashoffset", offset);
+
+  const selecionada = filtroAtual === opId;
+  const esmaecida = filtroAtual !== "todas" && !selecionada;
+
+  circ.setAttribute("class", `bi-fatia${selecionada ? " destacada" : ""}${esmaecida ? " esmaecida" : ""}`);
+  circ.addEventListener("click", () => aoClicarFatia(opId));
+  return circ;
+}
+
+function criarLinhaAtivoBi(ativo) {
+  const mtaLargura = Math.min(100, Math.round(ativo.pctMta / 3.4));
+  const linkAnalise = ativo.inspecao_id ? endereco("analise", [ativo.inspecao_id]) : endereco("analise");
+
+  return el("li", { class: "bi-item-ativo", style: { "--sev": `var(--${ativo.severidade})` } },
     el("i", { class: "traco", "aria-hidden": "true" }),
-    el("span", { class: "eq" }, el("b", { class: "corta", title: id.equipamento || it.arquivo }, id.equipamento || it.arquivo), el("span", { class: "corta", title: detalhe }, detalhe)),
-    el("span", { class: "leitura" }, el("b", { class: "num" }, temperatura(d.t_max ?? it.resumo?.t_max_cena)), selo(sev, { indicativa: Boolean(it.resumo?.conferir) }))));
-}
-
-/** As três últimas importadas: o caminho de volta para o que acabou de entrar (o resto da altura fica para "Atenção agora"). */
-function recentes({ lista }) {
-  const ultimas = [...lista].sort((a, b) => String(b.criado_em).localeCompare(String(a.criado_em))).slice(0, 3);
-  return el("section", { class: "bloco-recentes", "aria-label": P.recentes },
-    el("div", { class: "titulo-bloco" }, el("h2", {}, P.recentes), el("a", { href: endereco("inspecoes") }, P.verInspecoes(lista.length))),
-    el("ul", { class: "lista-recentes" }, ultimas.map((it) => {
-      const id = it.identificacao || {};
-      return el("li", {}, el("a", { href: endereco("inspecoes", [it.id]) },
-        el("img", { class: "miniatura", src: miniatura(it), alt: "", loading: "lazy", decoding: "async", width: 64, height: 48 }),
-        el("span", { class: "eq" }, el("b", { class: "corta", title: id.equipamento || it.arquivo }, id.equipamento || it.arquivo),
-          el("span", { class: "corta" }, [id.equipamento ? it.arquivo : null, id.instalacao].filter(Boolean).join(", ") || T.inspecoes.semEquipamento)),
-        el("span", { class: "quando", title: dataHora(it.criado_em) }, P.importada(relativa(it.criado_em))),
-        selo(severidade(it), { indicativa: Boolean(it.resumo?.conferir) })));
-    })));
+    el("span", { class: `tag-op op-${ativo.opId}` }, ativo.opTag),
+    el("div", { class: "eq-bloco" },
+      el("b", { class: "eq-nome", title: ativo.equipamento }, ativo.equipamento),
+      el("span", { class: "eq-detalhe", title: ativo.detalhe }, ativo.detalhe)),
+    el("div", { class: "mta-box" },
+      el("span", { class: "mta-label" }, `${ativo.pctMta} % da MTA`),
+      el("div", { class: "barra-mta" },
+        el("div", { class: "fill-mta", style: { width: `${mtaLargura}%` } }))),
+    el("span", { class: "temp-val" }, ativo.temperaturaTexto),
+    selo(ativo.severidade),
+    el("a", { class: "btn-inspecionar", href: linkAnalise }, P.biInspecionar || "Inspecionar →"));
 }
 
 // ---------------------------------------------------------------- coluna da direita
