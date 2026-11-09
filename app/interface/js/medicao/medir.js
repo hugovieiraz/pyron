@@ -1,10 +1,12 @@
 // Medição › Medir: medir um objeto qualquer numa foto comum (docs/07_roteiro_medicao_geral.md, fase 5).
-// Abrir a foto e clicar nas duas pontas do que se quer medir: o resultado é UMA distância entre elas, em cm, com a margem
-// de erro. Quem decide o que é altura, largura ou comprimento é o usuário, ao escolher as pontas; o seletor "Medindo" só
-// dá o nome ao resultado na tela. Uma referência de tamanho conhecido (o post-it rosa, achado sozinho pela cor) corrige a escala.
-// Cada par de pontas mede UMA vez e mostra UM resultado, que o par seguinte substitui: nada de medida guardada. O servidor mede
-// com o modelo padrão (POST /api/medicao/comparar com `modelo`, sem `registrar`, então nada vai para o registro): com a
-// referência quando ela vale, senão pela escala do próprio modelo. Geometria em 3D, sem contorno do objeto.
+// "Caixa em volta": arrastar um retângulo em volta do objeto; o SAM 2.1 contorna o que está dentro (POST /api/medicao/contorno,
+// sem medir nada) e o usuário clica as duas pontas do que quer medir, que grudam no contorno quando caem perto dele.
+// "Duas pontas": as mesmas duas pontas, sem o contorno. Quem decide o que é altura, largura ou comprimento é o usuário, ao
+// escolher as pontas; o seletor "Medindo" só dá o nome ao resultado. O software não mede altura nem largura sozinho.
+// A distância entre as pontas sai nos dois modelos de profundidade (Depth Anything 3 e MoGe-2), sem e com a referência
+// (o post-it rosa, achado sozinho pela cor): POST /api/medicao/comparar sem `modelo` e sem `registrar`, então nada vai para o
+// registro. O valor em destaque é o do modelo padrão; a tabela mostra a estimativa de cada um. Cada par de pontas mede UMA
+// vez e o par seguinte substitui: nada de medida guardada.
 // A foto aberta só fica na faixa de fotos (POST /api/medicao/fotos) para passar de uma para outra; as do celular chegam por ali.
 // Sem modelo nenhum (ou sem os pesos instalados), o modo "Retângulo de referência" mede no plano de uma folha
 // A4 ou de um cartão: 4 cantos e 2 pontas, por homografia (POST /api/medicao/plano).
@@ -30,7 +32,7 @@ export async function montar(no, ctx = {}) {
   const nomeModelo = M.colunas[modeloPadrao] || modeloPadrao;
 
   let foto = null;           // { arquivo, url, largura, altura, codigo }
-  let modo = estado.pronto ? "pontos" : "plano"; // pontos (duas pontas, com os modelos) | plano (sem modelo)
+  let modo = estado.pronto ? "caixa" : "plano"; // caixa (o SAM contorna, o usuário marca as pontas) | pontos (só as pontas) | plano (sem modelo)
   let grandeza = "distancia"; // só o nome do resultado na tela: altura | largura | comprimento | distancia
   let cantos = [];           // modo plano: cantos do retângulo de referência
   let pontoPlano = null;     // modo plano: a primeira ponta da medida
@@ -38,7 +40,12 @@ export async function montar(no, ctx = {}) {
   let alvo = "objeto";       // objeto | referencia: o que a próxima marca na foto define
   let medida = null;         // a medida mostrada: { pista: { pontos }, r (resposta do servidor; null enquanto mede), video (nº de quadros), comReferencia, seq }
   let pistaRef = null;       // pista da referência marcada à mão: { ponto }
-  let primeiroPonto = null;  // modo "pontos": a primeira ponta
+  let primeiroPonto = null;  // a primeira ponta da medida
+  let caixa = null;          // modo caixa: o retângulo em volta do objeto, [x0, y0, x1, y1]
+  let cantoCaixa = null;     // modo caixa, sem arrastar (toque, teclado): o primeiro canto do retângulo
+  let rascunho = null;       // o retângulo enquanto é arrastado
+  let contornoObj = null;    // o contorno que o SAM achou na caixa (polígonos)
+  let contornando = false;
   let medindo = false;
   let sequencia = 0;         // cada pedido de medida leva um número; só o mais novo mostra o resultado
   let geracao = 0;
@@ -184,7 +191,7 @@ export async function montar(no, ctx = {}) {
     barra.replaceChildren(barraFerramentas({
       rotulo: M.ferramentas,
       grupos: [[{ texto: foto ? M.trocar : M.abrir, icone: "foto", onclick: () => entrada.click() }, { texto: M.abrirVideo, icone: "video", onclick: () => entradaVideo.click() }],
-        [ferramenta("pontos", "linha"), ferramenta("plano", "escala")]],
+        [ferramenta("caixa", "regiao"), ferramenta("pontos", "linha"), ferramenta("plano", "escala")]],
       direita: [{ texto: M.limpar, icone: "x", indisponivel: foto ? null : M.abraFoto, onclick: () => limpar() }],
     }));
   }
@@ -203,6 +210,11 @@ export async function montar(no, ctx = {}) {
     if (modo === "plano") return cantos.length < 4 ? M.dicaModo.cantos(cantos.length + 1) : pontoPlano ? M.dicaModo.pontosSegundo : M.dicaModo.plano;
     if (alvo === "referencia") return M.dicaModo.referencia;
     if (primeiroPonto) return M.dicaModo.pontosSegundo;
+    if (modo === "caixa" && (!video || video.atual === 0)) {
+      if (contornando) return el("b", {}, M.dicaModo.contornando);
+      if (!caixa) return cantoCaixa ? M.dicaModo.caixaSegundo : M.dicaModo.caixa;
+      if (!medida) return contornoObj ? M.dicaModo.caixaPontos : M.dicaModo.pontos;
+    }
     return video ? M.videoDica : M.dicaModo.pontos;
   }
   const atualizarHud = () => {
@@ -244,6 +256,12 @@ export async function montar(no, ctx = {}) {
       if (medidaPlano) { pontas = medidaPlano.pontos; if (medidaPlano.r) texto = M.valor(fmt(medidaPlano.r.distancia_cm, 1)); }
       if (pontoPlano) ponta(pontoPlano, "marca-obj");
     } else {
+      if (modo === "caixa" && noPrimeiroQuadro) {
+        if (contornoObj) poligonos(contornoObj, "contorno-obj");
+        const ret = rascunho || caixa;
+        if (ret) { const [x0, y0, x1, y1] = ret; filhos.push(svg("rect", { x: x0, y: y0, width: x1 - x0, height: y1 - y0, class: "marca-rascunho" })); }
+        if (cantoCaixa) ponta(cantoCaixa, "marca-ref");
+      }
       if (medida?.r) poligonos(medida.r.contorno_referencia || [], "contorno-ref");  // onde o post-it foi achado
       if (pistaRef) ponta(pistaRef.ponto, "marca-ref");
       if (medida) {
@@ -284,18 +302,45 @@ export async function montar(no, ctx = {}) {
     const { res, v, usada } = valorDe(r);
     if (v.distancia_cm == null) { caixaResultado.replaceChildren(el("p", { class: "nota aviso-escala" }, M.semDistancia(res.erro))); return; }
     const notas = [];
+    let motivo = "";  // por que a referência não valeu: dito uma vez em cima, não repete na tabela
     if (usada) notas.push(el("p", { class: "nota" }, M.comReferencia));
     else if (medida.comReferencia) {
-      const motivo = res.erro || res.com_referencia?.referencia_ignorada;
+      motivo = res.erro || res.com_referencia?.referencia_ignorada;
       notas.push(el("p", { class: "nota aviso-escala" }, M.refNaoUsada(motivo)), el("p", { class: "nota" }, M.semReferencia));
     } else notas.push(el("p", { class: "nota" }, M.semReferencia));
     if (medida.video) notas.push(el("p", { class: "nota" }, M.notaVideo(medida.video)));
-    caixaResultado.replaceChildren(el("div", { class: "leituras-medir" }, leitura(M.nomes[grandeza], v.distancia_cm, v.incerteza_cm?.distancia)), ...notas);
+    caixaResultado.replaceChildren(el("div", { class: "leituras-medir" },
+      leitura(M.destaque(M.nomes[grandeza], nomeModelo, usada), v.distancia_cm, v.incerteza_cm?.distancia)), ...notas, tabelaModelos(r, medida.comReferencia, motivo));
     const detalhes = [];
     if (v.lente) detalhes.push(el("p", {}, M.lente[v.lente] || ""));
-    const total = v.tempos_ms?.total;
-    detalhes.push(el("p", { class: "nota" }, M.modeloUsado(nomeModelo, total != null ? M.segundos(fmt(total / 1000, 1)) : "")));
+    const tempos = Object.entries(r.resultados || {}).map(([k, x]) => x.sem_referencia?.tempos_ms?.total != null
+      ? M.tempoModelo(M.colunas[k] || k, M.segundos(fmt(x.sem_referencia.tempos_ms.total / 1000, 1))) : null).filter(Boolean);
+    if (tempos.length) detalhes.push(el("p", { class: "nota" }, M.tempos(tempos.join(", "))));
     caixaDetalhes.replaceChildren(...detalhes);
+  }
+
+  /** A mesma distância em cada modelo de profundidade, sem e com a referência: um modelo por linha. */
+  function tabelaModelos(r, pediuReferencia, jaDito) {
+    const celula = (x, ignorada) => {
+      if (!x || x.distancia_cm == null) return el("td", {}, el("span", { class: "valor" }, "—"));
+      return el("td", { class: ignorada ? "ignorada" : null, title: ignorada ? M.refNaoUsada(ignorada) : null },
+        el("span", { class: "valor" }, M.valor(fmt(x.distancia_cm, 1))),
+        x.incerteza_cm?.distancia != null ? el("span", { class: "mais" }, M.mais(fmt(x.incerteza_cm.distancia, 1))) : null);
+    };
+    const resultados = Object.entries(r.resultados || {});
+    const linhas = resultados.map(([k, x]) => el("tr", {},
+      el("th", { scope: "row" }, M.colunas[k] || k), celula(x.sem_referencia), celula(x.com_referencia, x.com_referencia?.referencia_ignorada)));
+    const ignorada = (x) => x.com_referencia?.referencia_ignorada;
+    const avisos = resultados.flatMap(([k, x]) => [
+      x.erro && x.erro !== jaDito ? M.modeloErro(M.colunas[k] || k, x.erro) : null,
+      ignorada(x) && ignorada(x) !== jaDito ? M.modeloRefIgnorada(M.colunas[k] || k, ignorada(x)) : null]).filter(Boolean);
+    return el("div", { class: "bloco-comparacao" },
+      el("h3", {}, M.comparacaoTitulo),
+      el("div", { class: "rola-tabela" }, el("table", { class: "tabela-comparacao" },
+        el("thead", {}, el("tr", {}, el("th", { scope: "col" }, M.colunaModelo), el("th", { scope: "col" }, M.colunaSem), el("th", { scope: "col" }, M.colunaCom))),
+        el("tbody", {}, linhas))),
+      pediuReferencia ? null : el("p", { class: "nota" }, M.semColunaCom),
+      ...avisos.map((t) => el("p", { class: "nota aviso-escala" }, t)));
   }
 
   function desenharResultadoPlano() {
@@ -412,6 +457,7 @@ export async function montar(no, ctx = {}) {
       foto = { arquivo, url, largura: img.naturalWidth, altura: img.naturalHeight, codigo: arquivo.codigo || null };
       pistaRef = primeiroPonto = pontoPlano = null;
       cantos = []; medidaPlano = null; medida = null;
+      tirarCaixa();
       alvo = "objeto";
       geracao++; medindo = false;  // a medida da foto anterior não aparece nesta
       imagem.src = url;
@@ -438,14 +484,17 @@ export async function montar(no, ctx = {}) {
 
   function escolherModo(id) {
     modo = id;
-    primeiroPonto = pontoPlano = null;
+    primeiroPonto = pontoPlano = cantoCaixa = rascunho = null;
     alvo = "objeto";
     atualizarTudo();
   }
 
+  function tirarCaixa() { caixa = cantoCaixa = rascunho = contornoObj = null; contornando = false; }
+
   function limpar() {
     pistaRef = primeiroPonto = pontoPlano = null;
     cantos = []; medidaPlano = null; medida = null;
+    tirarCaixa();
     alvo = "objeto";
     geracao++;
     medindo = false;
@@ -495,7 +544,7 @@ export async function montar(no, ctx = {}) {
       const ref = referencia();
       m.comReferencia = Boolean(ref);
       if (ref) dados.append("referencia", JSON.stringify(ref));
-      dados.append("modelo", modeloPadrao);  // só o modelo padrão; o servidor não guarda nada sem o pedido explícito
+      // sem `modelo`: os dois modelos de profundidade; sem `registrar`: o servidor não guarda nada
       if (m.video) dados.append("max_keyframes", String(QUADROS_VIDEO));
       try {
         const r = await api(m.video ? "/api/medicao/video/comparar" : "/api/medicao/comparar", { method: "POST", body: dados });
@@ -518,21 +567,72 @@ export async function montar(no, ctx = {}) {
     const fy = Math.min(1, Math.max(0, (ev.clientY - b.top) / b.height));
     return { fx, fy, x: fx * foto.largura, y: fy * foto.altura };
   };
-  let apertado = false;
+  const CAIXA_MINIMA = 0.02;  // arrasto menor que 2 % da foto conta como clique
+  const retangulo = (a, b) => [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])].map(Math.round);
+  let arrasto = null;
   quadro.addEventListener("pointerdown", (ev) => {
     if (!foto || ev.button !== 0 || espaco) return;
     ev.preventDefault();
-    apertado = true;
+    arrasto = naImagem(ev);
     quadro.setPointerCapture(ev.pointerId);
   });
-  quadro.addEventListener("pointerup", (ev) => {
-    if (!apertado) return;
-    apertado = false;
+  quadro.addEventListener("pointermove", (ev) => {
+    if (!arrasto || modo !== "caixa" || alvo !== "objeto" || (video && video.atual !== 0)) return;
     const b = naImagem(ev);
-    mira = { x: b.fx, y: b.fy };
-    clicar(b.x, b.y);
+    if (!rascunho && Math.abs(b.fx - arrasto.fx) <= CAIXA_MINIMA && Math.abs(b.fy - arrasto.fy) <= CAIXA_MINIMA) return;
+    rascunho = retangulo([arrasto.x, arrasto.y], [b.x, b.y]);
+    desenharCamada();
   });
-  quadro.addEventListener("pointercancel", () => { apertado = false; });
+  quadro.addEventListener("pointerup", (ev) => {
+    if (!arrasto) return;
+    const a = arrasto, b = naImagem(ev);
+    arrasto = null;
+    mira = { x: b.fx, y: b.fy };
+    if (rascunho) { rascunho = null; marcarCaixa(retangulo([a.x, a.y], [b.x, b.y])); } else clicar(b.x, b.y);
+  });
+  quadro.addEventListener("pointercancel", () => { arrasto = rascunho = null; desenharCamada(); });
+
+  /** A caixa em volta do objeto: o SAM 2.1 devolve o contorno do que está dentro (nada é medido nem guardado). Uma caixa
+   * nova tira a medida e o contorno anteriores. */
+  async function marcarCaixa(ret) {
+    if (ret[2] - ret[0] < 2 || ret[3] - ret[1] < 2) { desenharCamada(); return; }
+    tirarCaixa();
+    caixa = ret; contornando = true;
+    primeiroPonto = null; medida = null;
+    const minha = ++geracao;
+    medindo = false;
+    atualizarTudo();
+    const dados = new FormData();
+    dados.append("arquivo", foto.arquivo);
+    dados.append("pista", JSON.stringify({ caixa: ret }));
+    try {
+      const r = await api("/api/medicao/contorno", { method: "POST", body: dados });
+      if (minha !== geracao) return;
+      contornoObj = r.contorno;
+    } catch (e) {
+      if (minha !== geracao) return;
+      avisar(`${M.erroContorno} ${e.message}`, { erro: true });
+    }
+    contornando = false;
+    atualizarHud(); desenharCamada();
+  }
+
+  /** Ponta perto do contorno do objeto (até 1,5 % da foto; menos com zoom) gruda no ponto mais próximo do contorno. */
+  function grudar(p) {
+    if (modo !== "caixa" || !contornoObj) return p;
+    let melhor = null, menor = (Math.max(foto.largura, foto.altura) * 0.015) / zoom;
+    for (const poli of contornoObj) {
+      poli.forEach((a, i) => {
+        const b = poli[(i + 1) % poli.length];
+        const dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy;
+        const t = l2 ? Math.min(1, Math.max(0, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l2)) : 0;
+        const q = [a[0] + t * dx, a[1] + t * dy];
+        const d = Math.hypot(q[0] - p[0], q[1] - p[1]);
+        if (d < menor) { menor = d; melhor = q.map(Math.round); }
+      });
+    }
+    return melhor || p;
+  }
 
   /** Uma marca na foto: canto do retângulo ou ponta do plano, a referência à mão ou uma das duas pontas da medida. */
   function clicar(x, y) {
@@ -540,8 +640,17 @@ export async function montar(no, ctx = {}) {
     if (video && video.atual !== 0) { avisar(M.videoSoPrimeiro); mostrarQuadro(0); return; }
     if (modo === "plano") { clicarPlano(p); return; }
     if (alvo === "referencia") { marcarReferencia(p); return; }
-    if (!primeiroPonto) { primeiroPonto = p; atualizarHud(); desenharCamada(); return; }
-    const par = [primeiroPonto, p];
+    if (modo === "caixa" && !caixa) {  // sem arrastar (toque, teclado): dois cliques são os cantos do retângulo
+      if (!cantoCaixa) { cantoCaixa = p; atualizarHud(); desenharCamada(); return; }
+      const ret = retangulo(cantoCaixa, p);
+      cantoCaixa = null;
+      marcarCaixa(ret);
+      return;
+    }
+    if (modo === "caixa" && contornando) return;
+    const q = grudar(p);
+    if (!primeiroPonto) { primeiroPonto = q; atualizarHud(); desenharCamada(); return; }
+    const par = [primeiroPonto, q];
     primeiroPonto = null;
     medirPontas(par);
   }
@@ -560,8 +669,8 @@ export async function montar(no, ctx = {}) {
     } else if (ev.key === "Enter" || (ev.key === " " && zoom === 1)) {
       ev.preventDefault();
       clicar(mira.x * foto.largura, mira.y * foto.altura);
-    } else if (ev.key === "Escape" && (primeiroPonto || pontoPlano || alvo === "referencia")) {
-      primeiroPonto = pontoPlano = null; alvo = "objeto"; atualizarHud(); desenharCamada();
+    } else if (ev.key === "Escape" && (primeiroPonto || pontoPlano || cantoCaixa || alvo === "referencia")) {
+      primeiroPonto = pontoPlano = cantoCaixa = null; alvo = "objeto"; atualizarHud(); desenharCamada();
     }
   });
   palco.addEventListener("focus", () => desenharCamada());

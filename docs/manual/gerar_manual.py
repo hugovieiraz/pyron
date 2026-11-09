@@ -639,7 +639,7 @@ def conteudo() -> list:
             "<b>Baixar backup:</b> um .zip com tudo isso (vídeos enviados e treinos ficam de fora). Guarde fora do computador.",
             "<b>Restaurar backup:</b> troca os dados atuais pelos do .zip. Antes, uma cópia do que existe hoje fica na pasta de dados, em backups.",
             "O Pyron não envia nada para a internet. A única saída é quando o usuário clica em Abrir WhatsApp.",
-            "Instalação do zero, atualização e geração do executável: README do projeto. Código: github.com/hugovieiraz/Pyron---Embrapii.",
+            "Instalação do zero, atualização e geração do executável: README do projeto. Código: github.com/hugovieiraz/pyron.",
         ]),
     ]
 

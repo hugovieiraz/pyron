@@ -2673,6 +2673,40 @@ async def medicao_comparar(arquivo: UploadFile = File(...), pista: str = Form(..
         raise HTTPException(422, str(e))
 
 
+@app.post("/api/medicao/contorno")
+async def medicao_contorno(arquivo: UploadFile = File(...), pista: str = Form(...)) -> dict:
+    """O contorno do objeto dentro da caixa, pelo SAM 2.1, sem medir nada: a guia para o usuário marcar as duas pontas.
+    Não guarda nada."""
+    dados = await arquivo.read()
+    if not dados:
+        raise HTTPException(422, "O arquivo está vazio.")
+    if len(dados) > LIMITE_FOTO_MEDICAO:
+        raise HTTPException(413, "A foto passa de 40 MB.")
+    pista = _validar_pista_medicao(_json_form(pista, "pista"), "a caixa")
+    if "caixa" not in pista:
+        raise HTTPException(422, "Informe a caixa em volta do objeto.")
+    from nucleo.medicao.profundidade import abrir
+
+    try:
+        abrir(dados)
+    except Exception:
+        raise HTTPException(422, "Não consegui abrir a foto.")
+    from starlette.concurrency import run_in_threadpool
+
+    from nucleo import medicao as medicao_mod
+
+    def contornar() -> dict:
+        with _trava_medicao:
+            return medicao_mod.contornar(dados, pista["caixa"])
+
+    try:
+        return await run_in_threadpool(contornar)
+    except (ImportError, OSError) as e:
+        raise HTTPException(503, f"O SAM 2.1 não está instalado ({type(e).__name__}: {e}).")
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+
+
 @app.get("/api/medicao/registro")
 def medicao_registro(limite: int = 50) -> dict:
     """As últimas medições (da tela e do celular) e o erro mediano de cada modelo onde há valor real."""

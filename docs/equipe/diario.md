@@ -59,7 +59,50 @@ Modelo de entrada (curta; o detalhe fica no commit):
 
 - Feito: fast-forward da `main` local (`36bd868..d5295e3`, +36 commits) e merge limpo na branch `v09-f5-desktop`. Comparação da metrologia do Pyron (`nucleo/medicao/`) com o projeto `Detector-de-medidas` (`measurement.py`) e integração completa de `metrology.py`, `run_metrology.py` e `test_metrology.py` (17/17 testes passando) em `types_def.py`, `measurement.py`, `visualizer.py`, `main.py`, `run_video.py` e `server_cam.py`.
 - Para o outro: nenhum código do Pyron foi alterado além do merge de `origin/main`.
-- Pendente (Gabriel): responder sobre os kernels Mojo em `nucleo/aceleradores/bin/` (compilar/assinar ou remover).
+- Pendente (Gabriel): responder sobre os kernels Mojo em `nucleo/aceleradores/bin/` (compilar/assinar ou remover).
+
+## 07/11/2026 · Hugo: repositório com endereço novo
+
+- Feito: o GitHub passou a responder pelo endereço novo, https://github.com/hugovieiraz/pyron (o antigo,
+  `Pyron---Embrapii`, ainda redireciona). Remoto `origin` trocado nesta máquina e o endereço atualizado em
+  CLAUDE.md, site/index.html, docs/manual/gerar_manual.py e docs/08_arquitetura_banco_dados_pyron_cloud.md.
+- Para o outro: rode `git remote set-url origin https://github.com/hugovieiraz/pyron.git` na sua máquina. O caminho
+  local em docs/v09/medidas-f4/paridade-dml.json ficou como estava (é a pasta da sua máquina, registro de medida).
+- Pendente: nada.
+
+## 07/11/2026 · Hugo: Medição com caixa do SAM e os dois modelos
+
+- Feito: Medição › Medir volta a ter "Caixa em volta" (modo padrão). O usuário arrasta um retângulo (ou clica dois
+  cantos), o SAM 2.1 contorna o objeto por `POST /api/medicao/contorno` (rota nova, `nucleo.medicao.contornar()`,
+  não mede nem guarda nada), e o usuário clica as duas pontas do que quer medir; perto do contorno a ponta encosta
+  nele. A distância sai nos dois modelos de profundidade, sem e com o post-it: `/api/medicao/comparar` sem `modelo`
+  e sem `registrar`, numa tabela Depth Anything 3 / MoGe-2 × sem / com referência. Em destaque fica o valor do modelo
+  padrão. "Duas pontas" (sem contorno) e "Retângulo de referência" continuam.
+- Para o outro: o software continua sem medir altura nem largura sozinho; quem escolhe é o usuário pelas pontas.
+  Nada é guardado (só a foto na faixa, como antes). Medido em 07/11 na RTX 3050: geladeira real com post-it, topo ao
+  pé, DA3 192,3 cm sem e 168,9 cm com o post-it; MoGe-2 169,4 sem e 171,4 com; contorno do SAM em 4,5 s; os dois
+  modelos juntos em 30 s na primeira medida da foto. Revisão do diff pelo Codex (alethe): um defeito corrigido (clique
+  preso ao trocar de modo durante o contorno).
+- Pendente (Hugo): conferir o tempo dos dois modelos em sequência no uso real; se pesar, voltar a só o modelo padrão
+  com a tabela a pedido.
+
+## 07/11/2026 · Hugo: Controle Inteligente e o Pyron.exe
+
+- Feito: pesquisa, sem mudança de código. No registro de Integridade de Código (29/09 a 07/11), o Controle
+  Inteligente bloqueou o `Pyron.exe` sem assinatura 8 vezes (11/10, 26/10, 30/10 e 07/11 às 13:48). O `pythonw.exe`
+  do `.venv` (assinado pela PSF) nunca foi bloqueado; pacotes do `.venv` (onnx 43 vezes, torch, ml_dtypes, vernier,
+  hotcoco) só até 12/10. Atalho "Abrir Pyron" recriado na área de trabalho por `lancador/atalho.py`: abriu na 8765,
+  janela do Edge, nenhum bloqueio.
+- Para o outro: na máquina do Gabriel o Controle Inteligente está desligado, então lá o `.exe`, o Tauri e os kernels
+  Mojo sempre abrem; a prova só vale numa máquina com ele ligado. Assinatura sem pagar: Artifact Signing (Azure) só
+  aceita pessoa física dos EUA e do Canadá; SignPath Foundation é grátis só para código aberto com licença OSI (o
+  repositório não tem licença); a Microsoft Store é grátis para pessoa física desde 09/2025 e assina o MSIX na
+  publicação. Pago: certificado OV, cerca de US$ 150 a 300 por ano. Store fechada: "Private audience" no Partner
+  Center (só quem tem o e-mail da conta Microsoft pessoal no grupo vê e instala; até 10.000 por grupo; conta de
+  trabalho ou escola não serve). Publicou como público uma vez, não volta a privado: a primeira submissão já tem de
+  ser privada.
+- Pendente (Hugo): escolher entre MSIX pela Store, certificado OV ou continuar com o atalho; se for SignPath, ver com
+  a Embrapii se o código pode ser aberto.
 
 ## 07/11/2026 · Hugo: curadoria técnica e roteiro da apresentação
 

@@ -181,12 +181,14 @@ def test_medicao_e_tela_de_topo_e_nao_guarda_medidas():
     assert 'const ABAS = ["medir", "modelos"]' in (PASTA / "js" / "telas" / "medicao.js").read_text(encoding="utf-8")
     codigo = [l for l in (PASTA / "js" / "medicao" / "medir.js").read_text(encoding="utf-8").splitlines() if not l.strip().startswith("//")]
     medir = "\n".join(codigo)
-    # só as duas pontas (e o retângulo sem modelo): sem clique no objeto, sem caixa, sem a biblioteca de pesos
+    # a caixa só traz o contorno do SAM (o usuário marca as duas pontas); sem medida automática, sem a biblioteca de pesos
     for proibido in ("/api/medicao/registro", "trazerMedidasDoCelular", "registrar", "campoReal", "campoNome",
-                     "/api/medicao/contexto-2d", "/api/medicao/biblioteca", "caixa:", "contorno-obj"):
+                     "/api/medicao/contexto-2d", "/api/medicao/biblioteca", "altura_cm", "largura_cm"):
         assert proibido not in medir, proibido
     assert "segmentado(" in medir and "pontos: " in medir
-    assert 'dados.append("modelo", modeloPadrao)' in medir
+    assert "/api/medicao/contorno" in medir and 'ferramenta("caixa"' in medir
+    # a distância sai nos dois modelos (sem `modelo`), numa tabela sem e com referência
+    assert 'dados.append("modelo"' not in medir and "tabelaModelos(" in medir
     modelos = (PASTA / "js" / "medicao" / "modelos.js").read_text(encoding="utf-8")
     assert "/api/medicao/registro" not in modelos and "registro.csv" not in modelos
 

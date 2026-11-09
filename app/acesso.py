@@ -475,7 +475,7 @@ _GRUPOS_DAS_ROTAS = {
         "POST /api/analises", "POST /api/exemplos/{nome}/analisar", "POST /api/analises/{id_}/comentarios",
         "PUT /api/analises/{id_}/acompanhamento",  # o técnico só nas que não são urgentes nem imediatas (na rota)
         "POST /api/videos", "POST /api/videos/{id_}/cancelar", "POST /api/videos/{id_}/quadros/{n}/inspecao",
-        "POST /api/medicao", "POST /api/medicao/comparar", "POST /api/medicao/previa", "POST /api/medicao/fotos",
+        "POST /api/medicao", "POST /api/medicao/comparar", "POST /api/medicao/contorno", "POST /api/medicao/previa", "POST /api/medicao/fotos",
         "POST /api/medicao/referencia", "POST /api/medicao/plano", "POST /api/medicao/video/keyframes",
         "POST /api/medicao/video/medir", "POST /api/medicao/video/comparar", "POST /api/medicao/contexto-2d",
         "PUT /api/medicao/registro/{codigo}", "POST /api/cadastro/medidas", "POST /api/cadastro/cameras/{nome}/conferir",
