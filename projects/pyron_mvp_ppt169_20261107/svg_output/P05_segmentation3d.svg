@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" data-pptx-page-role="content">
+    <!-- Obsidian Frost Background -->
+    <rect width="1280" height="720" fill="#10141A"/>
+    <!-- Linhas Guia Estruturais -->
+    <g id="deck-guides" data-pptx-role="decoration" data-pptx-bounds="56 140 1168 520" stroke="#1E293B" stroke-width="0.5">
+        <line x1="56" y1="140" x2="1224" y2="140"/>
+        <line x1="56" y1="660" x2="1224" y2="660"/>
+    </g>
+    
+    <!-- Header Telemetria -->
+    <g id="slide-header" data-pptx-role="header" data-pptx-bounds="56 36 1168 100">
+        <rect x="56" y="36" width="256" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="76" y="52" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1.5">FEATURE 3 · VISÃO ESPACIAL</text>
+        <text x="56" y="96" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">Segmentação SAM 2.1 e Profundidade 3D</text>
+        <text x="56" y="124" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="400" fill="#94A3B8">Eliminando o Efeito Céu e Estimando Distâncias Métricas com 5,1% de Erro</text>
+    </g>
+    <!-- Footer Telemetria -->
+    <g id="slide-footer" data-pptx-role="footer" data-pptx-bounds="56 676 1168 28">
+        <line x1="56" y1="676" x2="1224" y2="676" stroke="#1E293B" stroke-width="1"/>
+        <text x="56" y="694" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">PYRON MVP · TERMOGRAFIA DIGITAL PREDITIVA</text>
+        <text x="640" y="694" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">CONFORMIDADE ABNT NBR 15866 &amp; IEC 60099-5 · 100% OFFLINE EDGE</text>
+        <text x="1224" y="694" text-anchor="end" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">05 / 12</text>
+    </g>
+    
+    <!-- Card Céu Frio (Esquerda) -->
+    <g id="sky-contamination" data-pptx-bounds="56 150 568 496">
+        <rect x="56" y="150" width="568" height="496" rx="24" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <text x="88" y="190" font-family="EB Garamond, Georgia, serif" font-size="22" font-weight="600" fill="#FFFFFF">O Problema da Caixa Retangular</text>
+        <text x="88" y="216" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#94A3B8">Por que caixas delimitadoras tradicionais falham em isoladores</text>
+        
+        <rect x="88" y="246" width="504" height="150" rx="14" fill="#0A0E14"/>
+        <text x="112" y="276" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#FFB4AB">CONTAMINAÇÃO TÉRMICA PELO FUNDO CELESTE:</text>
+        <text x="112" y="304" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">O céu em subestações de alta tensão varia entre -20 °C e 5 °C.</text>
+        <text x="112" y="328" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Caixas retangulares englobam até 40% de área de céu gélido,</text>
+        <text x="112" y="352" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">derrubando a temperatura média real do corpo do isolador.</text>
+        <text x="112" y="376" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#FFB4AB">Resultado: Severidade subdimensionada e falha imprevista.</text>
+
+        <rect x="88" y="416" width="504" height="206" rx="14" fill="#262A31"/>
+        <text x="112" y="446" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#A2CBF1">A SOLUÇÃO PYRON: CONTORNO POLIGONAL SAM 2.1</text>
+        <text x="112" y="474" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Segmentação fina em polígono ajustado à silhueta do ativo.</text>
+        <text x="112" y="498" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Convolução normalizada: pixels de céu são totalmente expurgados.</text>
+        <text x="112" y="522" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Apenas a cerâmica, silicone e terminais metálicos são integrados.</text>
+        <text x="112" y="546" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Algoritmo de pontos quentes roda em 1,9 ms após máscara.</text>
+        <rect x="112" y="568" width="456" height="34" rx="8" fill="#0A0E14"/>
+        <text x="128" y="590" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">PRECISÃO PURO ATIVO: Sem interferência solar ou celeste.</text>
+    </g>
+
+    <!-- Card Profundidade 3D (Direita) -->
+    <g id="depth-metrology" data-pptx-bounds="656 150 568 496">
+        <rect x="656" y="150" width="568" height="496" rx="24" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <text x="688" y="190" font-family="EB Garamond, Georgia, serif" font-size="22" font-weight="600" fill="#FFFFFF">Metrologia em 3D: Depth Anything 3</text>
+        <text x="688" y="216" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#94A3B8">Medição de distância física (cm) diretamente da fotografia comum</text>
+
+        <rect x="688" y="246" width="504" height="150" rx="14" fill="#0A0E14"/>
+        <text x="712" y="276" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#A2CBF1">MEDIDAS DE SEGURANÇA ENTRE CONDUTORES:</text>
+        <text x="712" y="304" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Usuário marca duas pontas na imagem: sistema projeta nuvem 3D.</text>
+        <text x="712" y="328" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Calcula distância métrica real entre fases energizadas sem contato.</text>
+        <text x="712" y="352" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Suporte a MoGe-2 ViT-L e Depth Anything 3 Metric Large.</text>
+        <text x="712" y="376" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#FFFFFF">Homologado com licenças permissivas (Apache 2.0 / MIT).</text>
+
+        <!-- Tabela Comparativa de Bancada -->
+        <g id="depth-benchmarks">
+            <rect x="688" y="416" width="504" height="206" rx="14" fill="#262A31"/>
+            <text x="712" y="446" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">BENCHMARK METROLÓGICO (RELATÓRIO POST-IT):</text>
+            
+            <rect x="712" y="466" width="220" height="60" rx="10" fill="#0A0E14"/>
+            <text x="728" y="490" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#94A3B8">DEPTH ANYTHING 3 (POST-IT)</text>
+            <text x="728" y="516" font-family="EB Garamond, Georgia, serif" font-size="24" font-weight="400" fill="#A2CBF1">5,1% de erro</text>
+
+            <rect x="948" y="466" width="220" height="60" rx="10" fill="#0A0E14"/>
+            <text x="964" y="490" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#94A3B8">TEMPO DE PROCESSAMENTO</text>
+            <text x="964" y="516" font-family="EB Garamond, Georgia, serif" font-size="24" font-weight="400" fill="#FFFFFF">2,0 s na CPU</text>
+
+            <text x="712" y="556" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">Evolução sobre MoGe-2 anterior: tempo caiu de 20 s para 2 s (10x),</text>
+            <text x="712" y="578" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">e o erro com referência caiu de 8,1% para 5,1% mediano.</text>
+            <text x="712" y="602" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">Cálculo de margem incorpora ruído local e propagação de Monte Carlo.</text>
+        </g>
+    </g>
+
+</svg>

@@ -1,0 +1,261 @@
+{
+  "aplicacao_1_radiometria": {
+    "n_termogramas_fff_testados": 19,
+    "tempo_mediano_leitura_fff_ms": 33.1,
+    "tempo_mediano_inversao_planck_ms": 30.512,
+    "camera_ref_modelo": "P65 NTSC",
+    "planck_constantes_ref": {
+      "R1": 14901.15,
+      "R2": 0.01817,
+      "B": 1396.7,
+      "F": 1.1,
+      "O": -4096.0,
+      "emissividade": 0.96
+    },
+    "desvio_max_emissividade_035_vs_098_C": 247.36,
+    "erro_interpolacao_linear_vs_planck_barra_C": {
+      "20_90C": 4.6,
+      "25_160C": 12.88,
+      "30_260C": 26.5
+    },
+    "gradiente_termico_max_C_por_px": 8.11,
+    "pico_trafo_tr01_C": 137.4
+  },
+  "aplicacao_2_visao_computacional": {
+    "efeito_ceu_t_med_bbox_C": 155.92,
+    "efeito_ceu_t_med_contorno_fino_C": 217.11,
+    "efeito_ceu_t_med_nucleo_defectsam_C": 260.79,
+    "ganho_t_med_sem_ceu_C": 61.19,
+    "tempo_mediano_pontos_quentes_ms": 2.01,
+    "media_pontos_quentes_por_imagem": 1.91,
+    "modelos_comparados": {
+      "Faster R-CNN": {
+        "mAP50": 0.893,
+        "mAP50_95": 0.506,
+        "F1": 0.887,
+        "IoU": 0.791
+      },
+      "YOLO26S": {
+        "mAP50": 0.909,
+        "mAP50_95": 0.545,
+        "F1": 0.914,
+        "IoU": 0.798
+      },
+      "RF-DETR Medium": {
+        "mAP50": 0.911,
+        "mAP50_95": 0.549,
+        "F1": 0.905,
+        "IoU": 0.806
+      }
+    },
+    "treino_local_rfdetr": {
+      "mAP50_teste": 0.891,
+      "IoU_medio_teste": 0.815,
+      "erro_Tmax_mediano_C": 0.0,
+      "erro_Tmax_p90_C": 0.94,
+      "melhor_epoca": 9
+    },
+    "aceleracao_hardware_ms": {
+      "CPU FP32 (RF-DETR Med)": 483.0,
+      "CPU INT8 Din. (43,5 MB)": 329.0,
+      "DirectML GPU (RTX 3050)": 71.0,
+      "DirectML GPU (GTX 1650)": 35.57,
+      "CUDA EP (GTX 1650)": 34.94,
+      "TensorRT FP32 (GTX 1650)": 26.88
+    },
+    "paridade_directml_iou_min": 0.9999982083797662
+  },
+  "aplicacao_3_normativa_preditiva": {
+    "paradoxo_baixa_carga_30pct_dt54": {
+      "dt_medido_C": 5.4,
+      "carga_pct": 30.0,
+      "dt_corrigido_100pct_C": 60.0,
+      "severidade_sem_correcao": "atencao",
+      "severidade_com_correcao_pyron": "imediato"
+    },
+    "tempo_mediano_analisar_regioes_ms": 0.89,
+    "regioes_tr01_230kv": [
+      {
+        "nome": "Terminal Superior",
+        "classe": "terminal_superior",
+        "t_max": 39.80897521972656,
+        "dt_corrigido": 0.0,
+        "pct_mta": 66.63419996941863,
+        "severidade": "atencao"
+      },
+      {
+        "nome": "Terminal Adjacente (Fase B)",
+        "classe": "terminal_superior",
+        "t_max": 137.42999267578125,
+        "dt_corrigido": 244.4044861001209,
+        "pct_mta": 338.194740080664,
+        "severidade": "imediato"
+      }
+    ],
+    "equipamentos_monitorados": 9,
+    "resumo_equipamentos": [
+      {
+        "equipamento": "PR-01 (Para-raios Fase A)",
+        "instalacao": "SE Campina Grande II",
+        "inspecoes": 2,
+        "severidade": "imediato",
+        "t_max": 85.7,
+        "tendencia_c_mes": null,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "TR-01 (Transformador 230/69 kV)",
+        "instalacao": "SE Campina Grande II",
+        "inspecoes": 2,
+        "severidade": "imediato",
+        "t_max": 137.4,
+        "tendencia_c_mes": null,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "TR-03 (Autotransformador 500 kV)",
+        "instalacao": "SE Patos Oeste",
+        "inspecoes": 3,
+        "severidade": "imediato",
+        "t_max": 88.6,
+        "tendencia_c_mes": -15.29,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "PR-02 (Para-raios Fase B)",
+        "instalacao": "SE Santa Rita Norte",
+        "inspecoes": 1,
+        "severidade": "imediato",
+        "t_max": 74.0,
+        "tendencia_c_mes": null,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "TR-02 (Transformador 69/13.8 kV)",
+        "instalacao": "SE Santa Rita Norte",
+        "inspecoes": 2,
+        "severidade": "urgente",
+        "t_max": 59.9,
+        "tendencia_c_mes": null,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "BANCO-CAP-01 (Banco de Capacitores)",
+        "instalacao": "",
+        "inspecoes": 1,
+        "severidade": "normal",
+        "t_max": 34.9,
+        "tendencia_c_mes": null,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "BANCO-CAP-01 (Banco de Capacitores)",
+        "instalacao": "SE Patos Oeste",
+        "inspecoes": 3,
+        "severidade": "normal",
+        "t_max": 36.9,
+        "tendencia_c_mes": -27.19,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "SEC-03 (Seccionadora)",
+        "instalacao": "SE Santa Rita Norte",
+        "inspecoes": 2,
+        "severidade": "normal",
+        "t_max": 43.1,
+        "tendencia_c_mes": null,
+        "projecao_mta_dias": null
+      },
+      {
+        "equipamento": "",
+        "instalacao": "",
+        "inspecoes": 41,
+        "severidade": "normal",
+        "t_max": 34.1,
+        "tendencia_c_mes": -1.67,
+        "projecao_mta_dias": null
+      }
+    ],
+    "distribuicao_severidade_244_regioes": {
+      "atencao": 2,
+      "imediato": 55,
+      "nao_avaliado": 1,
+      "normal": 128,
+      "programar": 4,
+      "sem_medida": 51,
+      "urgente": 3
+    },
+    "status_13_pendencias": {
+      "aberta": 8,
+      "corrigida": 2,
+      "programada": 3
+    }
+  },
+  "aplicacao_4_metrologia_3d": {
+    "n_medicoes_campo_extraidas": 55,
+    "erro_mediano_da3_com_postit_pct": 5.1,
+    "erro_mediano_moge2_com_postit_pct": 8.1,
+    "erro_mediano_da3_sem_ref_pct": 19.8,
+    "erro_mediano_moge2_sem_ref_pct": 29.6,
+    "teste_vivo_geometria_3d": {
+      "real_cm": 24.0,
+      "sem_ref_cm": 43.91,
+      "sem_ref_incerteza_cm": 8.26,
+      "com_postit_cm": 24.34,
+      "com_postit_incerteza_cm": 1.42,
+      "fator_escala_aplicado": 0.5544
+    },
+    "homografia_monte_carlo_72graus_incerteza_pct": 752.6
+  },
+  "aplicacao_5_engenharia_produto": {
+    "latencia_total_ponta_a_ponta_ms": {
+      "cpu_fp32_ms": 498.9,
+      "cpu_int8_ms": 344.9,
+      "gpu_directml_ms": 86.9,
+      "gpu_tensorrt_ms": 42.8
+    },
+    "sqlite_57_inspecoes_json_ms": 26.283,
+    "sqlite_57_inspecoes_indexado_ms": 0.205,
+    "speedup_6000_inspecoes_indexado": 15.24,
+    "benchmark_laudo_pdf_vivo": {
+      "lotes_inspecoes": [
+        1,
+        5,
+        10,
+        25,
+        50
+      ],
+      "reportlab_vivo_ms": [
+        112.7,
+        256.8,
+        437.2,
+        1083.8,
+        2055.2
+      ],
+      "typst_nativo_ms": [
+        32.0,
+        125.0,
+        235.0,
+        540.0,
+        1024.0
+      ],
+      "tamanho_pdf_kb": [
+        185.0,
+        196.2,
+        209.1,
+        245.8,
+        308.1
+      ]
+    },
+    "telemetria_mobile_15fps": {
+      "erro_medio_caixa_sem_compensacao_px": 5.33,
+      "erro_medio_caixa_com_compensacao_72px": 0.17,
+      "desvio_padrao_tmax_bruto_C": 2.87,
+      "desvio_padrao_tmax_mediana5_C": 1.22
+    },
+    "total_rotas_api": 137,
+    "total_linhas_codigo": 62000,
+    "testes_automatizados_passando": 458
+  },
+  "tempo_total_execucao_suite_s": 22.86
+}

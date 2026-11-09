@@ -1,0 +1,690 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": true,
+  "lint": {
+    "ok": false,
+    "errorCount": 36,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "root_missing_composition_id",
+        "severity": "error",
+        "message": "Root composition is missing `data-composition-id`.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable `data-composition-id` to the entry composition wrapper."
+      },
+      {
+        "code": "root_missing_dimensions",
+        "severity": "error",
+        "message": "Root composition is missing `data-width` or `data-height`.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Set numeric `data-width` and `data-height` on the entry composition root."
+      },
+      {
+        "code": "missing_timeline_registry",
+        "severity": "error",
+        "message": "Missing `window.__timelines` registration.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Register each composition timeline on `window.__timelines[compositionId]`."
+      },
+      {
+        "code": "css_transition_used",
+        "severity": "warning",
+        "message": "CSS declaration `transition: opacity 0.3s ease` runs on the browser clock and cannot be seeked deterministically across render workers.",
+        "selector": ".deck-hint",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Keep the class or attribute swap for state; put the visual change on the paused GSAP timeline."
+      },
+      {
+        "code": "non_deterministic_code",
+        "severity": "error",
+        "message": "Script contains `performance.now()` which produces non-deterministic output. Renders may differ between frames or runs.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\player\\hyperframes-player.global.js",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Remove time-dependent code. Use GSAP timeline position instead of wall-clock time."
+      },
+      {
+        "code": "non_deterministic_code",
+        "severity": "error",
+        "message": "Script contains `Date.now()` which produces non-deterministic output. Renders may differ between frames or runs.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\player\\hyperframes-slideshow.global.js",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Remove time-dependent code. Use GSAP timeline position instead of wall-clock time."
+      },
+      {
+        "code": "template_literal_selector",
+        "severity": "error",
+        "message": "querySelector uses a template literal variable (e.g. `${compId}`). The HTML bundler's CSS parser crashes on these. Use a hardcoded string instead.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Replace the template literal variable with a hardcoded string. The bundler's CSS parser cannot handle interpolated variables in script content."
+      },
+      {
+        "code": "requestanimationframe_in_composition",
+        "severity": "error",
+        "message": "`requestAnimationFrame` runs on wall-clock time, not the GSAP timeline. It will not sync with frame capture and may cause flickering or missed frames during rendering.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use GSAP tweens or onUpdate callbacks instead of requestAnimationFrame for animation logic."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"artigos-normas\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"capa\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"problema\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"problema\" fragment 13 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"problema\" fragment 16 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"fundamentos\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"fundamentos\" fragment 23 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"fundamentos\" fragment 26 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"normas-criterio\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"normas-criterio\" fragment 33 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"normas-criterio\" fragment 36 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"arquitetura\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"arquitetura\" fragment 43 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"arquitetura\" fragment 46 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"cv-ia\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"cv-ia\" fragment 53 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"cv-ia\" fragment 56 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"unwrapping\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"unwrapping\" fragment 63 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"unwrapping\" fragment 66 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"validacao\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"validacao\" fragment 73 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"validacao\" fragment 76 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"valor\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"valor\" fragment 83 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"valor\" fragment 86 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide references unresolved sceneId \"roadmap\"",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"roadmap\" fragment 93 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      },
+      {
+        "code": "slideshow_unresolved_ref",
+        "severity": "error",
+        "message": "Slideshow manifest error: slide \"roadmap\" fragment 96 is outside range [0, 0]",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Ensure every sceneId in the slideshow island matches the data-composition-id of a scene element in the composition, or provide explicit startTime/endTime."
+      }
+    ],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "duration": 0,
+    "samples": [],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 0,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [],
+    "checked": 0,
+    "passed": 0
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "step": 0,
+    "samples": 0
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 1,
+    "findings": [
+      {
+        "code": "audio_none",
+        "severity": "info",
+        "message": "The film has no sound: no clip in it plays audio.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      }
+    ]
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

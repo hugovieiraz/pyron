@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "p3_card_venc",
   "position": {
-    "x": 435,
+    "x": 225,
     "y": 15,
     "z": 200,
     "height": 110,
-    "width": 390,
+    "width": 195,
     "tabOrder": 200
   },
   "visual": {

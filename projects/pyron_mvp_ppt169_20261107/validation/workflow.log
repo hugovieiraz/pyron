@@ -1,0 +1,652 @@
+
+=== 2026-11-07T22:53:09.140Z NOTE id=c9fd8908ed10 ===
+Project initialized: profile=default; canvas=ppt169; path=D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii\projects\pyron_mvp_ppt169_20261107
+
+=== 2026-11-07T22:53:17.970Z PYTHON run=47d52b489739 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "scaffold-spec", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [OK] Design spec scaffold created: projects\pyron_mvp_ppt169_20261107\design_spec.md
+=== 2026-11-07T22:53:18.620Z END run=47d52b489739 elapsed_ms=655 output_lines=1 retained=1 omitted=0 ===
+
+=== 2026-11-07T22:53:30.620Z PYTHON run=767ae1d938c6 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [ERROR]
+    - Communication trace: missing spec_lock.md with a ## communication section.
+    - design_spec.md schema: contains 61 unresolved placeholder(s) matching '(?i)\[fill(?:[^\]]*)\]'
+    - design_spec.md schema: 'Slide 01 - [fill]' is missing field 'Relationships'
+  [WARN]
+  [ERROR] Project structure is invalid.
+=== 2026-11-07T22:53:31.360Z END run=767ae1d938c6 elapsed_ms=735 output_lines=9 retained=6 omitted=3 ===
+
+=== 2026-11-07T22:53:35.544Z PYTHON run=155767ff6429 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "scaffold-lock", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [OK] Execution lock scaffold created: projects\pyron_mvp_ppt169_20261107\spec_lock.md
+=== 2026-11-07T22:53:36.182Z END run=155767ff6429 elapsed_ms=640 output_lines=1 retained=1 omitted=0 ===
+
+=== 2026-11-07T22:55:17.236Z PYTHON run=e28fc95f9208 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [ERROR]
+    - design_spec.md schema: contains 61 unresolved placeholder(s) matching '(?i)\[fill(?:[^\]]*)\]'
+    - design_spec.md schema: 'Slide 01 - [fill]' is missing field 'Relationships'
+    - spec_lock.md schema: section 'communication' field 'consumption_mode' has illegal value 'live_presentation_and_technical_memo'
+    - spec_lock.md schema: section 'mode' field 'mode' has illegal value 'technical_editorial_blueprint'
+  [WARN]
+  [ERROR] Project structure is invalid.
+=== 2026-11-07T22:55:18.003Z END run=e28fc95f9208 elapsed_ms=764 output_lines=24 retained=7 omitted=17 ===
+
+=== 2026-11-07T22:57:52.414Z PYTHON run=5786f8da7d7f ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [ERROR]
+    - design_spec.md schema: contains 61 unresolved placeholder(s) matching '(?i)\[fill(?:[^\]]*)\]'
+    - design_spec.md schema: 'Slide 01 - [fill]' is missing field 'Relationships'
+  [WARN]
+    - svg_output directory is empty, no SVG files found
+  [ERROR] Project structure is invalid.
+=== 2026-11-07T22:57:53.100Z END run=5786f8da7d7f elapsed_ms=671 output_lines=8 retained=6 omitted=2 ===
+
+=== 2026-11-07T22:59:28.672Z PYTHON run=7f04fb055a74 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T22:59:29.340Z END run=7f04fb055a74 elapsed_ms=671 output_lines=5 retained=2 omitted=3 ===
+
+=== 2026-11-07T22:59:34.048Z PYTHON run=d4185be4fe1a ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "page-context", "projects\\pyron_mvp_ppt169_20261107", "P01"]
+=== 2026-11-07T22:59:34.712Z END run=d4185be4fe1a elapsed_ms=671 output_lines=1 retained=0 omitted=1 ===
+
+=== 2026-11-07T23:37:00.988Z PYTHON run=039c73fe0878 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [ERROR]
+    - spec_lock.md schema: condition 'custom-visual-style' requires field 'visual_style_behavior' in section 'visual_style'
+  [WARN]
+    - svg_output directory is empty, no SVG files found
+  [ERROR] Project structure is invalid.
+=== 2026-11-07T23:37:01.764Z END run=039c73fe0878 elapsed_ms=780 output_lines=7 retained=5 omitted=2 ===
+
+=== 2026-11-07T23:37:55.759Z PYTHON run=4ee2208574b0 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T23:37:56.474Z END run=4ee2208574b0 elapsed_ms=703 output_lines=5 retained=2 omitted=3 ===
+
+=== 2026-11-07T23:38:49.732Z PYTHON run=1da2a8b2a7a5 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T23:38:50.466Z END run=1da2a8b2a7a5 elapsed_ms=734 output_lines=5 retained=2 omitted=3 ===
+
+=== 2026-11-07T23:38:56.078Z PYTHON run=779ca1f5920b ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "page-context", "projects\\pyron_mvp_ppt169_20261107", "P01"]
+=== 2026-11-07T23:38:56.731Z END run=779ca1f5920b elapsed_ms=656 output_lines=1 retained=0 omitted=1 ===
+
+=== 2026-11-07T23:46:58.698Z PYTHON run=8aaee418d7d0 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T23:46:59.950Z END run=8aaee418d7d0 elapsed_ms=1250 output_lines=16 retained=2 omitted=14 ===
+
+=== 2026-11-07T23:47:29.088Z PYTHON run=9daea9a23213 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\svg_quality_checker.py", "projects\\pyron_mvp_ppt169_20261107\\svg_output\\P01.svg"]
+stdout:
+  [ERROR] P01.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 10 (6 occurrences), 11 (6 occurrences), 13 (7 occurrences), 20 (3 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 4 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+     [WARN] Recommendation: fill='#1d4a6a' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#1D4A6A". No change is required for export.
+     [WARN] Recommendation: fill='#262a31' is converter-compatible in 6 location(s) (<rect> attribute); generated SVG should prefer fill="#262A31". No change is required for export.
+     [WARN] Recommendation: fill='#94a3b8' is converter-compatible in 5 location(s) (<text> attribute); generated SVG should prefer fill="#94A3B8". No change is required for export.
+     [WARN] Recommendation: fill='#a2cbf1' is converter-compatible in 8 location(s) (<text> attribute); generated SVG should prefer fill="#A2CBF1". No change is required for export.
+  [SUMMARY] Check Summary
+  Total files: 1
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 0 (0%)
+    [ERROR] With errors: 1 (100%)
+  Provenance categories:
+    blocking: 1          hard findings; gate also requires exit 0
+    introduced: 17       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 1 | text: 26 | images: 1 | icons: 0
+    Geometry: SVG elements 17 | native presets 0 | page-frame elements 0 | marker uses 0
+=== 2026-11-07T23:47:30.779Z END run=9daea9a23213 elapsed_ms=1686 output_lines=69 retained=24 omitted=45 ===
+
+=== 2026-11-07T23:48:05.725Z PYTHON run=9a38f2dd994e ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T23:48:06.445Z END run=9a38f2dd994e elapsed_ms=734 output_lines=16 retained=2 omitted=14 ===
+
+=== 2026-11-07T23:48:12.452Z PYTHON run=dd44f18e10be ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\svg_quality_checker.py", "projects\\pyron_mvp_ppt169_20261107\\svg_output\\P01.svg"]
+stdout:
+  [WARN] P01.svg - Passed (with warnings)
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+  [SUMMARY] Check Summary
+  Total files: 1
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 1 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 17       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 1 | text: 26 | images: 1 | icons: 0
+    Geometry: SVG elements 17 | native presets 0 | page-frame elements 0 | marker uses 0
+=== 2026-11-07T23:48:13.943Z END run=dd44f18e10be elapsed_ms=1485 output_lines=60 retained=17 omitted=43 ===
+
+=== 2026-11-07T23:48:20.575Z PYTHON run=e09cb82c0ce3 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\svg_quality_checker.py", "projects\\pyron_mvp_ppt169_20261107\\svg_output"]
+stdout:
+  [ERROR] P01.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 4 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+     [WARN] Recommendation: fill='#1d4a6a' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#1D4A6A". No change is required for export.
+     [WARN] Recommendation: fill='#262a31' is converter-compatible in 6 location(s) (<rect> attribute); generated SVG should prefer fill="#262A31". No change is required for export.
+     [WARN] Recommendation: fill='#94a3b8' is converter-compatible in 5 location(s) (<text> attribute); generated SVG should prefer fill="#94A3B8". No change is required for export.
+     [WARN] Recommendation: fill='#a2cbf1' is converter-compatible in 8 location(s) (<text> attribute); generated SVG should prefer fill="#A2CBF1". No change is required for export.
+  [ERROR] P02.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=146, y=51; text='FUNDAMENTAÇÃO FÍSICA…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (-3.4, 42.5)-(295.4, 54.5), container (56.0, 36.0)-(1224.0, 124.0), overflow horizontal 5.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈8.8 px per mixed char at 10px incl. headroom; ≈132 chars fit in 1168 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 28 (5 occurrences), 30 (12 occurrences), 44 (3 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 3 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P03.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=882, y=234; text='Para termogramas sem…') exceeds the root viewBox on the horizontal axis: content (882.0, 223.8)-(1464.6, 238.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 14.4%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.1 px per mixed char at 12px without headroom; ≈180 chars fit in 1280 px
+     [ERROR] <text> (x=882, y=258; text='Lê rótulos térmicos …') exceeds the root viewBox on the horizontal axis: content (882.0, 247.8)-(1401.6, 262.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 9.5%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.4 px per mixed char at 12px without headroom; ≈172 chars fit in 1280 px
+     [ERROR] <text> (x=80, y=234; text='Acessa segmentos APP…') exceeds <g id="step-1"> data-pptx-bounds on the horizontal axis: content (80.0, 223.8)-(450.5, 238.2), container (56.0, 150.0)-(421.0, 490.0), overflow horizontal 8.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=80, y=258; text='Extrai matriz de sin…') exceeds <g id="step-1"> data-pptx-bounds on the horizontal axis: content (80.0, 247.8)-(719.5, 262.2), container (56.0, 150.0)-(421.0, 490.0), overflow horizontal 81.8%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈47 chars fit in 365 px
+     [ERROR] <text> (x=481, y=234; text='Desconta a radiação …') exceeds <g id="step-2"> data-pptx-bounds on the horizontal axis: content (481.0, 223.8)-(1092.0, 238.2), container (457.0, 150.0)-(822.0, 490.0), overflow horizontal 74.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=481, y=258; text='Modela a transmissão…') exceeds <g id="step-2"> data-pptx-bounds on the horizontal axis: content (481.0, 247.8)-(1093.3, 262.2), container (457.0, 150.0)-(822.0, 490.0), overflow horizontal 74.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 28 (5 occurrences), 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 3 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 4 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P04.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=528, y=474; text='• Supressão de Dupli…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 463.8)-(1272.3, 478.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 6.6%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈96 chars fit in 728 px
+     [ERROR] <text> (x=528, y=500; text='• Hierarquia Pai-Fil…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 489.8)-(1262.7, 504.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 5.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.4 px per mixed char at 12px incl. headroom; ≈98 chars fit in 728 px
+     [ERROR] <text> (x=528, y=526; text='• Corte Geométrico d…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 515.8)-(1326.6, 530.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 14.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.4 px per mixed char at 12px incl. headroom; ≈98 chars fit in 728 px
+     [ERROR] <text> (x=528, y=552; text='• Expurgo de Ponto Q…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 541.8)-(1291.3, 556.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 9.2%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.8 px per mixed char at 12px incl. headroom; ≈93 chars fit in 728 px
+     [ERROR] <text> (x=528, y=578; text='• Exclusão de Falso …') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 567.8)-(1274.8, 582.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 7.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.9 px per mixed char at 12px incl. headroom; ≈92 chars fit in 728 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 8 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 3 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P05.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 24 (4 occurrences), 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 5 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P06.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=88, y=212; text='Para-raios são ligad…') exceeds the root viewBox on the horizontal axis: content (88.0, 200.9)-(1376.9, 216.6), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 7.6%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.8 px per mixed char at 13px without headroom; ≈164 chars fit in 1280 px
+     [ERROR] <text> (x=882, y=374; text='Degradação avançada …') exceeds the root viewBox on the horizontal axis: content (882.0, 363.8)-(1339.2, 378.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 4.6%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.1 px per mixed char at 12px without headroom; ≈179 chars fit in 1280 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 5 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 3 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P07.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=872, y=430; text='• Carga < 40%: Alert…') exceeds the root viewBox on the horizontal axis: content (872.0, 419.8)-(1417.0, 434.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 10.7%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.2 px per mixed char at 12px without headroom; ≈178 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=466; text='• Ponto > 150 °C: Id…') exceeds the root viewBox on the horizontal axis: content (872.0, 455.8)-(1424.3, 470.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 11.3%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈6.9 px per mixed char at 12px without headroom; ≈185 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=502; text='• Sem Ambiente: Clas…') exceeds the root viewBox on the horizontal axis: content (872.0, 491.8)-(1394.6, 506.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 9.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.1 px per mixed char at 12px without headroom; ≈181 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=538; text='• Ponto fora da peça…') exceeds the root viewBox on the horizontal axis: content (872.0, 527.8)-(1485.0, 542.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 16.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.3 px per mixed char at 12px without headroom; ≈175 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=584; text='MTA configurável por…') exceeds the root viewBox on the horizontal axis: content (872.0, 574.6)-(1319.1, 587.9), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 3.1%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈6.9 px per mixed char at 11px without headroom; ≈186 chars fit in 1280 px
+     [ERROR] <text> (x=146, y=51; text='FEATURE 5 · MOTOR DE…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (-12.7, 42.5)-(304.7, 54.5), container (56.0, 36.0)-(1224.0, 124.0), overflow horizontal 5.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈9.1 px per mixed char at 10px incl. headroom; ≈128 chars fit in 1168 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences), 44 (3 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 7 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P08.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 24 (4 occurrences), 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 5 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P09.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=146, y=51; text='FEATURE 7 · INFRAEST…') exceeds the root viewBox on the horizontal axis: content (-2.1, 42.5)-(294.1, 54.5), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 0.2%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.8 px per mixed char at 10px without headroom; ≈164 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=434; text='• Senhas: Hashing sc…') exceeds the root viewBox on the horizontal axis: content (872.0, 423.8)-(1283.5, 438.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 0.3%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.0 px per mixed char at 12px without headroom; ≈183 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=466; text='• Sessões: Cookies H…') exceeds the root viewBox on the horizontal axis: content (872.0, 455.8)-(1292.2, 470.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 1.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈6.9 px per mixed char at 12px without headroom; ≈185 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=498; text='• Permissões: Rotas …') exceeds the root viewBox on the horizontal axis: content (872.0, 487.8)-(1295.6, 502.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 1.2%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.2 px per mixed char at 12px without headroom; ≈178 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=562; text='• 458 Testes: 100% d…') exceeds the root viewBox on the horizontal axis: content (872.0, 551.8)-(1289.5, 566.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 0.7%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.5 px per mixed char at 12px without headroom; ≈171 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=530; text='• Shell Zero: A jane…') exceeds <g id="security-card"> data-pptx-bounds on the horizontal axis: content (872.0, 519.8)-(1306.2, 534.2), container (816.0, 150.0)-(1224.0, 656.0), overflow horizontal 20.2%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈54 chars fit in 408 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P10.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 4 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 2 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P11.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <text> (x=898, y=440; text='• Eliminação de erro…') exceeds the root viewBox on the horizontal axis: content (898.0, 429.8)-(1343.8, 444.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 5.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.0 px per mixed char at 12px without headroom; ≈183 chars fit in 1280 px
+     [ERROR] <text> (x=898, y=486; text='• Histórico automati…') exceeds the root viewBox on the horizontal axis: content (898.0, 475.8)-(1320.4, 490.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 3.2%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.0 px per mixed char at 12px without headroom; ≈181 chars fit in 1280 px
+     [ERROR] <text> (x=96, y=394; text='• Parcela Variável (…') exceeds <g id="roi-1"> data-pptx-bounds on the horizontal axis: content (96.0, 383.8)-(614.2, 398.2), container (56.0, 150.0)-(421.0, 646.0), overflow horizontal 52.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.2 px per mixed char at 12px incl. headroom; ≈50 chars fit in 365 px
+     [ERROR] <text> (x=96, y=440; text='• Estouro dos limite…') exceeds <g id="roi-1"> data-pptx-bounds on the horizontal axis: content (96.0, 429.8)-(584.2, 444.2), container (56.0, 150.0)-(421.0, 646.0), overflow horizontal 44.7%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.4 px per mixed char at 12px incl. headroom; ≈49 chars fit in 365 px
+     [ERROR] <text> (x=96, y=486; text='• O Pyron identifica…') exceeds <g id="roi-1"> data-pptx-bounds on the horizontal axis: content (96.0, 475.8)-(536.4, 490.2), container (56.0, 150.0)-(421.0, 646.0), overflow horizontal 31.6%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=481, y=234; text='Preservação de Trans…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (481.0, 215.3)-(852.3, 241.7), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 8.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈14.3 px per mixed char at 22px incl. headroom; ≈25 chars fit in 365 px
+     [ERROR] <text> (x=497, y=394; text='• Envelhecimento tér…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (497.0, 383.8)-(918.9, 398.2), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 26.5%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.3 px per mixed char at 12px incl. headroom; ≈50 chars fit in 365 px
+     [ERROR] <text> (x=497, y=440; text='• Ponto quente na bu…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (497.0, 429.8)-(952.9, 444.2), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 35.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=497, y=486; text='• Eliminar o aquecim…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (497.0, 475.8)-(982.7, 490.2), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 44.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=898, y=394; text='• Triagem de 300 ima…') exceeds <g id="roi-3"> data-pptx-bounds on the horizontal axis: content (898.0, 383.8)-(1298.6, 398.2), container (858.0, 150.0)-(1224.0, 646.0), overflow horizontal 20.4%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.7 px per mixed char at 12px incl. headroom; ≈47 chars fit in 366 px
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 6 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 3 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [ERROR] P12.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] spec_lock typography-size recurrence: undeclared font-size 30 (12 occurrences) exceeds the sparse-display limit of 2 occurrences. Structural text must return to its declared role band; a genuinely recurring display treatment needs a justified named role in the Design Spec and spec_lock.
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 5 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+     [WARN] Recommendation: fill='#181c22' is converter-compatible in 4 location(s) (<rect> attribute); generated SVG should prefer fill="#181C22". No change is required for export.
+  [SUMMARY] Check Summary
+  Total files: 12
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 0 (0%)
+    [ERROR] With errors: 19 (100%)
+  Provenance categories:
+    blocking: 55         hard findings; gate also requires exit 0
+    introduced: 217      advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 12 | text: 400 | images: 1 | icons: 0
+    Geometry: SVG elements 185 | native presets 0 | page-frame elements 0 | marker uses 0
+=== 2026-11-07T23:48:24.001Z END run=e09cb82c0ce3 elapsed_ms=3421 output_lines=353 retained=137 omitted=216 ===
+
+=== 2026-11-07T23:50:04.056Z PYTHON run=37b01661519c ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T23:50:04.794Z END run=37b01661519c elapsed_ms=734 output_lines=16 retained=2 omitted=14 ===
+
+=== 2026-11-07T23:50:11.849Z PYTHON run=e797ebd3f46c ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\svg_quality_checker.py", "projects\\pyron_mvp_ppt169_20261107\\svg_output\\P01.svg"]
+stdout:
+  [WARN] P01.svg - Passed (with warnings)
+     [WARN] Fidelity warning: <g> uses group opacity='0.3'. The converter distributes this alpha to descendants and cannot preserve isolated group compositing; generated SVG should prefer descendant alpha. Existing input remains convertible and does not require modification.
+     [WARN] Recommendation: fill='#0a0e14' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#0A0E14". No change is required for export.
+     [WARN] Recommendation: fill='#10141a' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill="#10141A". No change is required for export.
+  [SUMMARY] Check Summary
+  Total files: 1
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 1 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 17       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 1 | text: 26 | images: 1 | icons: 0
+    Geometry: SVG elements 17 | native presets 0 | page-frame elements 0 | marker uses 0
+=== 2026-11-07T23:50:13.387Z END run=e797ebd3f46c elapsed_ms=1546 output_lines=60 retained=17 omitted=43 ===
+
+=== 2026-11-07T23:50:23.804Z PYTHON run=dfa2cb13fd4b ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\svg_to_pptx.py", "projects\\pyron_mvp_ppt169_20261107", "-o", "projects\\pyron_mvp_ppt169_20261107\\exports\\teste_p01.pptx"]
+stderr:
+  Error: default release export requires a passing final SVG quality report for the current svg_output/; found not-provided.
+  Run: python3 skills/ppt-master/scripts/svg_quality_checker.py "projects\pyron_mvp_ppt169_20261107" --canonical-authoring --stage final --json
+=== 2026-11-07T23:50:25.387Z END run=dfa2cb13fd4b elapsed_ms=1577 output_lines=2 retained=2 omitted=0 ===
+
+=== 2026-11-07T23:50:51.284Z PYTHON run=c9373d6c3233 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents\\skills\\ppt-master\\scripts\\project_manager.py", "validate", "projects\\pyron_mvp_ppt169_20261107"]
+stdout:
+  [WARN]
+  [OK] Project structure is valid, with warnings.
+=== 2026-11-07T23:50:52.180Z END run=c9373d6c3233 elapsed_ms=907 output_lines=16 retained=2 omitted=14 ===
+
+=== 2026-11-07T23:54:42.198Z PYTHON run=106a0581256b ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents/skills/ppt-master/scripts/svg_quality_checker.py", "projects/pyron_mvp_ppt169_20261107", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [ERROR] P01_hero.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (21 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P02_joule.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (19 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P03_planck.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=882, y=234; text='Para termogramas sem…') exceeds the root viewBox on the horizontal axis: content (882.0, 223.8)-(1464.6, 238.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 14.4%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.1 px per mixed char at 12px without headroom; ≈180 chars fit in 1280 px
+     [ERROR] <text> (x=882, y=258; text='Lê rótulos térmicos …') exceeds the root viewBox on the horizontal axis: content (882.0, 247.8)-(1401.6, 262.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 9.5%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.4 px per mixed char at 12px without headroom; ≈172 chars fit in 1280 px
+     [ERROR] <text> (x=80, y=234; text='Acessa segmentos APP…') exceeds <g id="step-1"> data-pptx-bounds on the horizontal axis: content (80.0, 223.8)-(450.5, 238.2), container (56.0, 150.0)-(421.0, 490.0), overflow horizontal 8.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=80, y=258; text='Extrai matriz de sin…') exceeds <g id="step-1"> data-pptx-bounds on the horizontal axis: content (80.0, 247.8)-(719.5, 262.2), container (56.0, 150.0)-(421.0, 490.0), overflow horizontal 81.8%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈47 chars fit in 365 px
+     [ERROR] <text> (x=481, y=234; text='Desconta a radiação …') exceeds <g id="step-2"> data-pptx-bounds on the horizontal axis: content (481.0, 223.8)-(1092.0, 238.2), container (457.0, 150.0)-(822.0, 490.0), overflow horizontal 74.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=481, y=258; text='Modela a transmissão…') exceeds <g id="step-2"> data-pptx-bounds on the horizontal axis: content (481.0, 247.8)-(1093.3, 262.2), container (457.0, 150.0)-(822.0, 490.0), overflow horizontal 74.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (21 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] <text> (x=56, y=96; text='Desenrolamento Radio…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (56.0, 65.4)-(1257.2, 108.6), container (56.0, 36.0)-(1224.0, 136.0), overflow horizontal 2.8%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈23.1 px per mixed char at 36px incl. headroom; ≈50 chars fit in 1168 px
+  [ERROR] P04_transformers.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=528, y=474; text='• Supressão de Dupli…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 463.8)-(1272.3, 478.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 6.6%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈96 chars fit in 728 px
+     [ERROR] <text> (x=528, y=500; text='• Hierarquia Pai-Fil…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 489.8)-(1262.7, 504.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 5.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.4 px per mixed char at 12px incl. headroom; ≈98 chars fit in 728 px
+     [ERROR] <text> (x=528, y=526; text='• Corte Geométrico d…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 515.8)-(1326.6, 530.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 14.1%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.4 px per mixed char at 12px incl. headroom; ≈98 chars fit in 728 px
+     [ERROR] <text> (x=528, y=552; text='• Expurgo de Ponto Q…') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 541.8)-(1291.3, 556.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 9.2%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.8 px per mixed char at 12px incl. headroom; ≈93 chars fit in 728 px
+     [ERROR] <text> (x=528, y=578; text='• Exclusão de Falso …') exceeds <g id="component-breakdown"> data-pptx-bounds on the horizontal axis: content (528.0, 567.8)-(1274.8, 582.2), container (496.0, 150.0)-(1224.0, 656.0), overflow horizontal 7.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.9 px per mixed char at 12px incl. headroom; ≈92 chars fit in 728 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (32 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="global-metrics"> x=112.0, y=594.0..614.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+  [ERROR] P05_segmentation3d.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (30 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="sky-contamination"> x=112.0, y=328.0..352.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+  [ERROR] P06_arrester_zno.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=88, y=212; text='Para-raios são ligad…') exceeds the root viewBox on the horizontal axis: content (88.0, 200.9)-(1376.9, 216.6), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 7.6%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.8 px per mixed char at 13px without headroom; ≈164 chars fit in 1280 px
+     [ERROR] <text> (x=882, y=374; text='Degradação avançada …') exceeds the root viewBox on the horizontal axis: content (882.0, 363.8)-(1339.2, 378.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 4.6%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.1 px per mixed char at 12px without headroom; ≈179 chars fit in 1280 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (24 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] <text> (x=898, y=488; text='Intervenção em até 2…') exceeds <g id="iec-columns"> data-pptx-bounds on the horizontal axis: content (898.0, 477.8)-(1250.4, 492.2), container (56.0, 254.0)-(1224.0, 534.0), overflow horizontal 2.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.7 px per mixed char at 12px incl. headroom; ≈152 chars fit in 1168 px
+  [ERROR] P07_normative_engine.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=872, y=430; text='• Carga < 40%: Alert…') exceeds the root viewBox on the horizontal axis: content (872.0, 419.8)-(1417.0, 434.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 10.7%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.2 px per mixed char at 12px without headroom; ≈178 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=466; text='• Ponto > 150 °C: Id…') exceeds the root viewBox on the horizontal axis: content (872.0, 455.8)-(1424.3, 470.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 11.3%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈6.9 px per mixed char at 12px without headroom; ≈185 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=502; text='• Sem Ambiente: Clas…') exceeds the root viewBox on the horizontal axis: content (872.0, 491.8)-(1394.6, 506.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 9.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.1 px per mixed char at 12px without headroom; ≈181 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=538; text='• Ponto fora da peça…') exceeds the root viewBox on the horizontal axis: content (872.0, 527.8)-(1485.0, 542.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 16.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.3 px per mixed char at 12px without headroom; ≈175 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=584; text='MTA configurável por…') exceeds the root viewBox on the horizontal axis: content (872.0, 574.6)-(1319.1, 587.9), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 3.1%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈6.9 px per mixed char at 11px without headroom; ≈186 chars fit in 1280 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (42 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] <text> (x=56, y=96; text='Motor de Decisão Dup…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (56.0, 65.4)-(1263.7, 108.6), container (56.0, 36.0)-(1224.0, 136.0), overflow horizontal 3.4%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈25.2 px per mixed char at 36px incl. headroom; ≈46 chars fit in 1168 px
+  [ERROR] P08_mobile_telemetry.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (30 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="optical-flow"> x=712.0, y=296.0..318.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+  [ERROR] P09_offline_architecture.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=872, y=434; text='• Senhas: Hashing sc…') exceeds the root viewBox on the horizontal axis: content (872.0, 423.8)-(1283.5, 438.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 0.3%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.0 px per mixed char at 12px without headroom; ≈183 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=466; text='• Sessões: Cookies H…') exceeds the root viewBox on the horizontal axis: content (872.0, 455.8)-(1292.2, 470.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 1.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈6.9 px per mixed char at 12px without headroom; ≈185 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=498; text='• Permissões: Rotas …') exceeds the root viewBox on the horizontal axis: content (872.0, 487.8)-(1295.6, 502.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 1.2%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.2 px per mixed char at 12px without headroom; ≈178 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=562; text='• 458 Testes: 100% d…') exceeds the root viewBox on the horizontal axis: content (872.0, 551.8)-(1289.5, 566.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 0.7%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.5 px per mixed char at 12px without headroom; ≈171 chars fit in 1280 px
+     [ERROR] <text> (x=872, y=530; text='• Shell Zero: A jane…') exceeds <g id="security-card"> data-pptx-bounds on the horizontal axis: content (872.0, 519.8)-(1306.2, 534.2), container (816.0, 150.0)-(1224.0, 656.0), overflow horizontal 20.2%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈54 chars fit in 408 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (32 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] <text> (x=56, y=96; text='Arquitetura 100% Off…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (56.0, 65.4)-(1279.6, 108.6), container (56.0, 36.0)-(1224.0, 136.0), overflow horizontal 4.8%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈23.5 px per mixed char at 36px incl. headroom; ≈49 chars fit in 1168 px
+  [ERROR] P10_automated_reports.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=56, y=96; text='Laudos Regulatórios …') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (56.0, 65.4)-(1328.9, 108.6), container (56.0, 36.0)-(1224.0, 136.0), overflow horizontal 9.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈24.0 px per mixed char at 36px incl. headroom; ≈48 chars fit in 1168 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (27 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P11_business_roi.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=898, y=440; text='• Eliminação de erro…') exceeds the root viewBox on the horizontal axis: content (898.0, 429.8)-(1343.8, 444.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 5.0%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.0 px per mixed char at 12px without headroom; ≈183 chars fit in 1280 px
+     [ERROR] <text> (x=898, y=486; text='• Histórico automati…') exceeds the root viewBox on the horizontal axis: content (898.0, 475.8)-(1320.4, 490.2), canvas (0.0, 0.0)-(1280.0, 720.0), overflow horizontal 3.2%, vertical 0.0%; move or reflow the text until its estimated bounds stay on-page; ≈7.0 px per mixed char at 12px without headroom; ≈181 chars fit in 1280 px
+     [ERROR] <text> (x=56, y=96; text='Valor do Produto: RO…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (56.0, 65.4)-(1309.1, 108.6), container (56.0, 36.0)-(1224.0, 136.0), overflow horizontal 7.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈23.6 px per mixed char at 36px incl. headroom; ≈49 chars fit in 1168 px
+     [ERROR] <text> (x=96, y=394; text='• Parcela Variável (…') exceeds <g id="roi-1"> data-pptx-bounds on the horizontal axis: content (96.0, 383.8)-(614.2, 398.2), container (56.0, 150.0)-(421.0, 646.0), overflow horizontal 52.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.2 px per mixed char at 12px incl. headroom; ≈50 chars fit in 365 px
+     [ERROR] <text> (x=96, y=440; text='• Estouro dos limite…') exceeds <g id="roi-1"> data-pptx-bounds on the horizontal axis: content (96.0, 429.8)-(584.2, 444.2), container (56.0, 150.0)-(421.0, 646.0), overflow horizontal 44.7%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.4 px per mixed char at 12px incl. headroom; ≈49 chars fit in 365 px
+     [ERROR] <text> (x=96, y=486; text='• O Pyron identifica…') exceeds <g id="roi-1"> data-pptx-bounds on the horizontal axis: content (96.0, 475.8)-(536.4, 490.2), container (56.0, 150.0)-(421.0, 646.0), overflow horizontal 31.6%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=481, y=234; text='Preservação de Trans…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (481.0, 215.3)-(852.3, 241.7), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 8.3%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈14.3 px per mixed char at 22px incl. headroom; ≈25 chars fit in 365 px
+     [ERROR] <text> (x=497, y=394; text='• Envelhecimento tér…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (497.0, 383.8)-(918.9, 398.2), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 26.5%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.3 px per mixed char at 12px incl. headroom; ≈50 chars fit in 365 px
+     [ERROR] <text> (x=497, y=440; text='• Ponto quente na bu…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (497.0, 429.8)-(952.9, 444.2), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 35.9%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.6 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=497, y=486; text='• Eliminar o aquecim…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (497.0, 475.8)-(982.7, 490.2), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 44.0%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.5 px per mixed char at 12px incl. headroom; ≈48 chars fit in 365 px
+     [ERROR] <text> (x=898, y=394; text='• Triagem de 300 ima…') exceeds <g id="roi-3"> data-pptx-bounds on the horizontal axis: content (898.0, 383.8)-(1298.6, 398.2), container (858.0, 150.0)-(1224.0, 646.0), overflow horizontal 20.4%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈7.7 px per mixed char at 12px incl. headroom; ≈47 chars fit in 366 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (27 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] <text> (x=882, y=234; text='Produtividade dos In…') exceeds <g id="roi-3"> data-pptx-bounds on the horizontal axis: content (882.0, 215.3)-(1230.0, 241.7), container (858.0, 150.0)-(1224.0, 646.0), overflow horizontal 1.6%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈13.4 px per Latin char at 22px incl. headroom; ≈27 chars fit in 366 px
+  [ERROR] P12_roadmap_closing.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] Detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id="deck-guides">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates
+     [ERROR] <text> (x=56, y=96; text='Cronograma de Homolo…') exceeds <g id="slide-header"> data-pptx-bounds on the horizontal axis: content (56.0, 65.4)-(1322.1, 108.6), container (56.0, 36.0)-(1224.0, 136.0), overflow horizontal 8.4%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈24.3 px per mixed char at 36px incl. headroom; ≈47 chars fit in 1168 px
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (34 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [SUMMARY] Check Summary
+  Total files: 12
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 0 (0%)
+    [ERROR] With errors: 12 (100%)
+  Provenance categories:
+    blocking: 48         hard findings; gate also requires exit 0
+    introduced: 44       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 12 | text: 399 | images: 1 | icons: 0
+    Geometry: SVG elements 185 | native presets 0 | page-frame elements 0 | marker uses 0
+    Effects: inline emphasis 30 (pages 7) | gradients 0 (pages 0) | filters 0 (pages 0) | text effects 0 (pages 0)
+  [REPORT] JSON quality report exported: projects\pyron_mvp_ppt169_20261107\validation\svg_quality_report.json
+=== 2026-11-07T23:54:45.756Z END run=106a0581256b elapsed_ms=3546 output_lines=163 retained=131 omitted=32 ===
+
+=== 2026-11-07T23:59:35.807Z PYTHON run=85b45573d097 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents/skills/ppt-master/scripts/svg_quality_checker.py", "projects/pyron_mvp_ppt169_20261107", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [ERROR] P01_hero.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="hero-mascot"> data-pptx-bounds by 460.0px x 508.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="technology-pillars"> data-pptx-bounds by 688.0px x 508.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (18 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P02_joule.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="measured-condition"> data-pptx-bounds by 568.0px x 330.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="projected-condition"> data-pptx-bounds by 568.0px x 330.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="formulas-strip"> data-pptx-bounds by 1168.0px x 152.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (19 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P03_planck.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="step-1"> data-pptx-bounds by 365.0px x 340.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="step-2"> data-pptx-bounds by 365.0px x 340.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="step-3"> data-pptx-bounds by 366.0px x 340.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="pipeline-summary"> data-pptx-bounds by 1168.0px x 142.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (21 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P04_transformers.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="global-metrics"> data-pptx-bounds by 420.0px x 506.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="component-breakdown"> data-pptx-bounds by 728.0px x 506.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (32 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="global-metrics"> x=112.0, y=594.0..614.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+  [ERROR] P05_segmentation3d.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="sky-contamination"> data-pptx-bounds by 568.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="depth-metrology"> data-pptx-bounds by 568.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (30 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="sky-contamination"> x=112.0, y=328.0..352.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+  [ERROR] P06_arrester_zno.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="rule-banner"> data-pptx-bounds by 1168.0px x 84.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="iec-columns"> data-pptx-bounds by 1168.0px x 280.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="iec-footer-box"> data-pptx-bounds by 1168.0px x 102.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (25 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P07_normative_engine.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="matrix-container"> data-pptx-bounds by 740.0px x 506.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="performance-card"> data-pptx-bounds by 408.0px x 506.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (41 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P08_mobile_telemetry.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="mobile-stream"> data-pptx-bounds by 568.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="optical-flow"> data-pptx-bounds by 568.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (30 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] Detected 1 paragraph-like line run(s) split across sibling <text> elements (<g id="optical-flow"> x=712.0, y=296.0..318.0, 2 lines). If each run is one prose paragraph, combine it into one <text>: keep its first line as direct text and use direct <tspan> children with the parent x and positive relative dy values for later lines. An all-<tspan> form may start with dy="0". Keep semantically independent text frames separate.
+  [ERROR] P09_offline_architecture.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="layer-stack"> data-pptx-bounds by 740.0px x 506.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="security-card"> data-pptx-bounds by 408.0px x 506.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (32 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P10_automated_reports.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="typst-speed"> data-pptx-bounds by 568.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="typst-contents"> data-pptx-bounds by 568.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (27 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [ERROR] P11_business_roi.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="roi-1"> data-pptx-bounds by 365.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="roi-2"> data-pptx-bounds by 365.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="roi-3"> data-pptx-bounds by 366.0px x 496.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (27 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+     [WARN] <text> (x=481, y=234; text='Proteção de Transfor…') exceeds <g id="roi-2"> data-pptx-bounds on the horizontal axis: content (481.0, 215.3)-(838.9, 241.7), container (457.0, 150.0)-(822.0, 646.0), overflow horizontal 4.6%, vertical 0.0% (error above 5%); expand the root module bounds into available non-overlapping space; otherwise reflow the text; ≈14.3 px per mixed char at 22px incl. headroom; ≈25 chars fit in 365 px
+  [ERROR] P12_roadmap_closing.svg - Failed
+     viewBox: 0 0 1280 720
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="timeline-phases"> data-pptx-bounds by 1168.0px x 280.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [ERROR] <g id="deck-guides"> data-pptx-bounds overlaps <g id="closing-card"> data-pptx-bounds by 1168.0px x 202.0px; keep ordinary direct-root module zones disjoint beyond the 1px tolerance
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (34 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [SUMMARY] Check Summary
+  Total files: 12
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 0 (0%)
+    [ERROR] With errors: 12 (100%)
+  Provenance categories:
+    blocking: 29         hard findings; gate also requires exit 0
+    introduced: 40       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 12 | text: 397 | images: 1 | icons: 0
+    Geometry: SVG elements 182 | native presets 0 | page-frame elements 0 | marker uses 0
+    Effects: inline emphasis 22 (pages 5) | gradients 0 (pages 0) | filters 0 (pages 0) | text effects 0 (pages 0)
+  [REPORT] JSON quality report exported: projects\pyron_mvp_ppt169_20261107\validation\svg_quality_report.json
+=== 2026-11-07T23:59:40.463Z END run=85b45573d097 elapsed_ms=4656 output_lines=139 retained=108 omitted=31 ===
+
+=== 2026-11-08T00:01:24.641Z PYTHON run=b1d5dd14c85a ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents/skills/ppt-master/scripts/svg_quality_checker.py", "projects/pyron_mvp_ppt169_20261107", "--canonical-authoring", "--stage", "final", "--json"]
+stdout:
+  [WARN] P01_hero.svg - Passed (with warnings)
+     [WARN] Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (18 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif'; text[8]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None; text[10]:font-family 'Plus Jakarta Sans, Segoe UI, Roboto, sans-serif' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)
+     [WARN] Font stack exports non-PPT-safe typeface(s) to PPTX (latin=Plus Jakarta Sans): Plus Jakarta Sans, Segoe UI, Roboto, sans-serif
+  [SUMMARY] Check Summary
+  Total files: 12
+    [OK] Fully passed: 0 (0%)
+    [WARN] With warnings: 12 (100%)
+    [ERROR] With errors: 0 (0%)
+  Provenance categories:
+    blocking: 0          hard findings; gate also requires exit 0
+    introduced: 39       advisory; new or changed
+    inherited: 0         informational; prototype-identical
+    source-import: 0     informational; source-conversion loss
+  [CARRIERS] Actual-use receipt (informational; not a quota)
+    Pages: 12 | text: 397 | images: 1 | icons: 0
+    Geometry: SVG elements 182 | native presets 0 | page-frame elements 24 | marker uses 0
+  [REPORT] JSON quality report exported: projects\pyron_mvp_ppt169_20261107\validation\svg_quality_report.json
+=== 2026-11-08T00:01:30.261Z END run=b1d5dd14c85a elapsed_ms=5608 output_lines=107 retained=18 omitted=89 ===
+
+=== 2026-11-08T00:01:36.253Z PYTHON run=67871107d670 ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents/skills/ppt-master/scripts/project_manager.py", "validate", "projects/pyron_mvp_ppt169_20261107"]
+stdout:
+  [OK] Project structure is complete.
+=== 2026-11-08T00:01:37.610Z END run=67871107d670 elapsed_ms=1360 output_lines=3 retained=1 omitted=2 ===
+
+=== 2026-11-08T00:01:43.425Z PYTHON run=02ab4de7b38a ===
+cwd: D:\hd_central\Antigravity projetos\brain\Obisidian_G\04 - Machine Learning\Projetos\Pyron---Embrapii
+argv: ["C:\\Users\\gabri\\AppData\\Local\\Programs\\Python\\Python312\\python.exe", ".agents/skills/ppt-master/scripts/svg_to_pptx.py", "projects/pyron_mvp_ppt169_20261107", "-o", "projects/pyron_mvp_ppt169_20261107/exports/pyron_mvp_obsidian_frost.pptx"]
+stdout:
+  [Done] Saved: projects\pyron_mvp_ppt169_20261107\exports\pyron_mvp_obsidian_frost.pptx
+    [POSTFLIGHT] status=passed-with-warnings quality_gate=passed slides=12 warning_categories=2
+    [POSTFLIGHT][WARNING] quality_introduced_warnings=39
+    [POSTFLIGHT][WARNING] unsafe_exported_font_faces=2
+    [PPTX] projects\pyron_mvp_ppt169_20261107\exports\pyron_mvp_obsidian_frost.pptx
+    [REPORT] projects\pyron_mvp_ppt169_20261107\validation\pyron_mvp_obsidian_frost.report.json
+=== 2026-11-08T00:01:48.550Z END run=02ab4de7b38a elapsed_ms=5125 output_lines=53 retained=6 omitted=47 ===

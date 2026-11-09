@@ -1,0 +1,63 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "p2_slicer_sub",
+  "position": {
+    "x": 640,
+    "y": 15,
+    "z": 350,
+    "height": 110,
+    "width": 200,
+    "tabOrder": 350
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dim_Subestacoes"
+                    }
+                  },
+                  "Property": "instalacao"
+                }
+              },
+              "queryRef": "Dim_Subestacoes.instalacao",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "syncGroup": {
+    "groupName": "Sync_Subestacao",
+    "fieldChanges": true,
+    "filterChanges": true
+  }
+}

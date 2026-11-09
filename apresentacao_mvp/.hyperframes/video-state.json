@@ -1,0 +1,385 @@
+{
+  "version": 1,
+  "historyId": "642c3427-4615-416f-b8c6-51fb2dc1a1db",
+  "currentRevision": "a7b90388-b92c-4794-b8e4-ee30cf09eb10",
+  "pendingChanges": false,
+  "files": {
+    "assets/icone-192.png": {
+      "hash": "2567ca192973a7f7f4cc542ae3a63fe098780a72be0916349c9ad33ca250fd87",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\25\\2567ca192973a7f7f4cc542ae3a63fe098780a72be0916349c9ad33ca250fd87"
+    },
+    "assets/pyron-logo-branco.svg": {
+      "hash": "cce3fe2da9971fe8aaaca067cd4082cf1ca4b83b1c757852229087123f1bec63",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\cc\\cce3fe2da9971fe8aaaca067cd4082cf1ca4b83b1c757852229087123f1bec63"
+    },
+    "assets/pyron-simbolo-cor.svg": {
+      "hash": "068b79b0138ea36b908453f4847ce6c8085198dd42908f3689edcdb31ad3cc92",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\06\\068b79b0138ea36b908453f4847ce6c8085198dd42908f3689edcdb31ad3cc92"
+    },
+    "assets/pyron_hero_thermography.jpg": {
+      "hash": "d99cb6e2e1c431a2b3330d000d61a04884f39d9f37d0520a6a0f041b171b34c1",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d9\\d99cb6e2e1c431a2b3330d000d61a04884f39d9f37d0520a6a0f041b171b34c1"
+    },
+    "composition/estilo.css": {
+      "hash": "e026d951927694fb66da96038de5147d3076f4101c68bfd1d01c27a720c727a6",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\e0\\e026d951927694fb66da96038de5147d3076f4101c68bfd1d01c27a720c727a6"
+    },
+    "composition/index.html": {
+      "hash": "27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\27\\27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c"
+    },
+    "hyperframes.json": {
+      "hash": "c3ee74353ce90beee27be1ac071c755f18ba209b29ecb9917615fe48f550168f",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\c3\\c3ee74353ce90beee27be1ac071c755f18ba209b29ecb9917615fe48f550168f"
+    },
+    "index.html": {
+      "hash": "27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\27\\27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c"
+    },
+    "player/hyperframes-player.global.js": {
+      "hash": "f666a8d6047d087ccaadb4a4f449ce62dda3b16ffe063f5bef718eea0764b53d",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\f6\\f666a8d6047d087ccaadb4a4f449ce62dda3b16ffe063f5bef718eea0764b53d"
+    },
+    "player/hyperframes-slideshow.global.js": {
+      "hash": "66413b1555fb11ec41afb47773d3280d627c5368f125a02ba20bc9f696d78f6f",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\66\\66413b1555fb11ec41afb47773d3280d627c5368f125a02ba20bc9f696d78f6f"
+    },
+    "estilo.css": {
+      "hash": "e69cabbed154ff00f9e80823cf843031cca7da005a18260ae162957292911b66",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\e6\\e69cabbed154ff00f9e80823cf843031cca7da005a18260ae162957292911b66"
+    },
+    "standalone.html": {
+      "hash": "94c45cb5d8921b7c747c4c29a821d7936c1ceaee10e26c2623d3654013e82464",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\94\\94c45cb5d8921b7c747c4c29a821d7936c1ceaee10e26c2623d3654013e82464"
+    },
+    "snapshot_capa.png/contact-sheet.jpg": {
+      "hash": "b1f2db74c4b9bde9193375314fff328db349da1e3015d41fe4f4cbfbab0db9a8",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\b1\\b1f2db74c4b9bde9193375314fff328db349da1e3015d41fe4f4cbfbab0db9a8"
+    },
+    "snapshot_capa.png/frame-00-at-0s.png": {
+      "hash": "d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa"
+    },
+    "snapshot_capa.png/frame-01-at-9.75s.png": {
+      "hash": "d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa"
+    },
+    "snapshot_tecnico.png/contact-sheet.jpg": {
+      "hash": "247907fa796adf58f1ea902bca98382b5b56f087d416f50838f903f174eaa8f3",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\24\\247907fa796adf58f1ea902bca98382b5b56f087d416f50838f903f174eaa8f3"
+    },
+    "snapshot_tecnico.png/frame-00-at-25s.png": {
+      "hash": "668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\66\\668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f"
+    },
+    "snapshot_tecnico.png/frame-01-at-35s.png": {
+      "hash": "668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\66\\668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f"
+    }
+  },
+  "revisions": {
+    "65a62bde-82af-4f10-b85a-c8942f7eb21e": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794082457183,
+      "endedAt": 1794082457194,
+      "files": {
+        "estilo.css": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\e0\\e026d951927694fb66da96038de5147d3076f4101c68bfd1d01c27a720c727a6"
+        },
+        "index.html": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\e2\\e2dc42644b182f43560e48edf4f89b79283c09dcfe23eb6c6b3b0f2fc6265b7c",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\46\\46966f10dbd4d0a0b6bbd1c165721b2a72ce8ebf6826770f260ba788d70657f7"
+        },
+        "standalone.html": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\94\\94c45cb5d8921b7c747c4c29a821d7936c1ceaee10e26c2623d3654013e82464"
+        }
+      }
+    },
+    "2c65f1d8-83e0-4ccf-b089-027125037c07": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794082495587,
+      "endedAt": 1794082495595,
+      "files": {
+        "estilo.css": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\e0\\e026d951927694fb66da96038de5147d3076f4101c68bfd1d01c27a720c727a6",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\e6\\e69cabbed154ff00f9e80823cf843031cca7da005a18260ae162957292911b66"
+        },
+        "index.html": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\46\\46966f10dbd4d0a0b6bbd1c165721b2a72ce8ebf6826770f260ba788d70657f7",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\11\\110fcb8e7db0fcbb3eea9ab555459989abc58ee10d654b409abb8c325fc1423d"
+        }
+      }
+    },
+    "a03170e2-8172-4646-a9f2-fffb3c503657": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794082546945,
+      "endedAt": 1794082546968,
+      "files": {
+        "snapshot_capa.png/contact-sheet.jpg": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\b1\\b1f2db74c4b9bde9193375314fff328db349da1e3015d41fe4f4cbfbab0db9a8"
+        },
+        "snapshot_capa.png/frame-00-at-0s.png": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa"
+        },
+        "snapshot_capa.png/frame-01-at-9.75s.png": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa"
+        }
+      }
+    },
+    "d975ef4f-e097-4a68-995d-10c2044d6b51": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794082595881,
+      "endedAt": 1794082595911,
+      "files": {
+        "composition/index.html": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d6\\d6ff21d4f601346748e0d88ec4048b121feb57dfc89bf409a842ee012e3dbcc7",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\27\\27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c"
+        },
+        "index.html": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\11\\110fcb8e7db0fcbb3eea9ab555459989abc58ee10d654b409abb8c325fc1423d",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\27\\27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c"
+        },
+        "snapshot_tecnico.png/contact-sheet.jpg": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\9b\\9b738d14c7c5de3f79874bcc6ed24f897f5f1925616bfbdc077f05b3c17a4135"
+        },
+        "snapshot_tecnico.png/frame-00-at-25s.png": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa"
+        },
+        "snapshot_tecnico.png/frame-01-at-35s.png": {
+          "before": null,
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa"
+        }
+      }
+    },
+    "a7b90388-b92c-4794-b8e4-ee30cf09eb10": {
+      "actor": {
+        "kind": "outside",
+        "name": "Outside"
+      },
+      "label": "Changed outside the app",
+      "startedAt": 1794082650593,
+      "endedAt": 1794082650615,
+      "files": {
+        "snapshot_tecnico.png/contact-sheet.jpg": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\9b\\9b738d14c7c5de3f79874bcc6ed24f897f5f1925616bfbdc077f05b3c17a4135",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\24\\247907fa796adf58f1ea902bca98382b5b56f087d416f50838f903f174eaa8f3"
+        },
+        "snapshot_tecnico.png/frame-00-at-25s.png": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\66\\668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f"
+        },
+        "snapshot_tecnico.png/frame-01-at-35s.png": {
+          "before": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\d1\\d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa",
+          "after": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\642c3427-4615-416f-b8c6-51fb2dc1a1db\\blobs\\66\\668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f"
+        }
+      }
+    }
+  },
+  "checks": {
+    "latest": {
+      "revision": "2c65f1d8-83e0-4ccf-b089-027125037c07",
+      "id": "299a80a3-c71e-4432-a654-bd72aeeaed45"
+    },
+    "revisions": {
+      "65a62bde-82af-4f10-b85a-c8942f7eb21e": [
+        {
+          "id": "8ce476ee-1945-4566-9ec8-c8a3849bec6d",
+          "scope": "project",
+          "report": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\.hyperframes\\artifacts\\checks\\8ce476ee-1945-4566-9ec8-c8a3849bec6d.json",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 45000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1794082467887,
+          "contentHash": "3d4014dfce518eb07a77892551ad637876f297e80e887540fa53140d346c05b4",
+          "revision": "65a62bde-82af-4f10-b85a-c8942f7eb21e",
+          "inputFingerprint": "3ca1f93076c3d13d951773478e7a4458dfe16de36e82ca8ab47200340459fd75",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        }
+      ],
+      "2c65f1d8-83e0-4ccf-b089-027125037c07": [
+        {
+          "id": "299a80a3-c71e-4432-a654-bd72aeeaed45",
+          "scope": "project",
+          "report": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\.hyperframes\\artifacts\\checks\\299a80a3-c71e-4432-a654-bd72aeeaed45.json",
+          "metadata": {
+            "ok": false,
+            "browserSkipped": false,
+            "options": {
+              "samples": 9,
+              "atTransitions": false,
+              "maxIssues": 80,
+              "collapseStatic": true,
+              "tolerance": 2,
+              "timeout": 45000,
+              "contrast": true,
+              "strict": false,
+              "snapshots": false,
+              "browserGpuMode": "auto"
+            }
+          },
+          "createdAt": 1794082502457,
+          "contentHash": "a153efc9daf72a2955b51c1205921c6e5e6ee970dbb6e706f87ed68e47b1d7b7",
+          "revision": "2c65f1d8-83e0-4ccf-b089-027125037c07",
+          "inputFingerprint": "e8843bb87e6416c1277718ece4373ef381a36e5ac56d548c182e8a781515b864",
+          "inputScope": "local-project-files",
+          "attribution": "recorded-revision"
+        }
+      ]
+    },
+    "unversioned": [
+      {
+        "id": "62dc2b92-8dc9-4150-80a7-61feece55308",
+        "scope": "project",
+        "report": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\.hyperframes\\artifacts\\checks\\62dc2b92-8dc9-4150-80a7-61feece55308.json",
+        "metadata": {
+          "ok": false,
+          "browserSkipped": true,
+          "options": {
+            "samples": 9,
+            "atTransitions": false,
+            "maxIssues": 80,
+            "collapseStatic": true,
+            "tolerance": 2,
+            "timeout": 45000,
+            "contrast": true,
+            "strict": false,
+            "snapshots": false,
+            "browserGpuMode": "auto"
+          }
+        },
+        "createdAt": 1794082336456,
+        "contentHash": "82db7ecfad98a292424dd64eb1cd001a66af2dc3776aa8ab45cf44b33b3ba11b",
+        "revision": null,
+        "inputFingerprint": "6ffa5e8b99ca37425b20d45a249b7c88c48ee9e25b1619c979a6382c71c4a094",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
+  },
+  "snapshots": {
+    "latest": {
+      "revision": null,
+      "id": "80585efe-c8cc-4420-9ce4-fcbd97fcb4bf-1"
+    },
+    "revisions": {},
+    "unversioned": [
+      {
+        "scope": "full",
+        "id": "2aa958fd-14ab-4088-aaa0-f9eba63e5079-0",
+        "image": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\snapshot_capa.png\\frame-00-at-0s.png",
+        "time": 0,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794082526913,
+        "contentHash": "d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa",
+        "revision": null,
+        "inputFingerprint": "e8843bb87e6416c1277718ece4373ef381a36e5ac56d548c182e8a781515b864",
+        "inputScope": "local-project-files",
+        "attribution": "inputs-changed"
+      },
+      {
+        "scope": "full",
+        "id": "2aa958fd-14ab-4088-aaa0-f9eba63e5079-1",
+        "image": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\snapshot_capa.png\\frame-01-at-9.75s.png",
+        "time": 9.75,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794082526913,
+        "contentHash": "d140783e917f5aaf746c0467a930c8a64d806e299f06546a1226a22a3fba74fa",
+        "revision": null,
+        "inputFingerprint": "e8843bb87e6416c1277718ece4373ef381a36e5ac56d548c182e8a781515b864",
+        "inputScope": "local-project-files",
+        "attribution": "inputs-changed"
+      },
+      {
+        "scope": "full",
+        "id": "80585efe-c8cc-4420-9ce4-fcbd97fcb4bf-0",
+        "image": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\snapshot_tecnico.png\\frame-00-at-25s.png",
+        "time": 25,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794082599269,
+        "contentHash": "668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f",
+        "revision": null,
+        "inputFingerprint": "a6624283164f6bdb761a72a61246b5ccde457615665b7fa38a5ec38f44fc3f41",
+        "inputScope": "local-project-files",
+        "attribution": "inputs-changed"
+      },
+      {
+        "scope": "full",
+        "id": "80585efe-c8cc-4420-9ce4-fcbd97fcb4bf-1",
+        "image": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\snapshot_tecnico.png\\frame-01-at-35s.png",
+        "time": 35,
+        "metadata": {
+          "width": 1920,
+          "height": 1080,
+          "zoomScale": 1,
+          "browserGpuMode": "auto",
+          "warnings": [],
+          "partial": false
+        },
+        "createdAt": 1794082599270,
+        "contentHash": "668a59471764cb3df8090f0819f8939974848ac887cc70a9625b243b9eacab0f",
+        "revision": null,
+        "inputFingerprint": "a6624283164f6bdb761a72a61246b5ccde457615665b7fa38a5ec38f44fc3f41",
+        "inputScope": "local-project-files",
+        "attribution": "inputs-changed"
+      }
+    ]
+  }
+}

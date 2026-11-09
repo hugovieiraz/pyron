@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" data-pptx-page-role="cover">
+    <!-- Obsidian Frost Background -->
+    <rect width="1280" height="720" fill="#10141A"/>
+    <!-- Linhas Guia Estruturais -->
+    <g id="deck-guides" data-pptx-role="decoration" data-pptx-bounds="56 140 1168 520" stroke="#1E293B" stroke-width="0.5">
+        <line x1="56" y1="140" x2="1224" y2="140"/>
+        <line x1="56" y1="660" x2="1224" y2="660"/>
+    </g>
+    
+    <!-- Header Telemetria -->
+    <g id="slide-header" data-pptx-role="header" data-pptx-bounds="56 36 1168 100">
+        <rect x="56" y="36" width="232" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="76" y="52" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1.5">PYRON MVP · VISÃO GERAL</text>
+        <text x="56" y="96" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">Pyron MVP: Termografia e Edge AI</text>
+        <text x="56" y="124" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="400" fill="#94A3B8">Inspeção Termográfica Automatizada, Física do Efeito Joule e NBR 15866</text>
+    </g>
+    <!-- Footer Telemetria -->
+    <g id="slide-footer" data-pptx-role="footer" data-pptx-bounds="56 676 1168 28">
+        <line x1="56" y1="676" x2="1224" y2="676" stroke="#1E293B" stroke-width="1"/>
+        <text x="56" y="694" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">PYRON MVP · TERMOGRAFIA DIGITAL PREDITIVA</text>
+        <text x="640" y="694" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">CONFORMIDADE ABNT NBR 15866 &amp; IEC 60099-5 · 100% OFFLINE EDGE</text>
+        <text x="1224" y="694" text-anchor="end" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">01 / 12</text>
+    </g>
+    
+    <!-- Card Hero Mascote 3D (Esquerda) -->
+    <g id="hero-mascot" data-pptx-bounds="56 148 460 508">
+        <rect x="56" y="148" width="460" height="508" rx="24" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <image href="../images/pyron_mira3d_hero.png" x="76" y="168" width="420" height="310" preserveAspectRatio="xMidYMid meet"/>
+        <rect x="76" y="498" width="160" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="156" y="514" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1">SENTINELA PYRON-01</text>
+        <text x="76" y="550" font-family="EB Garamond, Georgia, serif" font-size="22" font-weight="600" fill="#FFFFFF">Mascote Termográfico 3D</text>
+        <text x="76" y="578" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#94A3B8">Engine procedural Mira-3D / WebGL integrada com<tspan x="76" dy="20">telemetria de temperatura em tempo real.</tspan></text>
+        <rect x="76" y="620" width="420" height="24" rx="6" fill="#0A0E14"/>
+        <text x="88" y="636" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">STATUS: ATIVO · CONEXÃO DIRECTML GPU OK · 71 MS</text>
+    </g>
+
+    <!-- Pilares Tecnológicos (Direita) -->
+    <g id="technology-pillars" data-pptx-bounds="536 148 688 508">
+        <!-- Pilar 1 -->
+        <g id="pillar-1">
+            <rect x="536" y="148" width="688" height="152" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <text x="568" y="184" font-family="EB Garamond, Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF">01. Metrologia Radiométrica Bruta</text>
+            <text x="568" y="210" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Inversão exata da curva de Planck a partir dos metadados da câmera (FFF/FLIR em 1 ms).</text>
+            <text x="568" y="232" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Compensação analítica da transmissão do ar, emissividade e temperatura refletida.</text>
+            <rect x="568" y="252" width="140" height="28" rx="14" fill="#262A31"/>
+            <text x="638" y="270" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">9 MS MEDIANA</text>
+        </g>
+        <!-- Pilar 2 -->
+        <g id="pillar-2">
+            <rect x="536" y="324" width="688" height="152" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <text x="568" y="360" font-family="EB Garamond, Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF">02. Visão Computacional Transformers</text>
+            <text x="568" y="386" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">RF-DETR com backbone DINOv2 especializado em subestações de alta tensão.</text>
+            <text x="568" y="408" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Segmentação fina SAM 2.1 e Depth Anything 3 eliminando o efeito do céu frio.</text>
+            <rect x="568" y="428" width="160" height="28" rx="14" fill="#262A31"/>
+            <text x="648" y="446" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">mAP50 0,891 (71 MS)</text>
+        </g>
+        <!-- Pilar 3 -->
+        <g id="pillar-3">
+            <rect x="536" y="500" width="688" height="156" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <text x="568" y="536" font-family="EB Garamond, Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF">03. Inteligência Normativa e Edge</text>
+            <text x="568" y="562" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Motor de inferência de severidade NBR 15866 e IEC 60099-5 em 1,8 ms.</text>
+            <text x="568" y="584" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Compilação de laudos periciais Typst em 32 ms e arquitetura 100% offline.</text>
+            <rect x="568" y="604" width="160" height="28" rx="14" fill="#1D4A6A"/>
+            <text x="648" y="622" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#FFFFFF">458 TESTES (100% OK)</text>
+        </g>
+    </g>
+
+</svg>

@@ -1,0 +1,306 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 3,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "css_transition_used",
+        "severity": "warning",
+        "message": "CSS declaration `transition: opacity 0.3s ease, transform 0.3s ease` runs on the browser clock and cannot be seeked deterministically across render workers.",
+        "selector": ".fragment-item",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Keep the class or attribute swap for state; put the visual change on the paused GSAP timeline."
+      },
+      {
+        "code": "css_transition_used",
+        "severity": "warning",
+        "message": "CSS declaration `transition: all 0.2s ease` runs on the browser clock and cannot be seeked deterministically across render workers.",
+        "selector": ".hotspot-btn",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Keep the class or attribute swap for state; put the visual change on the paused GSAP timeline."
+      },
+      {
+        "code": "composition_file_too_large",
+        "severity": "warning",
+        "message": "This HTML composition file has 1087 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently."
+      }
+    ],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": false,
+    "errorCount": 1,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "sweep_static",
+        "severity": "error",
+        "time": 0,
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "width": 0,
+          "height": 0
+        },
+        "message": "Timeline did not advance under seek; every green verdict on this run is unreliable.",
+        "fixHint": "An animation on the page never moved under seek. Build it on the paused GSAP timeline registered in `window.__timelines[compositionId]`, or as a CSS animation, so the seek drives it.",
+        "firstSeen": 0,
+        "lastSeen": 0,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          0
+        ]
+      }
+    ],
+    "duration": 10,
+    "samples": [
+      0.556,
+      1.667,
+      2.778,
+      3.889,
+      5,
+      6.111,
+      7.222,
+      8.333,
+      9.444
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 1,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      0.556,
+      2.778,
+      5,
+      7.222,
+      9.444
+    ],
+    "checked": 70,
+    "passed": 70
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 11 text elements stay under it for 0.5 s or more, the smallest \"TELEMETRIA RADIOMÉTRICA ATIVA\" at 14 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "TELEMETRIA RADIOMÉTRICA ATIVA",
+        "selector": "div.scene-content > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 1098.8,
+          "y": 654.86,
+          "width": 256.42,
+          "height": 19
+        },
+        "time": 0,
+        "times": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "fontPx": 14,
+        "floorPx": 28,
+        "seconds": 10,
+        "elements": [
+          {
+            "selector": "div.scene-content > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1)",
+            "text": "TELEMETRIA RADIOMÉTRICA ATIVA",
+            "fontPx": 14,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "#scene-capa > div:nth-of-type(2) > div:nth-of-type(2)",
+            "text": "Apresentação Técnica Executiva",
+            "fontPx": 15,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "div.scene-content > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+            "text": "SEVERIDADE URGENTE",
+            "fontPx": 16,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "div.footer-left > span:nth-of-type(1)",
+            "text": "Pyron MVP • Embrapii / Polo UFJF",
+            "fontPx": 16,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "#scene-capa > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1)",
+            "text": "PROJETO EMBRAPII • MANUTENÇÃO PREDITIVA 4.0",
+            "fontPx": 18,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "span.badge-categoria.badge-verde",
+            "text": "✓ Edge AI 100% Local",
+            "fontPx": 18,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "span.badge-categoria.badge-quente",
+            "text": "⚡ Subestações & Transformadores",
+            "fontPx": 18,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "div.scene-content > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(3)",
+            "text": "🎯 Erro Mediano de 0,53 °C",
+            "fontPx": 18,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "div.scene-content > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > span:nth-of-type(4)",
+            "text": "📑 Rastreabilidade NBR 15866",
+            "fontPx": 18,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "div.scene-content > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2)",
+            "text": "Bucha Fase A: 84.6 °C | ΔT = 24.2 °C",
+            "fontPx": 20,
+            "time": 0,
+            "seconds": 10
+          },
+          {
+            "selector": "#scene-capa > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > p:nth-of-type(2)",
+            "text": "Leitura radiométrica pixel a pixel, detecção de componentes críticos via Transformers de visão, duplo critério normativo de severidade (NBR 15866) e geração instantânea de laudos para o Prontuário NR-10.",
+            "fontPx": 22,
+            "time": 0,
+            "seconds": 10
+          }
+        ]
+      }
+    ],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 80
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 1,
+    "findings": [
+      {
+        "code": "audio_none",
+        "severity": "info",
+        "message": "The film has no sound: no clip in it plays audio.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      }
+    ]
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

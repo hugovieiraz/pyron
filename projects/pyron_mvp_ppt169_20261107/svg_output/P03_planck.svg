@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" data-pptx-page-role="content">
+    <!-- Obsidian Frost Background -->
+    <rect width="1280" height="720" fill="#10141A"/>
+    <!-- Linhas Guia Estruturais -->
+    <g id="deck-guides" data-pptx-role="decoration" data-pptx-bounds="56 140 1168 520" stroke="#1E293B" stroke-width="0.5">
+        <line x1="56" y1="140" x2="1224" y2="140"/>
+        <line x1="56" y1="660" x2="1224" y2="660"/>
+    </g>
+    
+    <!-- Header Telemetria -->
+    <g id="slide-header" data-pptx-role="header" data-pptx-bounds="56 36 1168 100">
+        <rect x="56" y="36" width="296" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="76" y="52" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1.5">FEATURE 1 · PIXEL À TEMPERATURA</text>
+        <text x="56" y="96" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">Desenrolamento Radiométrico e Planck</text>
+        <text x="56" y="124" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="400" fill="#94A3B8">Matrizes Float32 Exatas em 9 ms e Reconstrução por Programação Dinâmica em 1,5 s</text>
+    </g>
+    <!-- Footer Telemetria -->
+    <g id="slide-footer" data-pptx-role="footer" data-pptx-bounds="56 676 1168 28">
+        <line x1="56" y1="676" x2="1224" y2="676" stroke="#1E293B" stroke-width="1"/>
+        <text x="56" y="694" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">PYRON MVP · TERMOGRAFIA DIGITAL PREDITIVA</text>
+        <text x="640" y="694" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">CONFORMIDADE ABNT NBR 15866 &amp; IEC 60099-5 · 100% OFFLINE EDGE</text>
+        <text x="1224" y="694" text-anchor="end" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">03 / 12</text>
+    </g>
+    
+    <!-- Nó 1 -->
+    <g id="step-1" data-pptx-bounds="56 150 365 340">
+        <rect x="56" y="150" width="365" height="340" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <rect x="80" y="174" width="32" height="32" rx="8" fill="#1D4A6A"/>
+        <text x="96" y="195" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">1</text>
+        <text x="124" y="196" font-family="EB Garamond, Georgia, serif" font-size="18" font-weight="600" fill="#FFFFFF">Extração FFF (FLIR)</text>
+        <text x="80" y="234" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="80" dy="0">Acessa segmentos APP1 com cabeçalho</tspan><tspan x="80" dy="18">FFF no JPEG radiométrico original.</tspan></text>
+        <text x="80" y="280" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="80" dy="0">Extrai matriz bruta (16 bits) e</tspan><tspan x="80" dy="18">constantes de Planck (R1, R2, B, F,</tspan><tspan x="80" dy="18">O) de fábrica.</tspan></text>
+        <rect x="80" y="390" width="317" height="76" rx="10" fill="#0A0E14"/>
+        <text x="96" y="414" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">TEMPO DE EXECUÇÃO:</text>
+        <text x="96" y="442" font-family="EB Garamond, Georgia, serif" font-size="28" font-weight="400" fill="#FFFFFF">1 ms <tspan font-size="12" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" fill="#94A3B8">conversão pura</tspan></text>
+    </g>
+
+    <!-- Nó 2 -->
+    <g id="step-2" data-pptx-bounds="457 150 365 340">
+        <rect x="457" y="150" width="365" height="340" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <rect x="481" y="174" width="32" height="32" rx="8" fill="#1D4A6A"/>
+        <text x="497" y="195" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">2</text>
+        <text x="525" y="196" font-family="EB Garamond, Georgia, serif" font-size="18" font-weight="600" fill="#FFFFFF">Compensação Física</text>
+        <text x="481" y="234" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="481" dy="0">Desconta radiação refletida e a</tspan><tspan x="481" dy="18">emissividade real (ε) de cerâmicas e</tspan><tspan x="481" dy="18">condutores.</tspan></text>
+        <text x="481" y="280" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="481" dy="0">Modela a transmissão atmosférica τ</tspan><tspan x="481" dy="18">por distância e umidade relativa do</tspan><tspan x="481" dy="18">ar.</tspan></text>
+        <rect x="481" y="390" width="317" height="76" rx="10" fill="#0A0E14"/>
+        <text x="497" y="414" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">LEITURA COMPLETA (EXIF + GIRO):</text>
+        <text x="497" y="442" font-family="EB Garamond, Georgia, serif" font-size="28" font-weight="400" fill="#FFFFFF">9 ms <tspan font-size="12" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" fill="#94A3B8">mediana em 43 fotos</tspan></text>
+    </g>
+
+    <!-- Nó 3 -->
+    <g id="step-3" data-pptx-bounds="858 150 366 340">
+        <rect x="858" y="150" width="366" height="340" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <rect x="882" y="174" width="32" height="32" rx="8" fill="#1D4A6A"/>
+        <text x="898" y="195" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">3</text>
+        <text x="926" y="196" font-family="EB Garamond, Georgia, serif" font-size="18" font-weight="600" fill="#FFFFFF">Barra Livre (Foto Comum)</text>
+        <text x="882" y="234" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="882" dy="0">Para imagens sem metadados brutos:</tspan><tspan x="882" dy="18">localiza a barra térmica por DP.</tspan></text>
+        <text x="882" y="280" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="882" dy="0">Lê dígitos por OCR em ONNX e</tspan><tspan x="882" dy="18">calibra as cores no espaço CIELAB</tspan><tspan x="882" dy="18">com KD-Tree.</tspan></text>
+        <rect x="882" y="390" width="318" height="76" rx="10" fill="#0A0E14"/>
+        <text x="898" y="414" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">PRECISÃO DE BANCO (SCIENCEDB):</text>
+        <text x="898" y="442" font-family="EB Garamond, Georgia, serif" font-size="28" font-weight="400" fill="#FFFFFF">0,53 °C <tspan font-size="12" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" fill="#94A3B8">erro mediano</tspan></text>
+    </g>
+
+    <!-- Fita Inferior -->
+    <g id="pipeline-summary" data-pptx-bounds="56 514 1168 142">
+        <rect x="56" y="514" width="1168" height="142" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <text x="88" y="548" font-family="EB Garamond, Georgia, serif" font-size="18" font-weight="600" fill="#FFFFFF">Inversão Analítica da Equação de Planck</text>
+        <text x="88" y="578" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">T_obj = B / ln(R1 / (R2 · (S_obj + O)) + F) - 273,15 °C. Onde S_obj desconta emissividade ε e radiação de fundo.</text>
+        <text x="88" y="604" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#94A3B8">Reconhecimento da barra testado em 299 termogramas do ScienceDB: escala identificada em 298 casos (99,7% de acerto).</text>
+        <text x="88" y="628" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">GARANTIA METROLÓGICA: Arquivo radiométrico é medida física real (9 ms); caminho estimado traz aviso normativo (1,5 s).</text>
+    </g>
+
+</svg>

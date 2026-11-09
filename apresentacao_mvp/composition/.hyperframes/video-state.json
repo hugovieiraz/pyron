@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "historyId": "9d5de871-8340-48bb-a448-16d10cf35be8",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "assets/icone-192.png": {
+      "hash": "2567ca192973a7f7f4cc542ae3a63fe098780a72be0916349c9ad33ca250fd87",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\9d5de871-8340-48bb-a448-16d10cf35be8\\blobs\\25\\2567ca192973a7f7f4cc542ae3a63fe098780a72be0916349c9ad33ca250fd87"
+    },
+    "assets/pyron-logo-branco.svg": {
+      "hash": "cce3fe2da9971fe8aaaca067cd4082cf1ca4b83b1c757852229087123f1bec63",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\9d5de871-8340-48bb-a448-16d10cf35be8\\blobs\\cc\\cce3fe2da9971fe8aaaca067cd4082cf1ca4b83b1c757852229087123f1bec63"
+    },
+    "assets/pyron-simbolo-cor.svg": {
+      "hash": "068b79b0138ea36b908453f4847ce6c8085198dd42908f3689edcdb31ad3cc92",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\9d5de871-8340-48bb-a448-16d10cf35be8\\blobs\\06\\068b79b0138ea36b908453f4847ce6c8085198dd42908f3689edcdb31ad3cc92"
+    },
+    "assets/pyron_hero_thermography.jpg": {
+      "hash": "d99cb6e2e1c431a2b3330d000d61a04884f39d9f37d0520a6a0f041b171b34c1",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\9d5de871-8340-48bb-a448-16d10cf35be8\\blobs\\d9\\d99cb6e2e1c431a2b3330d000d61a04884f39d9f37d0520a6a0f041b171b34c1"
+    },
+    "estilo.css": {
+      "hash": "e69cabbed154ff00f9e80823cf843031cca7da005a18260ae162957292911b66",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\9d5de871-8340-48bb-a448-16d10cf35be8\\blobs\\e6\\e69cabbed154ff00f9e80823cf843031cca7da005a18260ae162957292911b66"
+    },
+    "index.html": {
+      "hash": "27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c",
+      "content": "C:\\Users\\gabri\\.cache\\hyperframes\\history\\9d5de871-8340-48bb-a448-16d10cf35be8\\blobs\\27\\27bb3d670234be92e5f197c962742816fbdee13413df39876ffb52e000838d4c"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": {
+      "revision": null,
+      "id": "b2722a0c-eb53-4d66-84cf-c583154cffb1"
+    },
+    "revisions": {},
+    "unversioned": [
+      {
+        "id": "b2722a0c-eb53-4d66-84cf-c583154cffb1",
+        "scope": "project",
+        "report": "D:\\hd_central\\Antigravity projetos\\brain\\Obisidian_G\\04 - Machine Learning\\Projetos\\Pyron---Embrapii\\apresentacao_mvp\\composition\\.hyperframes\\artifacts\\checks\\b2722a0c-eb53-4d66-84cf-c583154cffb1.json",
+        "metadata": {
+          "ok": false,
+          "browserSkipped": false,
+          "options": {
+            "samples": 9,
+            "atTransitions": false,
+            "maxIssues": 80,
+            "collapseStatic": true,
+            "tolerance": 2,
+            "timeout": 45000,
+            "contrast": true,
+            "strict": false,
+            "snapshots": false,
+            "browserGpuMode": "auto"
+          }
+        },
+        "createdAt": 1794082737041,
+        "contentHash": "aa732d38d1565050517d7aa1d8ffd10281dd5db22e0ac32ae4ebc0cbf0563b16",
+        "revision": null,
+        "inputFingerprint": "e37c2263811cdded4fb7d458dcf2fbb0b3ff509cf7b486f793a06cf8a47c5bd8",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  }
+}

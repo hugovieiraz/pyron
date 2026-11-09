@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PYRON-01 // Personagem 3D &amp; Logo Interativa (Mira-3D + HyperFrames)</title>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./assets/vendor/three/three.module.js",
+      "three/addons/": "./assets/vendor/three/addons/"
+    }
+  }
+  </script>
+  <style>
+    :root {
+      --bg-paper: #F6F5F0;
+      --ink-dark: #18181B;
+      --ink-muted: #52525B;
+      --swiss-blue: #1D4ED8;
+      --pyron-orange: #EA580C;
+      --pyron-amber: #F59E0B;
+      --iron-violet: #6D28D9;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --border-cad: #D4D1C7;
+    }
+    body.dark-mode {
+      --bg-paper: #0B0F19;
+      --ink-dark: #F8FAFC;
+      --ink-muted: #94A3B8;
+      --swiss-blue: #38BDF8;
+      --card-bg: rgba(15, 23, 42, 0.82);
+      --border-cad: #1E293B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background-color: var(--bg-paper);
+      color: var(--ink-dark);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    /* Swiss Technical Blueprint Millimeter Frame */
+    .swiss-frame {
+      position: fixed; inset: 18px;
+      border: 1.5px solid var(--border-cad);
+      pointer-events: none; z-index: 10;
+    }
+    .swiss-frame::before {
+      content: ""; position: absolute; left: 0; right: 0; top: -8px; height: 8px;
+      background-image: repeating-linear-gradient(90deg, var(--border-cad) 0, var(--border-cad) 1px, transparent 1px, transparent 10px);
+    }
+    .swiss-frame::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 8px;
+      background-image: repeating-linear-gradient(90deg, var(--border-cad) 0, var(--border-cad) 1px, transparent 1px, transparent 10px);
+    }
+
+    /* Main 16:9 Stage */
+    .stage-grid {
+      position: relative; width: 100vw; height: 100vh;
+      display: grid; grid-template-columns: 420px 1fr;
+      gap: 28px; padding: 42px 48px; z-index: 5;
+    }
+
+    /* Left Column: Swiss Editorial Typography + Mira Logo Bokeh Eye */
+    .left-panel {
+      display: flex; flex-direction: column; justify-content: space-between;
+      z-index: 15;
+    }
+    .brand-header {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .mira-eye-badge {
+      width: 74px; height: 74px; flex-shrink: 0;
+      border-radius: 18px; background: #141414;
+      border: 1.5px solid rgba(255, 144, 77, 0.45);
+      box-shadow: 0 12px 28px -8px rgba(234, 88, 12, 0.35);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .brand-title-wrap h1 {
+      font-size: 46px; font-weight: 900; letter-spacing: -0.04em; line-height: 0.94;
+    }
+    .brand-title-wrap .sub-tag {
+      margin-top: 6px; font-size: 12px; font-weight: 800;
+      letter-spacing: 0.12em; color: var(--swiss-blue); text-transform: uppercase;
+    }
+
+    /* Swiss Technical Card */
+    .swiss-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border: 1.5px solid var(--border-cad);
+      padding: 22px 24px;
+      box-shadow: 0 16px 40px -15px rgba(0, 0, 0, 0.07);
+    }
+    .swiss-card .card-kicker {
+      font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+      color: var(--pyron-orange); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .swiss-card h2 {
+      font-size: 20px; font-weight: 800; line-height: 1.2; margin-bottom: 10px;
+    }
+    .swiss-card p {
+      font-size: 13px; line-height: 1.55; color: var(--ink-muted);
+    }
+    .anatomy-list {
+      margin-top: 14px; display: grid; gap: 8px;
+      border-top: 1px solid var(--border-cad); padding-top: 12px;
+    }
+    .anatomy-item {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; font-weight: 700;
+    }
+    .anatomy-item span.code {
+      font-family: ui-monospace, monospace; font-size: 11px;
+      padding: 2px 7px; background: rgba(234, 88, 12, 0.12);
+      color: var(--pyron-orange); border-radius: 4px;
+    }
+
+    /* Interactive Controls Bar */
+    .controls-card {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .btn-row {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .swiss-btn {
+      flex: 1; min-width: 110px; padding: 10px 12px;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+      text-transform: uppercase; cursor: pointer;
+      border: 1.5px solid var(--border-cad);
+      background: var(--card-bg); color: var(--ink-dark);
+      transition: all 0.2s ease;
+    }
+    .swiss-btn:hover, .swiss-btn.active {
+      border-color: var(--pyron-orange);
+      background: var(--pyron-orange); color: #FFFFFF;
+    }
+    .telemetry-strip {
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: ui-monospace, monospace; font-size: 11px;
+      color: var(--ink-muted); padding-top: 4px;
+    }
+
+    /* Right Column: Mira-3D Maximized Canvas Card */
+    .mira-3d-card {
+      position: relative; width: 100%; height: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid var(--border-cad);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* Corner CAD brackets */
+    .cad-corner {
+      position: absolute; width: 18px; height: 18px;
+      border-color: var(--ink-dark); border-style: solid;
+      pointer-events: none; z-index: 12;
+    }
+    .cad-tl { top: 12px; left: 12px; border-width: 2.5px 0 0 2.5px; }
+    .cad-tr { top: 12px; right: 12px; border-width: 2.5px 2.5px 0 0; }
+    .cad-bl { bottom: 12px; left: 12px; border-width: 0 0 2.5px 2.5px; }
+    .cad-br { bottom: 12px; right: 12px; border-width: 0 2.5px 2.5px 0; }
+
+    #pyron-3d-wrap {
+      width: 100%; height: 100%; cursor: grab;
+    }
+    #pyron-3d-wrap:active { cursor: grabbing; }
+
+    .hud-overlay-top {
+      position: absolute; top: 20px; left: 26px; right: 26px;
+      display: flex; justify-content: space-between; align-items: center;
+      pointer-events: none; z-index: 11;
+      font-family: ui-monospace, monospace; font-size: 11.5px; font-weight: 700;
+    }
+    .hud-pill {
+      padding: 5px 11px; background: rgba(15, 23, 42, 0.86);
+      color: #F8FAFC; border-left: 3px solid #EA580C;
+    }
+    .hud-Overlay-bottom {
+      position: absolute; bottom: 20px; right: 26px;
+      display: flex; gap: 8px; pointer-events: none; z-index: 11;
+    }
+    .norm-pill {
+      padding: 5px 12px; background: #FFFFFF; color: #18181B;
+      border: 1.5px solid #18181B; font-size: 10.5px; font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+  <div class="swiss-frame"></div>
+
+  <main class="stage-grid">
+    <!-- Left Swiss Editorial Column -->
+    <aside class="left-panel">
+      <div>
+        <div class="brand-header">
+          <!-- Official Mira Animated Bokeh Eye Logo recolored to Pyron Ironbow Spectrum -->
+          <div class="mira-eye-badge" title="Logo Animada Mira + Pyron Ironbow">
+            <svg viewBox="0 0 1080 1080" width="66" height="66" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+              <defs>
+                <filter id="pGlow" x="-80%" y="-80%" width="260%" height="260%">
+                  <feGaussianBlur stdDeviation="16"/>
+                </filter>
+                <path id="pOrbit1" d="M 940 540 C 940 760, 740 880, 540 880 C 340 880, 140 760, 140 540 C 140 320, 340 200, 540 200 C 740 200, 940 320, 940 540 Z" fill="none"/>
+                <path id="pOrbit2" d="M 990 540 C 990 800, 770 930, 540 930 C 310 930, 90 800, 90 540 C 90 280, 310 150, 540 150 C 770 150, 990 280, 990 540 Z" fill="none"/>
+              </defs>
+              <g>
+                <circle r="34" fill="#ff904d" opacity="0.88"><animateMotion dur="8s" begin="0s" repeatCount="indefinite"><mpath href="#pOrbit1"/></animateMotion></circle>
+                <circle r="28" fill="#facc15" opacity="0.92"><animateMotion dur="8s" begin="-1.6s" repeatCount="indefinite"><mpath href="#pOrbit1"/></animateMotion></circle>
+                <circle r="32" fill="#ea580c" opacity="0.85"><animateMotion dur="8s" begin="-3.2s" repeatCount="indefinite"><mpath href="#pOrbit2"/></animateMotion></circle>
+                <circle r="26" fill="#9333ea" opacity="0.85"><animateMotion dur="8s" begin="-4.8s" repeatCount="indefinite"><mpath href="#pOrbit2"/></animateMotion></circle>
+                <circle r="30" fill="#38bdf8" opacity="0.85"><animateMotion dur="8s" begin="-6.4s" repeatCount="indefinite"><mpath href="#pOrbit1"/></animateMotion></circle>
+              </g>
+              <g transform="translate(540 540)">
+                <g>
+                  <animateTransform attributeName="transform" type="scale" dur="10s" repeatCount="indefinite"
+                    values="1 1;1 1;1 0.08;1 0.08;1 1;1 1" keyTimes="0;0.44;0.46;0.48;0.50;1"/>
+                  <circle r="175" fill="#ff904d" filter="url(#pGlow)" opacity="0.65"/>
+                  <circle r="155" fill="#ffffff"/>
+                  <circle r="130" fill="#0F172A"/>
+                  <circle r="76" fill="#EA580C"/>
+                  <circle r="38" fill="#FEF08A"/>
+                  <circle cx="-48" cy="-52" r="26" fill="#ffffff"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="brand-title-wrap">
+            <h1>PYRON<br>MIRA-3D</h1>
+            <div class="sub-tag">00 // MASCOTE &amp; LOGO 3D OFICIAL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Character Concept & Physics Anatomy -->
+      <div class="swiss-card">
+        <div class="card-kicker">METÁFORA VISUAL INTELIGENTE (MIRA)</div>
+        <h2>Sentinela Termográfico PYRON-01</h2>
+        <p>
+          Concebido com a arquitetura <strong>/mira-3d</strong> (Three.js procedural + Regra Zero de movimento perpétuo), o mascote personifica os 3 pilares científicos do Pyron:
+        </p>
+        <div class="anatomy-list">
+          <div class="anatomy-item">
+            <span>1. Olho Radiométrico (8–14 μm)</span>
+            <span class="code">Lei de Planck • 9 ms</span>
+          </div>
+          <div class="anatomy-item">
+            <span>2. Corpo de Saias de Varistor ZnO</span>
+            <span class="code">IEC 60099-5 • ΔT</span>
+          </div>
+          <div class="anatomy-item">
+            <span>3. Halo Orbital Ironbow + Coroa Chama</span>
+            <span class="code">0,53 °C Unwrapping</span>
+          </div>
+          <div class="anatomy-item">
+            <span>4. Escudo de Visão RF-DETR + SAM 2.1</span>
+            <span class="code">mAP50 = 0,891</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Controls -->
+      <div class="swiss-card controls-card">
+        <div class="card-kicker">CONTROLES INTERATIVOS DA CENA 3D</div>
+        <div class="btn-row">
+          <button class="swiss-btn active" id="btn-mode-hero">Pose Hero</button>
+          <button class="swiss-btn" id="btn-mode-scan">Modo Scan IR</button>
+          <button class="swiss-btn" id="btn-mode-logo">Emblema Logo</button>
+        </div>
+        <div class="btn-row">
+          <button class="swiss-btn" id="btn-theme">Alternar Papel Suíço / Dark</button>
+        </div>
+        <div class="telemetry-strip">
+          <span id="status-rot">● AUTO-ROTATE ATIVO (REGRA ZERO MIRA)</span>
+          <span>ARRASTE PARA GIRAR • SCROLL ZOOM</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Column: Mira-3D WebGL Canvas -->
+    <section class="mira-3d-card">
+      <div class="cad-corner cad-tl"></div>
+      <div class="cad-corner cad-tr"></div>
+      <div class="cad-corner cad-bl"></div>
+      <div class="cad-corner cad-br"></div>
+
+      <div class="hud-overlay-top">
+        <div class="hud-pill" id="hud-telemetry">PYRON-01 // NÚCLEO RADIOMÉTRICO: 84,6 °C (IRONBOW)</div>
+        <div class="hud-pill" style="border-left-color:#38BDF8;">THREE.JS PROCEDURAL • 60 FPS</div>
+      </div>
+
+      <div id="pyron-3d-wrap"></div>
+
+      <div class="hud-Overlay-bottom">
+        <div class="norm-pill">MIRA-3D ENGINE</div>
+        <div class="norm-pill">ABNT NBR 15866</div>
+        <div class="norm-pill">EMBRAPII</div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const wrap = document.getElementById('pyron-3d-wrap');
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(38, wrap.clientWidth / wrap.clientHeight, 0.1, 100);
+    camera.position.set(1.1, 0.45, 5.15);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.18;
+    wrap.appendChild(renderer.domElement);
+
+    // Studio Lighting (Swiss CAD + Ironbow Thermal Rim Lights)
+    scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+
+    const keyLight = new THREE.DirectionalLight(0xfff7ed, 2.2);
+    keyLight.position.set(4, 5, 5);
+    scene.add(keyLight);
+
+    const rimOrange = new THREE.DirectionalLight(0xff6b00, 2.8);
+    rimOrange.position.set(-4.5, 2.0, -3.5);
+    scene.add(rimOrange);
+
+    const rimViolet = new THREE.DirectionalLight(0x7c3aed, 2.0);
+    rimViolet.position.set(3.5, -3.0, -3.0);
+    scene.add(rimViolet);
+
+    const corePointLight = new THREE.PointLight(0xffaa00, 3.2, 6);
+    corePointLight.position.set(0, 0.3, 0.9);
+    scene.add(corePointLight);
+
+    // =========================================================================
+    // PROCEDURAL 3D CHARACTER & LOGO: "PYRON-01" (MIRA-3D STANDARD)
+    // =========================================================================
+    const characterRoot = new THREE.Group();
+    scene.add(characterRoot);
+
+    // Materials (Ironbow Thermal Gradient + Brushed Titanium + Ceramic Insulator)
+    const matTitaniumDark = new THREE.MeshStandardMaterial({
+      color: 0x18181b, metalness: 0.78, roughness: 0.24
+    });
+    const matCeramicSlate = new THREE.MeshStandardMaterial({
+      color: 0x27272a, metalness: 0.45, roughness: 0.38
+    });
+    const matChrome = new THREE.MeshStandardMaterial({
+      color: 0xe4e4e7, metalness: 0.92, roughness: 0.14
+    });
+
+    // Ironbow Thermal Palette Materials (from cool violet at bottom to white-hot at top)
+    const ironbowColors = [
+      { col: 0x3b0764, em: 0x1e1b4b, int: 0.35 }, // Disc 0: Cool Indigo/Violet
+      { col: 0x6d28d9, em: 0x4c1d95, int: 0.50 }, // Disc 1: Royal Purple
+      { col: 0xbe123c, em: 0x9f1239, int: 0.70 }, // Disc 2: Crimson Magenta
+      { col: 0xea580c, em: 0xc2410c, int: 0.95 }, // Disc 3: Pyron Orange
+      { col: 0xf59e0b, em: 0xd97706, int: 1.25 }, // Disc 4: Molten Amber
+      { col: 0xfef08a, em: 0xfacc15, int: 1.60 }  // Disc 5: White-Hot Yellow
+    ];
+
+    // 1. BODY TORSO: Stacked High-Voltage ZnO Surge Arrester Sheds (Saias Poliméricas)
+    const torsoGroup = new THREE.Group();
+    characterRoot.add(torsoGroup);
+
+    const shedCount = 5;
+    for (let i = 0; i < shedCount; i++) {
+      const yPos = -0.95 + i * 0.24;
+      const radius = 0.62 + Math.sin((i / (shedCount - 1)) * Math.PI) * 0.16;
+      const ib = ironbowColors[i];
+
+      // Outer Ceramic Insulator Shed (Torus + Beveled Cone)
+      const shedGeo = new THREE.CylinderGeometry(radius * 0.82, radius, 0.13, 36);
+      const shedMat = new THREE.MeshStandardMaterial({
+        color: ib.col,
+        emissive: ib.em,
+        emissiveIntensity: ib.int * 0.45,
+        metalness: 0.35,
+        roughness: 0.28
+      });
+      const shedMesh = new THREE.Mesh(shedGeo, shedMat);
+      shedMesh.position.y = yPos;
+      torsoGroup.add(shedMesh);
+
+      // Glowing Internal ZnO Varistor Ring between sheds
+      const ringGeo = new THREE.TorusGeometry(radius * 0.76, 0.032, 16, 48);
+      const ringMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: ib.col,
+        emissiveIntensity: ib.int * 1.4,
+        roughness: 0.1
+      });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      ringMesh.rotation.x = Math.PI / 2;
+      ringMesh.position.y = yPos + 0.065;
+      torsoGroup.add(ringMesh);
+    }
+
+    // Chest Emblem: Glowing Pyron Hexagonal Core on the front of the torso
+    const chestHexGeo = new THREE.CylinderGeometry(0.26, 0.26, 0.08, 6);
+    const chestHexMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a, emissive: 0xf97316, emissiveIntensity: 2.0, metalness: 0.2, roughness: 0.15
+    });
+    const chestHex = new THREE.Mesh(chestHexGeo, chestHexMat);
+    chestHex.rotation.x = Math.PI / 2;
+    chestHex.rotation.z = Math.PI / 6;
+    chestHex.position.set(0, -0.35, 0.68);
+    torsoGroup.add(chestHex);
+
+    // 2. HEAD & MIRA RADIOMETRIC EYE: Precision Spherical Gimbal + Germanium IR Lens
+    const headGroup = new THREE.Group();
+    headGroup.position.set(0, 0.58, 0);
+    characterRoot.add(headGroup);
+
+    // Outer Helmet Shell (Chamfered Sphere + Side Ear Flanges)
+    const helmetGeo = new THREE.SphereGeometry(0.68, 48, 36);
+    helmetGeo.scale(1.08, 0.94, 0.98);
+    const helmetMesh = new THREE.Mesh(helmetGeo, matTitaniumDark);
+    headGroup.add(helmetMesh);
+
+    // Brushed Chrome Equatorial Visor Trim Ring
+    const visorRingGeo = new THREE.TorusGeometry(0.54, 0.048, 20, 64);
+    const visorRing = new THREE.Mesh(visorRingGeo, matChrome);
+    visorRing.position.set(0, 0.0, 0.48);
+    headGroup.add(visorRing);
+
+    // Dark Glass Faceplate
+    const faceGeo = new THREE.CylinderGeometry(0.52, 0.52, 0.14, 48);
+    const faceMat = new THREE.MeshStandardMaterial({
+      color: 0x090d16, metalness: 0.9, roughness: 0.08
+    });
+    const faceMesh = new THREE.Mesh(faceGeo, faceMat);
+    faceMesh.rotation.x = Math.PI / 2;
+    faceMesh.position.set(0, 0.0, 0.62);
+    headGroup.add(faceMesh);
+
+    // MIRA-PYRON CENTRAL THERMAL EYE (Blinks & Pulses!)
+    const eyeGroup = new THREE.Group();
+    eyeGroup.position.set(0, 0.0, 0.70);
+    headGroup.add(eyeGroup);
+
+    // Outer Iris Ring (Orange-Red)
+    const irisOuterGeo = new THREE.TorusGeometry(0.32, 0.055, 20, 48);
+    const irisOuterMat = new THREE.MeshStandardMaterial({
+      color: 0xff6b00, emissive: 0xea580c, emissiveIntensity: 2.2
+    });
+    eyeGroup.add(new THREE.Mesh(irisOuterGeo, irisOuterMat));
+
+    // Inner Iris Ring (Golden Yellow)
+    const irisInnerGeo = new THREE.RingGeometry(0.14, 0.26, 48);
+    const irisInnerMat = new THREE.MeshBasicMaterial({
+      color: 0xfacc15, side: THREE.DoubleSide
+    });
+    const irisInner = new THREE.Mesh(irisInnerGeo, irisInnerMat);
+    irisInner.position.z = 0.01;
+    eyeGroup.add(irisInner);
+
+    // Glowing White-Hot Pupil + Specular Highlight (Mira Signature Eye!)
+    const pupilGeo = new THREE.CircleGeometry(0.13, 36);
+    const pupilMat = new THREE.MeshBasicMaterial({ color: 0x0f172a });
+    const pupil = new THREE.Mesh(pupilGeo, pupilMat);
+    pupil.position.z = 0.015;
+    eyeGroup.add(pupil);
+
+    const catchlightGeo = new THREE.CircleGeometry(0.048, 24);
+    const catchlightMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const catchlight = new THREE.Mesh(catchlightGeo, catchlightMat);
+    catchlight.position.set(-0.065, 0.065, 0.02);
+    eyeGroup.add(catchlight);
+
+    // Crosshair Reticle inside the Eye
+    const reticleGeo = new THREE.RingGeometry(0.37, 0.385, 32);
+    const reticleMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide });
+    const reticleMesh = new THREE.Mesh(reticleGeo, reticleMat);
+    reticleMesh.position.z = 0.025;
+    eyeGroup.add(reticleMesh);
+
+    // 3. PYRON FLAME CROWN (3 Sculpted Plasma Plumes on top of the helmet)
+    const crownGroup = new THREE.Group();
+    crownGroup.position.set(0, 0.64, 0);
+    headGroup.add(crownGroup);
+
+    // Center White-Hot Flame Plume
+    const plumeCenterGeo = new THREE.ConeGeometry(0.22, 0.62, 24);
+    const plumeCenterMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a, emissive: 0xf59e0b, emissiveIntensity: 2.4, roughness: 0.15
+    });
+    const plumeCenter = new THREE.Mesh(plumeCenterGeo, plumeCenterMat);
+    plumeCenter.position.set(0, 0.24, 0);
+    crownGroup.add(plumeCenter);
+
+    // Left & Right Orange Flame Plumes
+    const plumeSideGeo = new THREE.ConeGeometry(0.16, 0.46, 24);
+    const plumeSideMat = new THREE.MeshStandardMaterial({
+      color: 0xf97316, emissive: 0xea580c, emissiveIntensity: 2.0, roughness: 0.2
+    });
+    const plumeL = new THREE.Mesh(plumeSideGeo, plumeSideMat);
+    plumeL.position.set(-0.24, 0.14, 0);
+    plumeL.rotation.z = 0.35;
+    crownGroup.add(plumeL);
+
+    const plumeR = new THREE.Mesh(plumeSideGeo, plumeSideMat);
+    plumeR.position.set(0.24, 0.14, 0);
+    plumeR.rotation.z = -0.35;
+    crownGroup.add(plumeR);
+
+    // Side High-Voltage Bushing Ears
+    for (const dir of [-1, 1]) {
+      const earGroup = new THREE.Group();
+      earGroup.position.set(dir * 0.72, 0.02, 0);
+      earGroup.rotation.z = -dir * Math.PI / 2;
+      for (let k = 0; k < 3; k++) {
+        const earDisc = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.14 - k * 0.02, 0.16 - k * 0.02, 0.06, 24),
+          matChrome
+        );
+        earDisc.position.y = k * 0.075;
+        earGroup.add(earDisc);
+      }
+      const earTip = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+      );
+      earTip.position.y = 0.26;
+      earGroup.add(earTip);
+      headGroup.add(earGroup);
+    }
+
+    // 4. FLOATING MAGNETIC HANDS (Right: Calibrated Reference Target; Left: RF-DETR Bounding Box)
+    const handsGroup = new THREE.Group();
+    characterRoot.add(handsGroup);
+
+    const leftArmGroup = new THREE.Group();
+    leftArmGroup.position.set(-1.12, -0.1, 0.25);
+    handsGroup.add(leftArmGroup);
+
+    const handSphereL = new THREE.Mesh(new THREE.SphereGeometry(0.17, 24, 24), matTitaniumDark);
+    leftArmGroup.add(handSphereL);
+
+    // Floating Cyan RF-DETR 3D Bounding Box Hologram held by Left Hand
+    const bboxEdges = new THREE.EdgesGeometry(new THREE.BoxGeometry(0.42, 0.42, 0.42));
+    const bboxLines = new THREE.LineSegments(
+      bboxEdges,
+      new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2 })
+    );
+    bboxLines.position.set(0, 0.36, 0);
+    leftArmGroup.add(bboxLines);
+
+    const rightArmGroup = new THREE.Group();
+    rightArmGroup.position.set(1.12, -0.1, 0.25);
+    handsGroup.add(rightArmGroup);
+
+    const handSphereR = new THREE.Mesh(new THREE.SphereGeometry(0.17, 24, 24), matTitaniumDark);
+    rightArmGroup.add(handSphereR);
+
+    // Floating Calibration Target (Yellow Post-it 76mm Metric Depth Reference!)
+    const postItGeo = new THREE.BoxGeometry(0.36, 0.36, 0.03);
+    const postItMat = new THREE.MeshStandardMaterial({
+      color: 0xfacc15, emissive: 0xeab308, emissiveIntensity: 0.7, roughness: 0.3
+    });
+    const postItMesh = new THREE.Mesh(postItGeo, postItMat);
+    postItMesh.position.set(0, 0.36, 0);
+    postItMesh.rotation.y = -0.35;
+    rightArmGroup.add(postItMesh);
+
+    // 5. ORBITING IRONBOW COLORBAR HALO + MIRA BOKEH PARTICLES
+    const orbitGroup = new THREE.Group();
+    orbitGroup.rotation.x = 0.38;
+    orbitGroup.rotation.z = -0.22;
+    characterRoot.add(orbitGroup);
+
+    // Segmented Colorbar Ring around the character
+    const arcSegments = 36;
+    for (let s = 0; s < arcSegments; s++) {
+      const angle = (s / arcSegments) * Math.PI * 2;
+      const t = (Math.sin(angle) + 1) * 0.5; // 0..1 Ironbow interpolation
+      const color = new THREE.Color();
+      if (t < 0.33) {
+        color.lerpColors(new THREE.Color(0x3b0764), new THREE.Color(0xbe123c), t / 0.33);
+      } else if (t < 0.66) {
+        color.lerpColors(new THREE.Color(0xbe123c), new THREE.Color(0xf97316), (t - 0.33) / 0.33);
+      } else {
+        color.lerpColors(new THREE.Color(0xf97316), new THREE.Color(0xfef08a), (t - 0.66) / 0.34);
+      }
+      const segGeo = new THREE.BoxGeometry(0.18, 0.045, 0.08);
+      const segMat = new THREE.MeshStandardMaterial({
+        color: color, emissive: color, emissiveIntensity: 1.1, roughness: 0.2
+      });
+      const seg = new THREE.Mesh(segGeo, segMat);
+      const R = 1.68;
+      seg.position.set(Math.cos(angle) * R, 0, Math.sin(angle) * R);
+      seg.rotation.y = -angle;
+      orbitGroup.add(seg);
+    }
+
+    // Mira Bokeh Thermal Particles orbiting in 3D space
+    const bokehGroup = new THREE.Group();
+    characterRoot.add(bokehGroup);
+    const bokehParticles = [];
+    const bokehPalette = [0xff904d, 0xfacc15, 0xea580c, 0x9333ea, 0x38bdf8];
+    for (let p = 0; p < 28; p++) {
+      const r = 0.035 + (p % 4) * 0.018;
+      const col = bokehPalette[p % bokehPalette.length];
+      const m = new THREE.Mesh(
+        new THREE.SphereGeometry(r, 16, 16),
+        new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.82 })
+      );
+      const dist = 1.35 + (p % 5) * 0.18;
+      const speed = 0.4 + (p % 3) * 0.25;
+      const phase = (p / 28) * Math.PI * 2;
+      const yAmp = 0.6 + (p % 4) * 0.22;
+      bokehGroup.add(m);
+      bokehParticles.push({ mesh: m, dist, speed, phase, yAmp });
+    }
+
+    // Infrared Scanning Cone (Toggled in Scan Mode)
+    const scanConeGeo = new THREE.ConeGeometry(1.15, 2.4, 36, 1, true);
+    const scanConeMat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.0
+    });
+    const scanCone = new THREE.Mesh(scanConeGeo, scanConeMat);
+    scanCone.rotation.x = -Math.PI / 2;
+    scanCone.position.set(0, 0.58, 1.65);
+    characterRoot.add(scanCone);
+
+    // =========================================================================
+    // ORBIT CONTROLS & MIRA REGRA ZERO (AUTO-ROTATE + PAUSE ON DRAG + RESUME)
+    // =========================================================================
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.enablePan = false;
+    controls.minDistance = 2.6;
+    controls.maxDistance = 8.0;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2.2;
+
+    const statusRot = document.getElementById('status-rot');
+    let resumeTimer = null;
+    controls.addEventListener('start', () => {
+      controls.autoRotate = false;
+      statusRot.textContent = '◐ INTERAÇÃO MANUAL (GIRO RETOMA EM 2,5S)';
+      clearTimeout(resumeTimer);
+    });
+    controls.addEventListener('end', () => {
+      resumeTimer = setTimeout(() => {
+        controls.autoRotate = true;
+        statusRot.textContent = '● AUTO-ROTATE ATIVO (REGRA ZERO MIRA)';
+      }, 2500);
+    });
+
+    // Mode Buttons
+    let currentMode = 'hero';
+    const btnHero = document.getElementById('btn-mode-hero');
+    const btnScan = document.getElementById('btn-mode-scan');
+    const btnLogo = document.getElementById('btn-mode-logo');
+    const hudTelemetry = document.getElementById('hud-telemetry');
+
+    function setMode(mode) {
+      currentMode = mode;
+      [btnHero, btnScan, btnLogo].forEach(b => b.classList.remove('active'));
+      if (mode === 'hero') {
+        btnHero.classList.add('active');
+        scanConeMat.opacity = 0.0;
+        torsoGroup.visible = true;
+        handsGroup.visible = true;
+        controls.autoRotateSpeed = 2.2;
+        hudTelemetry.textContent = 'PYRON-01 // NÚCLEO RADIOMÉTRICO: 84,6 °C (IRONBOW)';
+      } else if (mode === 'scan') {
+        btnScan.classList.add('active');
+        scanConeMat.opacity = 0.32;
+        torsoGroup.visible = true;
+        handsGroup.visible = true;
+        controls.autoRotateSpeed = 1.0;
+        hudTelemetry.textContent = 'MODO SCAN IR // RF-DETR (54 ms) + DEPTH ANYTHING 3 (5,1%)';
+      } else if (mode === 'logo') {
+        btnLogo.classList.add('active');
+        scanConeMat.opacity = 0.0;
+        torsoGroup.visible = false;
+        handsGroup.visible = false;
+        controls.autoRotateSpeed = 3.0;
+        hudTelemetry.textContent = 'EMBLEMA OFICIAL // LOGO 3D COMPACTA PYRON + MIRA';
+      }
+    }
+
+    btnHero.addEventListener('click', () => setMode('hero'));
+    btnScan.addEventListener('click', () => setMode('scan'));
+    btnLogo.addEventListener('click', () => setMode('logo'));
+
+    document.getElementById('btn-theme').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    // =========================================================================
+    // PERPETUAL CHOREOGRAPHY LOOP (HYPERFRAMES & MIRA-3D COMPATIBLE)
+    // =========================================================================
+    const clock = new THREE.Clock();
+    let rafId = null;
+
+    function animate() {
+      rafId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      // Gentle floating hover of the character
+      characterRoot.position.y = Math.sin(t * 2.2) * 0.09;
+
+      // Head curiosity tilt & Flame Crown pulse
+      headGroup.rotation.z = Math.sin(t * 1.5) * 0.06;
+      headGroup.rotation.x = Math.cos(t * 1.2) * 0.05;
+      const flameScale = 1.0 + Math.sin(t * 6.0) * 0.08;
+      crownGroup.scale.set(1.0, flameScale, 1.0);
+
+      // Periodic Mira Eye Blink every ~4.5 seconds
+      const blinkCycle = t % 4.5;
+      if (blinkCycle > 4.2 && blinkCycle < 4.38) {
+        eyeGroup.scale.y = 0.08;
+      } else {
+        eyeGroup.scale.y = 1.0;
+      }
+      reticleMesh.rotation.z = t * 1.4;
+
+      // Floating hands & hologram rotation
+      leftArmGroup.position.y = -0.1 + Math.sin(t * 2.8 + 1.0) * 0.08;
+      rightArmGroup.position.y = -0.1 + Math.cos(t * 2.8) * 0.08;
+      bboxLines.rotation.y = t * 1.8;
+      bboxLines.rotation.x = t * 0.9;
+      postItMesh.rotation.y = -0.35 + Math.sin(t * 2.0) * 0.25;
+
+      // Orbiting Colorbar Halo & Mira Bokeh Particles
+      orbitGroup.rotation.y = -t * 0.65;
+      for (const bp of bokehParticles) {
+        const ang = t * bp.speed + bp.phase;
+        bp.mesh.position.set(
+          Math.cos(ang) * bp.dist,
+          Math.sin(ang * 1.7) * bp.yAmp,
+          Math.sin(ang) * bp.dist
+        );
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && rafId === null) animate();
+        else if (!e.isIntersecting && rafId !== null) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      });
+    }, { threshold: 0.05 }).observe(wrap);
+
+    new ResizeObserver(() => {
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      if (!w || !h) return;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }).observe(wrap);
+  </script>
+</body>
+</html>

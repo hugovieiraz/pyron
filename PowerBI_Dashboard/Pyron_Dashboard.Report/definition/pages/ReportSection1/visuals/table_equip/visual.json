@@ -56,42 +56,55 @@
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Dim_Equipamentos"
+                      "Entity": "_Medidas"
                     }
                   },
-                  "Property": "inspecoes"
+                  "Property": "Total Inspeções"
                 }
               },
-              "queryRef": "Dim_Equipamentos.inspecoes"
+              "queryRef": "_Medidas.Total Inspeções"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Dim_Equipamentos"
+                      "Entity": "_Medidas"
                     }
                   },
-                  "Property": "maior_t_max_cena"
+                  "Property": "Inspeções Críticas"
                 }
               },
-              "queryRef": "Dim_Equipamentos.maior_t_max_cena"
+              "queryRef": "_Medidas.Inspeções Críticas"
             },
             {
               "field": {
-                "Column": {
+                "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Dim_Equipamentos"
+                      "Entity": "_Medidas"
                     }
                   },
-                  "Property": "maior_pct_mta"
+                  "Property": "Temperatura Máxima Global"
                 }
               },
-              "queryRef": "Dim_Equipamentos.maior_pct_mta"
+              "queryRef": "_Medidas.Temperatura Máxima Global"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Medidas"
+                    }
+                  },
+                  "Property": "Maior % MTA Atingido"
+                }
+              },
+              "queryRef": "_Medidas.Maior % MTA Atingido"
             }
           ]
         }

@@ -58,7 +58,7 @@ table Fato_Pendencias_OS
 	column t_max_detectada_c
 		dataType: double
 		lineageTag: d8ec2f51-97b3-4e4c-b564-d5194ca696fc
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: t_max_detectada_c
 
 	column pct_mta_atingido
@@ -82,7 +82,7 @@ table Fato_Pendencias_OS
 	column dias_restantes_para_reparo
 		dataType: int64
 		lineageTag: c2b1712c-5a79-4880-bdc2-18abc834ac1a
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: dias_restantes_para_reparo
 
 	column janela_logistica_prioridade

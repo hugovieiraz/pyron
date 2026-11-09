@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" data-pptx-page-role="content">
+    <!-- Obsidian Frost Background -->
+    <rect width="1280" height="720" fill="#10141A"/>
+    <!-- Linhas Guia Estruturais -->
+    <g id="deck-guides" data-pptx-role="decoration" data-pptx-bounds="56 140 1168 520" stroke="#1E293B" stroke-width="0.5">
+        <line x1="56" y1="140" x2="1224" y2="140"/>
+        <line x1="56" y1="660" x2="1224" y2="660"/>
+    </g>
+    
+    <!-- Header Telemetria -->
+    <g id="slide-header" data-pptx-role="header" data-pptx-bounds="56 36 1168 100">
+        <rect x="56" y="36" width="208" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="76" y="52" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1.5">HOMOLOGAÇÃO &amp; PILOTO</text>
+        <text x="56" y="96" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">Cronograma de Homologação e Piloto</text>
+        <text x="56" y="124" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="400" fill="#94A3B8">Validação Prática de 458 Testes e Próximos Passos Comerciais</text>
+    </g>
+    <!-- Footer Telemetria -->
+    <g id="slide-footer" data-pptx-role="footer" data-pptx-bounds="56 676 1168 28">
+        <line x1="56" y1="676" x2="1224" y2="676" stroke="#1E293B" stroke-width="1"/>
+        <text x="56" y="694" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">PYRON MVP · TERMOGRAFIA DIGITAL PREDITIVA</text>
+        <text x="640" y="694" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">CONFORMIDADE ABNT NBR 15866 &amp; IEC 60099-5 · 100% OFFLINE EDGE</text>
+        <text x="1224" y="694" text-anchor="end" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">12 / 12</text>
+    </g>
+    
+    <!-- Timeline Horizontal de 3 Fases -->
+    <g id="timeline-phases" data-pptx-bounds="56 150 1168 280">
+        <!-- Fase 1 -->
+        <g id="phase-1">
+            <rect x="56" y="150" width="365" height="280" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <rect x="80" y="174" width="140" height="24" rx="9999" fill="#1D4A6A"/>
+            <text x="150" y="190" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ETAPA 1 · CONCLUÍDA</text>
+            <text x="80" y="234" font-family="EB Garamond, Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF">MVP 0.9 Estável (Nov/2026)</text>
+            <text x="80" y="264" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Leitura radiométrica Planck em 9 ms.</text>
+            <text x="80" y="286" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• RF-DETR mAP50 0,891 em 71 ms DirectML.</text>
+            <text x="80" y="308" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• NBR 15866 e IEC 60099-5 em 1,8 ms.</text>
+            <text x="80" y="330" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Laudos Typst instantâneos em 32 ms.</text>
+            <rect x="80" y="360" width="317" height="46" rx="8" fill="#0A0E14"/>
+            <text x="96" y="388" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#A2CBF1">458 TESTES UNITÁRIOS APROVADOS (100%)</text>
+        </g>
+        <!-- Fase 2 -->
+        <g id="phase-2">
+            <rect x="457" y="150" width="365" height="280" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <rect x="481" y="174" width="160" height="24" rx="9999" fill="#262A31"/>
+            <text x="561" y="190" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ETAPA 2 · EM ANDAMENTO</text>
+            <text x="481" y="234" font-family="EB Garamond, Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF">Piloto de Campo (Q1/2027)</text>
+            <text x="481" y="264" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Subestação 138/230 kV parceira.</text>
+            <text x="481" y="286" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Coleta de 1.000+ termogramas em campo.</text>
+            <text x="481" y="308" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Validação sob sol, vento e chuva.</text>
+            <text x="481" y="330" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Calibração com termografia de referência.</text>
+            <rect x="481" y="360" width="317" height="46" rx="8" fill="#0A0E14"/>
+            <text x="497" y="388" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">META: &gt; 85% CONCORDÂNCIA ESPECIALISTA</text>
+        </g>
+        <!-- Fase 3 -->
+        <g id="phase-3">
+            <rect x="858" y="150" width="366" height="280" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <rect x="882" y="174" width="160" height="24" rx="9999" fill="#262A31"/>
+            <text x="962" y="190" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="700" fill="#FFFFFF">ETAPA 3 · COMERCIAL</text>
+            <text x="882" y="234" font-family="EB Garamond, Georgia, serif" font-size="18" font-weight="600" fill="#FFFFFF">Certificação e Produto (Q2/2027)</text>
+            <text x="882" y="264" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Desktop em Rust/Tauri com instalador assinado.</text>
+            <text x="882" y="286" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Integração nativa com SAP PM e IBM Maximo.</text>
+            <text x="882" y="308" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Novas classes: buchas, seccionadoras e TPs.</text>
+            <text x="882" y="330" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">• Suporte a câmeras fixas RTSP/ONVIF.</text>
+            <rect x="882" y="360" width="318" height="46" rx="8" fill="#0A0E14"/>
+            <text x="898" y="388" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#A2CBF1">VERSÃO 1.0 COMERCIAL CERTIFICADA</text>
+        </g>
+    </g>
+
+    <!-- Card de Encerramento e Agradecimento -->
+    <g id="closing-card" data-pptx-bounds="56 454 1168 202">
+        <rect x="56" y="454" width="1168" height="202" rx="24" fill="#181C22" stroke="#A2CBF1" stroke-width="1"/>
+        <text x="88" y="494" font-family="EB Garamond, Georgia, serif" font-size="24" font-weight="600" fill="#FFFFFF">Pyron MVP: O Futuro da Termografia Digital de Alta Tensão</text>
+        <text x="88" y="524" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Desenvolvido sob o programa Embrapii · Parceria Universidade e Concessionárias do Setor Elétrico</text>
+        
+        <rect x="88" y="546" width="340" height="84" rx="12" fill="#0A0E14"/>
+        <text x="108" y="574" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#A2CBF1">DEMONSTRAÇÃO PRÁTICA INTERATIVA:</text>
+        <text x="108" y="598" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Servidor Local FastAPI ativo em http://127.0.0.1:8790</text>
+        <text x="108" y="618" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" fill="#94A3B8">Abra e teste qualquer termograma FLIR ou imagem comum.</text>
+
+        <rect x="452" y="546" width="340" height="84" rx="12" fill="#0A0E14"/>
+        <text x="472" y="574" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#A2CBF1">MASCOTE 3D PROCEDURAL:</text>
+        <text x="472" y="598" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Sentinela PYRON-01 em WebGL / Three.js</text>
+        <text x="472" y="618" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" fill="#94A3B8">Disponível em apresentacao_mvp/abrir-personagem-3d.cmd</text>
+
+        <rect x="816" y="546" width="376" height="84" rx="12" fill="#1D4A6A"/>
+        <text x="836" y="574" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">EQUIPE DE DESENVOLVIMENTO:</text>
+        <text x="836" y="598" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Gabriel &amp; Hugo · Equipe Pyron / Embrapii</text>
+        <text x="836" y="618" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" fill="#A2CBF1">Agradecemos a atenção de todos os avaliadores!</text>
+    </g>
+
+</svg>

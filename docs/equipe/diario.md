@@ -13,6 +13,54 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 09/11/2026 · Gabriel: recriação da interface do Pyron e Painel BI interativo no FigCraft via MCP
+
+- Feito: recriação completa da interface do Pyron (`app/interface/`) no FigCraft via MCP (`D:\Backup_SSD_C\pyron-interface.figcraft` e `docs/interface/pyron-interface.figcraft`), com evolução da tela `01 · Painel` para formato Business Intelligence: retirada a seção "Importadas por último" e criado o Component Set interativo `Painel BI · Atenção por Operação` com 4 variantes de cross-filter (`Operação=Todas (6)`, `Transformação (3)`, `Proteção (2)`, `Manobra (1)`), gráfico de pizza/donut por operação com fatias destacadas, barras de progresso de `% da MTA` e interações `onClick -> changeTo (smartAnimate 220ms)` nas fatias, pílulas e cartões de operação (além de clique em `Inspecionar →` navegando para `02 · Análise Termográfica`).
+- Para o outro: os arquivos `D:\Backup_SSD_C\pyron-interface.figcraft` e `docs/interface/pyron-interface.figcraft` estão sincronizados e com o fluxo de protótipo `BI Cross-Filter · Atenção por Operação` pronto para testar com `Shift + Space` ou `Present` no FigCraft. Nenhum arquivo de código da aplicação foi alterado.
+- Pendente: nenhuma pendência.
+
+## 08/11/2026 · Gabriel: auditoria, correção de filtros do Dashboard Power BI e 12 recortes para apresentação
+
+- Feito: auditoria e correção dos filtros do Dashboard Power BI em `PowerBI_Dashboard/` (PBIP), `Pyron_Dashboard.pbit` e `dashboard_pyron_bi.html`. Ativado `crossFilteringBehavior: bothDirections` nos 4 relacionamentos (`relationships.tmdl`), substituídas colunas pré-agregadas estáticas de `table_equip` por medidas DAX dinâmicas (`_Medidas`), adicionado o registro `equipamento_id = 0` faltante em `Dim_Equipamentos`, configurado `summarizeBy: none` nas colunas físicas de `Fato_*`, corrigida a DAX de `Confiança Média IA` e configurados `syncGroup` + novos Slicers nas Páginas 2, 3 e 4. Gerados 12 recortes em alta resolução (Retina 2x DPI) em `testes/relatorios_visuais/recortes_dashboard_powerbi/` prontos para anexar à apresentação.
+- Para o outro: tanto o projeto PBIP (`PowerBI_Dashboard/`) quanto o template `Pyron_Dashboard.pbit` e o painel web interativo `dashboard_pyron_bi.html` estão 100% sincronizados e com os filtros funcionando em todas as 4 abas.
+- Pendente: nenhuma pendência.
+
+## 08/11/2026 · Gabriel: bateria de 25 plots e testes reais por aplicação para a apresentação MVP
+
+- Feito: criação e execução da suíte `scripts/gerar_25_plots_mvp_pyron.py` que roda testes reais sobre os 5 pilares de aplicação do Pyron (`nucleo/flir.py`, `nucleo/paleta.py`, `nucleo/detectores/pontos_quentes.py`, `nucleo/pipeline/pyron_pipeline.py`, `nucleo/analise.py`, `app/equipamentos.py`, `nucleo/medicao/`, `app/armazenamento.py`, `app/laudo.py`) e gera 25 gráficos (5 plots para cada aplicação real) em `testes/relatorios_visuais/mvp_25_plots/` junto com as métricas extraídas em `testes/relatorios_visuais/mvp_25_plots/metricas_extraidas_reais.json`.
+- Para o outro: os 25 gráficos cobrem (1) Física e Radiometria de Planck, (2) Detecção RF-DETR e Segmentação Fina SAM 2.1 / Pontos Quentes, (3) Motor Normativo NBR 15866 / IEC 60099-5 e Tendência Preditiva, (4) Metrologia Dimensional 3D e Homografia Monte Carlo, e (5) Latência Ponta a Ponta, Escalabilidade SQLite WAL, Telemetria Mobile e Emissão de Laudos PDF. Nenhum arquivo de produção foi alterado.
+- Pendente: nenhuma pendência.
+
+## 07/11/2026 · Gabriel: Geração Concluída do Deck PPTX Editável Pyron MVP (Obsidian Frost)
+
+- Feito: compilação completa dos 12 slides DrawingML nativos e 12 notas de orador do Pyron MVP sob o Design System Obsidian Frost. Todos os 12 slides foram aprovados no gate estrito `svg_quality_checker.py` com zero erros bloqueantes (exit code 0) e validados no `project_manager.py validate`. Gerado o arquivo editável `projects/pyron_mvp_ppt169_20261107/exports/pyron_mvp_obsidian_frost.pptx` (332 KB, copiado também para `apresentacao_mvp/pyron_mvp_obsidian_frost.pptx`). Criado o visualizador web interativo em `apresentacao_mvp/visualizar_apresentacao.html` com navegação por teclado (setas, N para notas, F para tela cheia) e o atalho `apresentacao_mvp/abrir-apresentacao.cmd`.
+- Para o outro: o `.pptx` gerado utiliza vetores e caixas de texto DrawingML nativas, perfeitamente editável no Microsoft PowerPoint e no Google Slides (basta fazer upload do `.pptx` para o Google Drive e abrir com Google Slides).
+- Pendente: nenhuma pendência.
+
+## 07/11/2026 · Gabriel: Design System Obsidian Frost aplicado ao PPT-Master do Pyron
+
+- Feito: incorporação completa do design system `Obsidian Frost` (Dark Cinematic Realism + Sub-zero Glassmorphism) no framework PPT-Master. Criação do estilo customizado em `.agents/skills/ppt-master/references/visual-styles/obsidian-frost.md` (guard de integridade aprovado 100%). Atualização e validação estrita de `projects/pyron_mvp_ppt169_20261107/spec_lock.md` e `design_spec.md` (fundo obsidiana `#10141a`, títulos heroicos em EB Garamond, telemetria em Plus Jakarta Sans, acentos em gelo azul `#a2cbf1`, contornos de vidro fosco e pílulas 9999px). Master prompt atualizado em `apresentacao_mvp/prompt_ppt_master_pyron.md`.
+- Para o outro: o projeto segue 100% validado no `project_manager.py validate`. Ao compilar ou gerar os slides pelo `ppt-master`, as cores e tipografia de Obsidian Frost serão usadas por padrão.
+- Pendente: nenhuma pendência.
+
+## 07/11/2026 · Gabriel: Integração da Skill ppt-master e Master Prompt do Pyron MVP
+
+- Feito: integração da skill oficial `ppt-master` v6.8.0 (Hugo He) em `.agents/skills/ppt-master/` com integridade e licença verificadas (`attribution_guard.py` 100% aprovado). Instalação das dependências do compilador DrawingML (`python-pptx`, `pyyaml`, `xlsxwriter`, `lxml`). Criação e validação estrita do projeto em `projects/pyron_mvp_ppt169_20261107/` (`spec_lock.md` e `design_spec.md` aprovados sem erros para 12 slides). Master Prompt do Pyron MVP estruturado em `apresentacao_mvp/prompt_ppt_master_pyron.md`.
+- Para o outro: para validar ou gerar slides via `ppt-master`, basta rodar `python .agents/skills/ppt-master/scripts/project_manager.py validate projects/pyron_mvp_ppt169_20261107` ou compilar os SVGs para PPTX nativo via `svg_to_pptx.py`. Todos os dados reais de bancada levantados em `curadoria.md` (Planck 1 ms, RF-DETR 71 ms, NBR 15866, IEC 60099-5 e mascote 3D PYRON-01) foram integrados ao prompt.
+- Pendente: nenhuma pendência.
+
+## 07/11/2026 · Gabriel: Apresentação Oficial do Pyron MVP no Google Slides & HyperFrames
+
+- Feito: criação da apresentação executiva e científica oficial do Pyron MVP diretamente no Google Slides (11 slides com notas de orador completas, visual hero gerado por IA, equações termodinâmicas e duplo critério NBR 15866). ID da apresentação: `17LbvkrsqakHZqw7oCPa2u3KQsVa2QdLmISjJW9ChSsY`, disponível para edição e projeção em: https://docs.google.com/presentation/d/17LbvkrsqakHZqw7oCPa2u3KQsVa2QdLmISjJW9ChSsY/edit. Também mantido o deck offline e interativo em `apresentacao_mvp/` com HyperFrames.
+- Para o outro: para editar ou projetar a apresentação, basta abrir o link do Google Slides acima (já autenticado na conta da equipe). As notas de orador em cada slide trazem o roteiro falado para a apresentação de 50 minutos.
+- Pendente: nenhuma pendência.
+
+## 07/11/2026 · Gabriel: sincronização com origin/main e metrologia no Detector-de-medidas
+
+- Feito: fast-forward da `main` local (`36bd868..d5295e3`, +36 commits) e merge limpo na branch `v09-f5-desktop`. Comparação da metrologia do Pyron (`nucleo/medicao/`) com o projeto `Detector-de-medidas` (`measurement.py`) e integração completa de `metrology.py`, `run_metrology.py` e `test_metrology.py` (17/17 testes passando) em `types_def.py`, `measurement.py`, `visualizer.py`, `main.py`, `run_video.py` e `server_cam.py`.
+- Para o outro: nenhum código do Pyron foi alterado além do merge de `origin/main`.
+- Pendente (Gabriel): responder sobre os kernels Mojo em `nucleo/aceleradores/bin/` (compilar/assinar ou remover).
+
 ## 07/11/2026 · Hugo: curadoria técnica e roteiro da apresentação
 
 - Feito: pesquisa sem mudança de código. `docs/apresentacao/curadoria.md` (bibliotecas com versão, fórmula de

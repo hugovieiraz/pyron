@@ -54,5 +54,10 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "syncGroup": {
+    "groupName": "Sync_Subestacao",
+    "fieldChanges": true,
+    "filterChanges": true
   }
 }

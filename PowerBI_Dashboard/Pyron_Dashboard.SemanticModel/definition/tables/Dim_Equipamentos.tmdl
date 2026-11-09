@@ -67,7 +67,8 @@ table Dim_Equipamentos
 				        {5, "se-santa-rita-norte--pr-02-para-raios-fase-b", "SE Santa Rita Norte", "PR-02 (Para-raios Fase B)", 1, "2026-09-16T20:52:24", "2026-09-16T20:52:24", 74.03836822509766, 232.51299745774665},
 				        {6, "se-campina-grande-ii--tr-01-transformador-230-69-kv", "SE Campina Grande II", "TR-01 (Transformador 230/69 kV)", 2, "2026-07-20T20:17:24", "2026-10-01T21:22:24", 137.42999267578125, 338.194740080664},
 				        {7, "se-santa-rita-norte--tr-02-transformador-69-13-8-kv", "SE Santa Rita Norte", "TR-02 (Transformador 69/13.8 kV)", 2, "2026-07-26T19:22:24", "2026-10-08T22:16:24", 59.90578842163086, 72.43147245287912},
-				        {8, "--banco-cap-01-banco-de-capacitores", "", "BANCO-CAP-01 (Banco de Capacitores)", 1, "2024-06-04T17:27:51", "2024-06-04T17:27:51", 34.89828872680664, 0}
+				        {8, "--banco-cap-01-banco-de-capacitores", "Não informada", "BANCO-CAP-01 (Banco de Capacitores)", 1, "2024-06-04T17:27:51", "2024-06-04T17:27:51", 34.89828872680664, 0},
+				        {0, "sem-equipamento", "Não informada", "Não informado", 41, "2019-06-05T11:26:39", "2026-10-30T21:28:51", 260.79302978515625, 289.77003309461804}
 				    })
 				in
 				    Fonte

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pyron MVP — Apresentação Técnica & Científica</title>
+
+    <script src="player/hyperframes-player.global.js"></script>
+    <script src="player/hyperframes-slideshow.global.js"></script>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0a0d14;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      .deck-hint {
+        position: fixed;
+        top: 16px;
+        left: 20px;
+        z-index: 10000;
+        background: rgba(10, 13, 20, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        padding: 8px 14px;
+        color: #94a3b8;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+      .deck-hint kbd {
+        background: rgba(255, 255, 255, 0.12);
+        color: #f8fafc;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck-hint">
+      <span><strong>Navegação:</strong> <kbd>→</kbd> / <kbd>Espaço</kbd> Avançar</span>
+      <span><kbd>←</kbd> Voltar</span>
+      <span><kbd>P</kbd> Modo Apresentador com Notas</span>
+      <span><kbd>F</kbd> Tela Cheia</span>
+    </div>
+
+    <hyperframes-slideshow
+      tabindex="0"
+      sound
+      notes-storage-key="pyron-mvp-slideshow-deck"
+      style="display: block; position: relative; width: 100vw; height: 100vh"
+    >
+      <hyperframes-player
+        interactive
+        style="position: absolute; inset: 0"
+        src="index.html"
+      ></hyperframes-player>
+
+      <script type="application/hyperframes-slideshow+json">
+        {
+          "slides": [
+            {
+              "sceneId": "capa",
+              "notes": "Abertura oficial do Pyron MVP. Ressaltar que o projeto nasceu na Embrapii com foco em transformar a termografia de subestação em um processo preditivo automatizado, rigoroso e auditável."
+            },
+            {
+              "sceneId": "problema",
+              "fragments": [13.0, 16.0],
+              "notes": "Slide do Problema: Explicar por que temperatura máxima isolada é uma ilusão perigosa sem saber a carga operacional e o limite térmico específico do material."
+            },
+            {
+              "sceneId": "fundamentos",
+              "fragments": [23.0, 26.0],
+              "notes": "Física e Termodinâmica: Contrastar a elevação quadrática de Joule (I²R) nos contatos ôhmicos com as correntes de fuga dielétricas em para-raios de ZnO e a cinética de Arrhenius."
+            },
+            {
+              "sceneId": "normas-criterio",
+              "fragments": [33.0, 36.0],
+              "hotspots": [
+                {
+                  "id": "h-artigos",
+                  "label": "Ver Literatura & Normas",
+                  "target": "seq-artigos",
+                  "region": { "x": 70, "y": 82, "w": 25, "h": 10 }
+                }
+              ],
+              "notes": "Normas e Duplo Critério: ABNT NBR 15866 e NETA MTS. Destacar o duplo critério: MTA absoluta projetada vs Delta T relativo contra fase adjacente. Clique no botão inferior para ver as referências completas."
+            },
+            {
+              "sceneId": "arquitetura",
+              "fragments": [43.0, 46.0],
+              "notes": "Arquitetura do Software: Demonstrar como o sistema opera 100% on-premises em 127.0.0.1, garantindo privacidade corporativa e conformidade estrita com o controle do Windows."
+            },
+            {
+              "sceneId": "cv-ia",
+              "fragments": [53.0, 56.0],
+              "notes": "Visão Computacional: Explicar a escolha do RF-DETR e Transformers de visão, com aceleração DirectML para rodar em 54ms na placa de vídeo mantendo total estabilidade."
+            },
+            {
+              "sceneId": "unwrapping",
+              "fragments": [63.0, 66.0],
+              "notes": "Inovação Central: O algoritmo patenteável de unwrapping por barra de cores que permite a qualquer smartphone comum funcionar como leitor térmico calibrado com erro de apenas 0,53 °C."
+            },
+            {
+              "sceneId": "validacao",
+              "fragments": [73.0, 76.0],
+              "notes": "Validação Científica: Dados empíricos reais do dataset ScienceDB 10185 (DOI 10.57760/sciencedb.10185), comprovando a precisão da detecção e rastreamento em vídeo."
+            },
+            {
+              "sceneId": "valor",
+              "fragments": [83.0, 86.0],
+              "notes": "Valor de Negócio e ROI: Prevenção de paradas de transformadores, conformidade estrita com NR-10 e Prontuário PIE, além de relatórios automáticos que poupam centenas de horas de engenharia."
+            },
+            {
+              "sceneId": "roadmap",
+              "fragments": [93.0, 96.0],
+              "notes": "Conclusão e Próximos Passos: Status atual da versão 0.8, empacotamento MSIX para Microsoft Store e evolução para modelos foundation multimodais."
+            }
+          ],
+          "slideSequences": [
+            {
+              "id": "seq-artigos",
+              "label": "Literatura & Normas Científicas",
+              "slides": [
+                {
+                  "sceneId": "artigos-normas",
+                  "notes": "Detalhamento aprofundado dos artigos científicos e normas ABNT/IEC que embasam os algoritmos do Pyron."
+                }
+              ]
+            }
+          ]
+        }
+      </script>
+    </hyperframes-slideshow>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        const slideshow = document.querySelector("hyperframes-slideshow");
+        if (slideshow) {
+          slideshow.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

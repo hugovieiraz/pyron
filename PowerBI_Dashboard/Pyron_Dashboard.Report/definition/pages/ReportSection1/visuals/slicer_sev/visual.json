@@ -54,5 +54,10 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "syncGroup": {
+    "groupName": "Sync_Severidade",
+    "fieldChanges": true,
+    "filterChanges": true
   }
 }

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" data-pptx-page-role="content">
+    <!-- Obsidian Frost Background -->
+    <rect width="1280" height="720" fill="#10141A"/>
+    <!-- Linhas Guia Estruturais -->
+    <g id="deck-guides" data-pptx-role="decoration" data-pptx-bounds="56 140 1168 520" stroke="#1E293B" stroke-width="0.5">
+        <line x1="56" y1="140" x2="1224" y2="140"/>
+        <line x1="56" y1="660" x2="1224" y2="660"/>
+    </g>
+    
+    <!-- Header Telemetria -->
+    <g id="slide-header" data-pptx-role="header" data-pptx-bounds="56 36 1168 100">
+        <rect x="56" y="36" width="296" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="76" y="52" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1.5">FEATURE 4 · ATIVOS NÃO LINEARES</text>
+        <text x="56" y="96" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">Diagnóstico de Para-raios ZnO (IEC)</text>
+        <text x="56" y="124" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="400" fill="#94A3B8">Por Que Para-raios Não Seguem I²R e Devem Ser Avaliados por Fuga Resistiva</text>
+    </g>
+    <!-- Footer Telemetria -->
+    <g id="slide-footer" data-pptx-role="footer" data-pptx-bounds="56 676 1168 28">
+        <line x1="56" y1="676" x2="1224" y2="676" stroke="#1E293B" stroke-width="1"/>
+        <text x="56" y="694" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">PYRON MVP · TERMOGRAFIA DIGITAL PREDITIVA</text>
+        <text x="640" y="694" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">CONFORMIDADE ABNT NBR 15866 &amp; IEC 60099-5 · 100% OFFLINE EDGE</text>
+        <text x="1224" y="694" text-anchor="end" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">06 / 12</text>
+    </g>
+    
+    <!-- Banner de Regra Crítica -->
+    <g id="rule-banner" data-pptx-bounds="56 150 1168 84">
+        <rect x="56" y="150" width="1168" height="84" rx="16" fill="#1C2026" stroke="#A2CBF1" stroke-width="1"/>
+        <text x="88" y="184" font-family="EB Garamond, Georgia, serif" font-size="20" font-weight="600" fill="#FFFFFF">Regra Fundamental em Para-raios ZnO</text>
+        <text x="88" y="208" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">Para-raios operam sob tensão contínua fase-terra e <tspan font-weight="700" fill="#FFB4AB">NÃO transportam corrente de carga do sistema!</tspan></text>
+        <text x="88" y="226" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#94A3B8">Aplicações que utilizam correção quadrática I²R em para-raios geram laudos incorretos e falsos alarmes graves.</text>
+    </g>
+
+    <!-- 3 Colunas de Severidade IEC 60099-5 -->
+    <g id="iec-columns" data-pptx-bounds="56 254 1168 280">
+        <!-- Coluna 1: Normal -->
+        <g id="iec-normal">
+            <rect x="56" y="254" width="365" height="280" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <rect x="80" y="278" width="120" height="24" rx="9999" fill="#0A0E14"/>
+            <text x="140" y="294" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">FAIXA 1 · NORMAL</text>
+            <text x="80" y="340" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="400" fill="#FFFFFF">ΔT ≤ 2,0 °C</text>
+            <text x="80" y="374" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="80" dy="0">Delta térmico contra para-raios</tspan><tspan x="80" dy="18">idênticos das outras fases da</tspan><tspan x="80" dy="18">subestação.</tspan></text>
+            <text x="80" y="418" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#94A3B8">Corrente capacitiva dominante (95%).</text>
+            <rect x="80" y="440" width="317" height="66" rx="10" fill="#0A0E14"/>
+            <text x="96" y="464" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">AÇÃO RECOMENDADA:</text>
+            <text x="96" y="488" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#A2CBF1">Manter rotina anual de inspeção.</text>
+        </g>
+        <!-- Coluna 2: Atenção -->
+        <g id="iec-warning">
+            <rect x="457" y="254" width="365" height="280" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+            <rect x="481" y="278" width="130" height="24" rx="9999" fill="#262A31"/>
+            <text x="546" y="294" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">FAIXA 2 · ATENÇÃO</text>
+            <text x="481" y="340" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="400" fill="#FFFFFF">2,0 &lt; ΔT ≤ 5,0 °C</text>
+            <text x="481" y="374" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="481" dy="0">Início de degradação interna dos</tspan><tspan x="481" dy="18">blocos de varistor de óxido de</tspan><tspan x="481" dy="18">zinco.</tspan></text>
+            <text x="481" y="418" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#94A3B8">Aumento na componente resistiva Irx.</text>
+            <rect x="481" y="440" width="317" height="66" rx="10" fill="#0A0E14"/>
+            <text x="497" y="464" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">AÇÃO RECOMENDADA:</text>
+            <text x="497" y="488" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">Encurtar reinspeção para 90 dias.</text>
+        </g>
+        <!-- Coluna 3: Crítico -->
+        <g id="iec-critical">
+            <rect x="858" y="254" width="366" height="280" rx="20" fill="#3B1219" stroke="#FFB4AB" stroke-width="1.5"/>
+            <rect x="882" y="278" width="140" height="24" rx="9999" fill="#0A0E14"/>
+            <text x="952" y="294" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#FFB4AB">FAIXA 3 · CRÍTICO</text>
+            <text x="882" y="340" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="400" fill="#FFB4AB">ΔT &gt; 10,0 °C</text>
+            <text x="882" y="374" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="400" fill="#DFE2EB"><tspan x="882" dy="0">Degradação severa por umidade ou</tspan><tspan x="882" dy="18">perfuração de blocos cerâmicos ZnO.</tspan></text>
+            <text x="882" y="418" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#FFB4AB">Risco iminente de explosão térmica.</text>
+            <rect x="882" y="440" width="318" height="66" rx="10" fill="#0A0E14"/>
+            <text x="898" y="464" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFB4AB">AÇÃO IMEDIATA:</text>
+            <text x="898" y="488" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">Intervenção em até 24 horas.</text>
+        </g>
+    </g>
+
+    <!-- Fita de Normas -->
+    <g id="iec-footer-box" data-pptx-bounds="56 554 1168 102">
+        <rect x="56" y="554" width="1168" height="102" rx="16" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <text x="88" y="586" font-family="EB Garamond, Georgia, serif" font-size="16" font-weight="600" fill="#FFFFFF">Implementação Técnica no Núcleo do Pyron (nucleo/analise.py)</text>
+        <text x="88" y="612" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">Se a peça classificada for para-raios ou isolador, o Pyron desativa automaticamente a correção (100/carga)² e aplica os degraus 2 / 5 / 10 °C.</text>
+        <text x="88" y="634" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">ESTADOS ESPECIAIS: 'Não avaliado' quando a foto não contém o par de outra fase para comparação; aviso 'Confira antes de agir' em hotspots fora das peças.</text>
+    </g>
+
+</svg>

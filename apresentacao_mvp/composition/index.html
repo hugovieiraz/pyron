@@ -1,0 +1,1083 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Pyron MVP — Apresentação Técnica & Científica</title>
+    <!-- GSAP CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="estilo.css" />
+  </head>
+  <body>
+    <!--
+      ILHA JSON DO SLIDESHOW HYPERFRAMES (ESTÁTICA, NO TOPO DO BODY)
+    -->
+    <script type="application/hyperframes-slideshow+json">
+      {
+        "slides": [
+          {
+            "sceneId": "capa",
+            "notes": "Abertura oficial do Pyron MVP. Ressaltar que o projeto nasceu na Embrapii com foco em transformar a termografia de subestação em um processo preditivo automatizado, rigoroso e auditável."
+          },
+          {
+            "sceneId": "problema",
+            "fragments": [13.0, 16.0],
+            "notes": "Slide do Problema: Explicar por que temperatura máxima isolada é uma ilusão perigosa sem saber a carga operacional e o limite térmico específico do material."
+          },
+          {
+            "sceneId": "fundamentos",
+            "fragments": [23.0, 26.0],
+            "notes": "Física e Termodinâmica: Contrastar a elevação quadrática de Joule (I²R) nos contatos ôhmicos com as correntes de fuga dielétricas em para-raios de ZnO e a cinética de Arrhenius."
+          },
+          {
+            "sceneId": "normas-criterio",
+            "fragments": [33.0, 36.0],
+            "hotspots": [
+              {
+                "id": "h-artigos",
+                "label": "Ver Literatura & Normas",
+                "target": "seq-artigos",
+                "region": { "x": 70, "y": 82, "w": 25, "h": 10 }
+              }
+            ],
+            "notes": "Normas e Duplo Critério: ABNT NBR 15866 e NETA MTS. Destacar o duplo critério: MTA absoluta projetada vs Delta T relativo contra fase adjacente. Clique no botão inferior para ver as referências completas."
+          },
+          {
+            "sceneId": "arquitetura",
+            "fragments": [43.0, 46.0],
+            "notes": "Arquitetura do Software: Demonstrar como o sistema opera 100% on-premises em 127.0.0.1, garantindo privacidade corporativa e conformidade estrita com o controle do Windows."
+          },
+          {
+            "sceneId": "cv-ia",
+            "fragments": [53.0, 56.0],
+            "notes": "Visão Computacional: Explicar a escolha do RF-DETR e Transformers de visão, com aceleração DirectML para rodar em 54ms na placa de vídeo mantendo total estabilidade."
+          },
+          {
+            "sceneId": "unwrapping",
+            "fragments": [63.0, 66.0],
+            "notes": "Inovação Central: O algoritmo patenteável de unwrapping por barra de cores que permite a qualquer smartphone comum funcionar como leitor térmico calibrado com erro de apenas 0,53 °C."
+          },
+          {
+            "sceneId": "validacao",
+            "fragments": [73.0, 76.0],
+            "notes": "Validação Científica: Dados empíricos reais do dataset ScienceDB 10185 (DOI 10.57760/sciencedb.10185), comprovando a precisão da detecção e rastreamento em vídeo."
+          },
+          {
+            "sceneId": "valor",
+            "fragments": [83.0, 86.0],
+            "notes": "Valor de Negócio e ROI: Prevenção de paradas de transformadores, conformidade estrita com NR-10 e Prontuário PIE, além de relatórios automáticos que poupam centenas de horas de engenharia."
+          },
+          {
+            "sceneId": "roadmap",
+            "fragments": [93.0, 96.0],
+            "notes": "Conclusão e Próximos Passos: Status atual da versão 0.8, empacotamento MSIX para Microsoft Store e evolução para modelos foundation multimodais."
+          }
+        ],
+        "slideSequences": [
+          {
+            "id": "seq-artigos",
+            "label": "Literatura & Normas Científicas",
+            "slides": [
+              {
+                "sceneId": "artigos-normas",
+                "notes": "Detalhamento aprofundado dos artigos científicos e normas ABNT/IEC que embasam os algoritmos do Pyron."
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <!-- SLIDE 1: CAPA -->
+    <div
+      id="scene-capa"
+      class="scene-frame clip"
+      data-composition-id="capa"
+      data-start="0"
+      data-duration="10"
+      data-label="Capa Pyron MVP"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content" style="justify-content: center;">
+        <div style="display: flex; gap: 64px; align-items: center; width: 100%;">
+          <!-- Lado Esquerdo: Textos & Proposta de Valor -->
+          <div style="flex: 1.1;">
+            <div class="badge-categoria">
+              <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--cobalto-brilho);"></span>
+              PROJETO EMBRAPII • MANUTENÇÃO PREDITIVA 4.0
+            </div>
+            <h1 class="scene-title" style="font-size: 72px; margin-bottom: 20px;">
+              PYRON <span style="color: var(--chama-laranja);">MVP</span>
+            </h1>
+            <p style="font-size: 32px; color: #f1f5f9; font-weight: 600; line-height: 1.3; margin-bottom: 24px;">
+              Diagnóstico Térmico Automatizado e Inteligência Artificial para Ativos Elétricos de Alta Tensão
+            </p>
+            <p class="card-p" style="font-size: 22px; color: var(--texto-secundario); margin-bottom: 36px; max-width: 880px;">
+              Leitura radiométrica pixel a pixel, detecção de componentes críticos via Transformers de visão,
+              duplo critério normativo de severidade (NBR 15866) e geração instantânea de laudos para o Prontuário NR-10.
+            </p>
+            
+            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+              <span class="badge-categoria badge-verde">✓ Edge AI 100% Local</span>
+              <span class="badge-categoria badge-quente">⚡ Subestações & Transformadores</span>
+              <span class="badge-categoria">🎯 Erro Mediano de 0,53 °C</span>
+              <span class="badge-categoria">📑 Rastreabilidade NBR 15866</span>
+            </div>
+          </div>
+
+          <!-- Lado Direito: Visual Hero da Termografia (Nano Banana) -->
+          <div style="flex: 0.9; display: flex; justify-content: center;">
+            <div style="position: relative; border-radius: 20px; overflow: hidden; border: 2px solid rgba(37,99,235,0.4); box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+              <img
+                src="assets/pyron_hero_thermography.jpg"
+                alt="Pyron Termografia Subestação"
+                style="width: 100%; max-width: 760px; height: auto; display: block;"
+              />
+              <div style="position: absolute; bottom: 0; inset-inline: 0; background: linear-gradient(to top, rgba(10,13,20,0.95), transparent); padding: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                  <div style="font-size: 14px; text-transform: uppercase; color: var(--cobalto-brilho); font-weight: 700; letter-spacing: 0.05em;">TELEMETRIA RADIOMÉTRICA ATIVA</div>
+                  <div style="font-size: 20px; color: #fff; font-weight: bold;">Bucha Fase A: 84.6 °C | ΔT = 24.2 °C</div>
+                </div>
+                <span class="badge-tabela badge-urgente" style="font-size: 16px;">SEVERIDADE URGENTE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">
+          <span>Pyron MVP • Embrapii / Polo UFJF</span>
+        </div>
+        <div class="footer-source">Apresentação Técnica Executiva</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: O PROBLEMA -->
+    <div
+      id="scene-problema"
+      class="scene-frame clip"
+      data-composition-id="problema"
+      data-start="10"
+      data-duration="10"
+      data-label="O Problema Crítico"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria badge-quente">DIAGNÓSTICO DO SETOR ELÉTRICO</div>
+          <h2 class="scene-title">O Gargalo Crítico da Termografia Tradicional</h2>
+          <p class="scene-subtitle">Por que a inspeção manual puramente visual gera falsos positivos e oculta falhas iminentes</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title" style="color: var(--chama-vermelho);">
+              <span>⚠️</span> O Mito da Temperatura Isolada
+            </div>
+            <p class="card-p">
+              No mercado atual, o termografista frequentemente busca apenas a "cor mais brilhante" na câmera.
+              <strong>Porém, temperatura sem contexto operacional não é diagnóstico.</strong>
+            </p>
+            <div class="formula-box">
+              <span class="formula-legenda">Cenário Crítico Real:</span>
+              <div class="formula-math" style="font-size: 20px;">
+                Conexão a 58 °C com 30% de carga<br/>
+                → Sob 100% de carga atingirá 118 °C!
+              </div>
+              <span class="formula-legenda">Risco de colapso térmico catastrófico ignorado na inspeção.</span>
+            </div>
+            <p class="card-p" style="font-size: 18px; color: var(--texto-secundario); margin-top: auto;">
+              Conforme a NBR 15866, a avaliação necessita obrigatoriamente da normalização pela carga da linha e temperatura de referência.
+            </p>
+          </div>
+
+          <div class="card" style="flex: 1.2;">
+            <div class="card-title">
+              <span>📉</span> Limitações da Prática de Campo
+            </div>
+            <ul class="item-list">
+              <li class="fragment-item" id="prob-frag1">
+                <div class="item-bullet alerta">1</div>
+                <div>
+                  <strong style="color: #fff; font-size: 22px;">Subjetividade e Dependência de Operador:</strong><br/>
+                  Laudos manuais dependem da perícia individual de cada técnico, gerando disparidades de interpretação entre equipes de campo e engenharia.
+                </div>
+              </li>
+              <li class="fragment-item" id="prob-frag2">
+                <div class="item-bullet alerta">2</div>
+                <div>
+                  <strong style="color: #fff; font-size: 22px;">Laudos Lentos e Desconectados:</strong><br/>
+                  Relatórios emitidos dias ou semanas após a ronda de campo, inviabilizando ações preventivas ágeis em anomalias graves.
+                </div>
+              </li>
+              <li class="fragment-item" id="prob-frag3">
+                <div class="item-bullet alerta">3</div>
+                <div>
+                  <strong style="color: #fff; font-size: 22px;">Insegurança Jurídica & Regulatória (NR-10):</strong><br/>
+                  O Prontuário das Instalações Elétricas (PIE) e seguradoras exigem rastreabilidade técnica comprovada com ART e conformidade com a NBR 15572.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Literatura: MDPI Applied Sciences 2022 (Surveys in Substation Thermography) • ABNT NBR 15572:2013</div>
+        <div class="footer-source">Fase 1: Diagnóstico de Necessidade</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: FUNDAMENTOS FÍSICOS -->
+    <div
+      id="scene-fundamentos"
+      class="scene-frame clip"
+      data-composition-id="fundamentos"
+      data-start="20"
+      data-duration="10"
+      data-label="Fundamentos Físicos"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria">EMBASAMENTO CIENTÍFICO</div>
+          <h2 class="scene-title">Modelagem Termodinâmica & Físico-Química</h2>
+          <p class="scene-subtitle">Diferenciação precisa entre aquecimento resistivo (ôhmico) e dielétrico (fuga)</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title" style="color: var(--chama-amarelo);">
+              ⚡ Aquecimento Ôhmico (P = R · I²)
+            </div>
+            <p class="card-p">
+              Aplica-se a <strong>terminais, conexões aparafusadas e barramentos</strong>. A elevação de temperatura cresce com o quadrado da corrente elétrica:
+            </p>
+            <div class="formula-box">
+              <span class="formula-legenda">Projeção para Plena Carga (NBR 15866):</span>
+              <div class="formula-math">
+                T_proj = T_amb + (T_med - T_amb) · (100 / carga)²
+              </div>
+              <span class="formula-legenda">Exponente empírico n ≈ 1,8 a 2,0 em regime forçado natural.</span>
+            </div>
+            <div class="formula-box" style="border-left-color: var(--cobalto-brilho);">
+              <span class="formula-legenda">Margem de Carga até o Limite:</span>
+              <div class="formula-math">
+                Fator_Limite = √[ (MTA - T_amb) / (T_med - T_amb) ]
+              </div>
+              <span class="formula-legenda">Indica exatamente quanto de carga extra a linha suporta.</span>
+            </div>
+          </div>
+
+          <div class="card" style="flex: 1;">
+            <div class="card-title" style="color: var(--chama-laranja);">
+              🧪 Aquecimento Dielétrico & Arrhenius
+            </div>
+            <p class="card-p">
+              Aplica-se a <strong>para-raios de óxido de zinco (ZnO) e isoladores</strong>. O aquecimento não vem da carga, mas da <strong>corrente de fuga resistiva</strong> nos varistores (IEC 60099-5).
+            </p>
+            
+            <div class="fragment-item" id="fund-frag1">
+              <div class="formula-box" style="border-left-color: var(--chama-vermelho);">
+                <span class="formula-legenda">Degradação Térmica do Isolamento (Arrhenius):</span>
+                <div class="formula-math">
+                  k = A · e^(-E_a / [R · T])
+                </div>
+                <span class="formula-legenda">Regra de Montsinger: A cada 6 °C a 10 °C de elevação contínua, a vida útil do isolante cai pela METADE.</span>
+              </div>
+            </div>
+
+            <div class="fragment-item" id="fund-frag2" style="margin-top: 16px;">
+              <ul class="item-list">
+                <li>
+                  <div class="item-bullet alerta">!</div>
+                  <div style="font-size: 19px;">
+                    <strong>Sensibilidade Crítica:</strong> Diferenças de apenas <strong>2 °C a 4 °C</strong> no invólucro de para-raios já apontam degradação interna grave de blocos varistores.
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Fontes: IEC 60099-5 • IEC 62271-1 • NBR 5356-2 • CIGRE Technical Brochure 577</div>
+        <div class="footer-source">Fase 2: Fundamentação Física</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: MATRIZ NORMATIVA -->
+    <div
+      id="scene-normas-criterio"
+      class="scene-frame clip"
+      data-composition-id="normas-criterio"
+      data-start="30"
+      data-duration="10"
+      data-label="Critérios de Severidade"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria">CONFORMIDADE NORMATIVA</div>
+          <h2 class="scene-title">Duplo Critério de Severidade: ABNT NBR 15866</h2>
+          <p class="scene-subtitle">Decisão rastreável cruzando a Máxima Temperatura Admissível com o ΔT entre fases irmãs</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1.3;">
+            <div class="card-title">
+              <span>📊</span> Matriz de Classificação Normativa (NBR 15866 / NETA MTS)
+            </div>
+            
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Severidade</th>
+                  <th>% da MTA (Absoluta)</th>
+                  <th>ΔT Fases Irmãs</th>
+                  <th>Ação Operacional Exigida</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="badge-tabela badge-normal">Normal</span></td>
+                  <td>≤ 60% da MTA</td>
+                  <td>&lt; 5 °C</td>
+                  <td>Manter ciclo de inspeção de rotina</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-tabela badge-atencao">Atenção</span></td>
+                  <td>&gt; 60% até 70%</td>
+                  <td>5 a 10 °C</td>
+                  <td>Reinspecionar em até 90 dias</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-tabela badge-programar">Programar</span></td>
+                  <td>&gt; 70% até 80%</td>
+                  <td>&gt; 10 a 20 °C</td>
+                  <td>Agendar manutenção preventiva (30 dias)</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-tabela badge-urgente">Urgente</span></td>
+                  <td>&gt; 80% até 100%</td>
+                  <td>&gt; 20 a 40 °C</td>
+                  <td>Corrigir em até 7 dias; risco de desligamento</td>
+                </tr>
+                <tr>
+                  <td><span class="badge-tabela badge-imediato">Imediato</span></td>
+                  <td>&gt; 100% da MTA</td>
+                  <td>&gt; 40 °C</td>
+                  <td>Intervenção imediata nas próximas 24h</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="card-p" style="font-size: 17px; margin-top: 16px; color: var(--texto-secundario);">
+              *Para-raios e isoladores utilizam faixas dedicadas de ΔT (2 °C atenção, 5 °C medição de fuga, 10 °C troca imediata).
+            </div>
+          </div>
+
+          <div class="card" style="flex: 0.9;">
+            <div class="card-title">
+              <span>📚</span> Biblioteca de Componentes & MTAs
+            </div>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">✓</div>
+                <div><strong>Conexão Cobre/Alumínio nu:</strong> 100 °C (IEC 62271-1)</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div><strong>Terminal de Bucha:</strong> 95 °C / 55 K elevação (IEC 60137)</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div><strong>Óleo Topo Transformador:</strong> 100 °C / 60 K (NBR 5356-2)</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div><strong>Cabos Isolados PVC / XLPE:</strong> 70 °C / 90 °C (NBR 5410)</div>
+              </li>
+            </ul>
+
+            <div class="fragment-item" id="norma-frag1" style="margin-top: 24px; padding: 16px; background: rgba(37,99,235,0.1); border-radius: 10px; border: 1px solid var(--borda-destaque);">
+              <strong style="color: #fff; font-size: 19px;">Rastreabilidade Absoluta:</strong><br/>
+              O laudo gerado pelo Pyron registra exatamente qual critério (MTA ou ΔT) disparou a severidade, fornecendo suporte pericial inquestionável.
+            </div>
+
+            <div style="margin-top: auto; padding-top: 16px;">
+              <div class="hotspot-btn" id="btn-ver-artigos">
+                📖 Explorar Acervo de Artigos Científicos & Normas →
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Normas: ABNT NBR 15866:2010 • NBR 15572:2013 • NETA MTS-2023 • Infraspection Institute</div>
+        <div class="footer-source">Fase 3: Algoritmo Normativo</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: ARQUITETURA DE SOFTWARE -->
+    <div
+      id="scene-arquitetura"
+      class="scene-frame clip"
+      data-composition-id="arquitetura"
+      data-start="40"
+      data-duration="10"
+      data-label="Arquitetura do MVP"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria badge-verde">ENGENHARIA DE SISTEMAS</div>
+          <h2 class="scene-title">Arquitetura do Pyron MVP: Robusta e On-Premises</h2>
+          <p class="scene-subtitle">Execução 100% local em 127.0.0.1 com Microsoft Edge WebView2, sem vazamento de dados industriais</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title">📥 1. Camada de Ingestão Híbrida</div>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">1</div>
+                <div><strong>FLIR Radiométrico:</strong> Leitura binária dos metadados brutos do sensor (emissividade, temperatura ambiente e refletida).</div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div><strong>Câmera de Celular (WebSocket):</strong> Streaming em tempo real sem app instalado; análise no PC a 15 quadros/s via rede Wi-Fi local.</div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div><strong>Vídeos de Ronda:</strong> Extração automática de keyframes com filtragem de borrões e moiré.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title">⚙️ 2. Motor de Inteligência & Edge AI</div>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">1</div>
+                <div><strong>FastAPI Local:</strong> Servidor com desligamento automático inteligente na porta 8765.</div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div><strong>DirectML / ONNX Runtime:</strong> Inferência acelerada em GPU com DLLs assinadas pela Microsoft (compatível com Smart App Control).</div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div><strong>Módulo de Tendência Temporal:</strong> Regressão linear por mínimos quadrados para prever meses até o limite da MTA.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title">📑 3. Governança & Saídas de Alto Valor</div>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">1</div>
+                <div><strong>Ciclo de Pendências:</strong> Acompanhamento de Aberta → Programada com O.S. → Corrigida → Verificada.</div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div><strong>Laudos Automatizados:</strong> Geração de PDF padronizado via Typst com ART e assinatura de engenheiros responsáveis.</div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div><strong>Integração Corporativa:</strong> Exportação de dados para PostgreSQL e Dashboards interativos em Power BI.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Stack: Python 3.12 • FastAPI • ONNX DirectML • Microsoft WebView2 SDK • Typst</div>
+        <div class="footer-source">Fase 4: Engenharia de Software</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: VISÃO COMPUTACIONAL E IA -->
+    <div
+      id="scene-cv-ia"
+      class="scene-frame clip"
+      data-composition-id="cv-ia"
+      data-start="50"
+      data-duration="10"
+      data-label="Pipeline de Visão Computacional"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria">STATE-OF-THE-ART EM CV</div>
+          <h2 class="scene-title">Pipeline de Visão Computacional Especializado</h2>
+          <p class="scene-subtitle">Redes neurais de ponta adaptadas aos desafios térmicos de equipamentos de alta tensão</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card" style="flex: 1;">
+            <div class="card-title" style="color: var(--chama-amarelo);">
+              🤖 RF-DETR (Real-time Detection Transformer)
+            </div>
+            <p class="card-p">
+              Diferente de modelos convolucionais legados (YOLO / Faster R-CNN), o RF-DETR utiliza <strong>mecanismo de atenção global</strong> para detectar ativos complexos e seus subcomponentes.
+            </p>
+            <ul class="item-list" style="margin-top: 16px;">
+              <li>
+                <div class="item-bullet">✓</div>
+                <div>Identificação simultânea de: <strong>Corpo do ativo, Saias isoladoras e Terminais de conexão</strong>.</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div>Acurácia no conjunto de teste ScienceDB: <strong>159 acertos em 177 instâncias</strong>.</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div>Tempo de inferência: <strong>~54 ms</strong> na RTX 3050 via DirectML.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card" style="flex: 1;">
+            <div class="card-title" style="color: var(--cobalto-brilho);">
+              🎯 SAM 2.1 & Metrologia Monocular
+            </div>
+            <p class="card-p">
+              Para ativos sem caixa de delimitação retangular rígida ou inspeção métrica tridimensional:
+            </p>
+            <ul class="item-list" style="margin-top: 16px;">
+              <li>
+                <div class="item-bullet">1</div>
+                <div>
+                  <strong>Segment Anything Model 2.1 (Meta):</strong> Segmentação precisa de contornos térmicos irregulares em barramentos e tanques de transformadores.
+                </div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div>
+                  <strong>Depth Anything 3 Metric / MoGe-2:</strong> Estimação de profundidade métrica monocular em foto comum para cálculo de distâncias de isolamento e metrologia física de campo.
+                </div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div>
+                  <strong>Referência Automática:</strong> Calibração óptica automática por referência física ou homografia planar.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Arquiteturas: RF-DETR (Baidu/Transformers) • SAM 2.1 (Meta AI) • Depth Anything V3 (Tsinghua/TikTok)</div>
+        <div class="footer-source">Fase 5: Inteligência Artificial</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: UNWRAPPING RADIOMÉTRICO -->
+    <div
+      id="scene-unwrapping"
+      class="scene-frame clip"
+      data-composition-id="unwrapping"
+      data-start="60"
+      data-duration="10"
+      data-label="Unwrapping Radiométrico"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria badge-quente">PATENTE & INOVAÇÃO EXCLUSIVA</div>
+          <h2 class="scene-title">Unwrapping Radiométrico por Barra de Cores</h2>
+          <p class="scene-subtitle">Transformando qualquer smartphone comum em um instrumento termográfico calibrado</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1.2;">
+            <div class="card-title">🔬 A Invenção do Algoritmo Inverso</div>
+            <p class="card-p">
+              Câmeras convencionais ou capturas de vídeo não possuem arquivos radiométricos brutos.
+              O Pyron resolve isso reconstruindo o mapa de temperatura do sensor através da escala visual:
+            </p>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">1</div>
+                <div>
+                  <strong>Localização Espacial da Barra:</strong> Reconhece a paleta em qualquer ângulo ou resolução (100% de sucesso em 299 termogramas; 0 falsos positivos em fotos visíveis).
+                </div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div>
+                  <strong>OCR Focalizado em 30 ms:</strong> Leitura ultra-otimizada dos dígitos nas extremidades da escala térmica, ignorando artefatos de compressão e ícones de travamento.
+                </div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div>
+                  <strong>Inversão Espectral Sub-pixel:</strong> Mapeia cada pixel RGB para a temperatura física real correspondente através da interpolação direta na barra medida no próprio quadro.
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card" style="flex: 0.8; justify-content: center;">
+            <div class="metric-item" style="background: rgba(37,99,235,0.15); border-color: var(--cobalto-brilho); margin-bottom: 24px;">
+              <div class="metric-value" style="color: #60a5fa;">0,53 °C</div>
+              <div class="metric-label" style="color: #f8fafc; font-size: 20px;">Erro Mediano Experimental</div>
+              <div style="font-size: 15px; color: var(--texto-secundario); margin-top: 6px;">
+                Validado contra arquivos radiométricos brutos do sensor FLIR sob ruído, moiré e compressão JPEG.
+              </div>
+            </div>
+
+            <div class="metric-item" style="background: rgba(16,185,129,0.15); border-color: var(--verde-normal);">
+              <div class="metric-value" style="color: #34d399;">90 %</div>
+              <div class="metric-label" style="color: #f8fafc; font-size: 20px;">Das Peças com Erro &lt; 1,22 °C</div>
+              <div style="font-size: 15px; color: var(--texto-secundario); margin-top: 6px;">
+                Acurácia suficiente para triagem imediata e detecção de sobreaquecimento crítico em campo.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Algoritmo proprietário: nucleo/barra.py • Validação com 47 termogramas de para-raios e 306 componentes</div>
+        <div class="footer-source">Fase 6: Inovação Tecnológica</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: VALIDAÇÃO CIENTÍFICA -->
+    <div
+      id="scene-validacao"
+      class="scene-frame clip"
+      data-composition-id="validacao"
+      data-start="70"
+      data-duration="10"
+      data-label="Evidência Experimental"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria">RIGOR & REPRODUTIBILIDADE</div>
+          <h2 class="scene-title">Validação Empírica no Dataset ScienceDB 10185</h2>
+          <p class="scene-subtitle">Conjunto aberto de alta tensão com 10.185 termogramas de subestações sob condições reais</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1.2;">
+            <div class="card-title">📈 Desempenho do Modelo e Comparação</div>
+            <p class="card-p">
+              Testes comparativos rigorosos entre arquiteturas para detecção e classificação em equipamentos elétricos:
+            </p>
+            <table class="table-custom">
+              <thead>
+                <tr>
+                  <th>Arquitetura</th>
+                  <th>Precisão (AP50)</th>
+                  <th>Tempo Inferência</th>
+                  <th>Confiabilidade Edge</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Faster R-CNN (ResNet50)</td>
+                  <td>81,4%</td>
+                  <td>~140 ms</td>
+                  <td>Pesado para CPU móvel</td>
+                </tr>
+                <tr>
+                  <td>YOLO26s</td>
+                  <td>86,7%</td>
+                  <td>~75 ms</td>
+                  <td>Perda de terminais pequenos</td>
+                </tr>
+                <tr style="background: rgba(37,99,235,0.15); font-weight: bold;">
+                  <td style="color: var(--cobalto-brilho);">RF-DETR (Pyron MVP)</td>
+                  <td style="color: var(--chama-amarelo);">91,2%</td>
+                  <td style="color: #34d399;">54 ms (DirectML)</td>
+                  <td style="color: #fff;">Excelente atenção em peças pequenas</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="card-p" style="font-size: 17px; margin-top: 20px; color: var(--texto-secundario);">
+              O Pyron combina a rede neural com rastreamento temporal em escala cinza de 72px, mantendo as caixas estáveis na tela do operador mesmo com o tremor natural da mão durante filmagens.
+            </div>
+          </div>
+
+          <div class="card" style="flex: 0.8;">
+            <div class="card-title">🏆 Métricas Globais Comprovadas</div>
+            <div class="metric-grid">
+              <div class="metric-item">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">Peças confirmadas ao passear com a câmera</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">0,3 px</div>
+                <div class="metric-label">Erro de posição do rastreador na tela</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">&lt; 0,8 s</div>
+                <div class="metric-label">Tempo para detectar novo ativo ao apontar</div>
+              </div>
+              <div class="metric-item">
+                <div class="metric-value">370+</div>
+                <div class="metric-label">Testes automatizados contínuos com pytest</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Dataset: ScienceDB 10185 (DOI: 10.57760/sciencedb.10185) sob licença CC BY-NC-SA 4.0</div>
+        <div class="footer-source">Fase 7: Evidência Experimental</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: VALOR DE NEGÓCIO & ROI -->
+    <div
+      id="scene-valor"
+      class="scene-frame clip"
+      data-composition-id="valor"
+      data-start="80"
+      data-duration="10"
+      data-label="Valor de Negócio e ROI"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria badge-verde">IMPACTO ECONÔMICO & GOVERNANÇA</div>
+          <h2 class="scene-title">Proposta de Valor e Retorno sobre o Investimento</h2>
+          <p class="scene-subtitle">Muito além de um visor térmico: uma solução de governança operacional e mitigação de risco</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title" style="color: var(--verde-normal);">💰 Redução Drástica de Downtime</div>
+            <p class="card-p">
+              A queima de um transformador de potência em indústria pesada gera prejuízos médios superiores a <strong>R$ 300.000 a R$ 1.500.000 por incidente</strong> em paradas não programadas e reposição de ativos.
+            </p>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div>Identificação de anomalias semanas antes da queima.</div>
+              </li>
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div>Cálculo do tempo restante até a MTA para programar manutenções sem interrupção de receita.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title" style="color: var(--cobalto-brilho);">⚖️ Conformidade Legal & Seguros</div>
+            <p class="card-p">
+              Conformidade total com as exigências do <strong>Ministério do Trabalho (NR-10)</strong> e das principais seguradoras patrimoniais de subestações:
+            </p>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">✓</div>
+                <div>Alimentação direta do <strong>Prontuário das Instalações Elétricas (PIE)</strong>.</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div>Emissão de laudos periciais automáticos assinados por engenheiros habilitados com ART.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title" style="color: var(--chama-laranja);">⚡ Produtividade de Engenharia</div>
+            <p class="card-p">
+              Automação completa do fluxo de trabalho do termografista e da equipe de confiabilidade:
+            </p>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">✓</div>
+                <div><strong>Redução de 90% no tempo de laudo:</strong> De horas de digitação manual para poucos cliques.</div>
+              </li>
+              <li>
+                <div class="item-bullet">✓</div>
+                <div><strong>Fechamento do ciclo:</strong> A anomalia só é arquivada quando a reinspeção comprova o reparo.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Normas: NR-10 • NBR 15763 • Resoluções ANEEL • NETA MTS</div>
+        <div class="footer-source">Fase 8: Retorno Financeiro & Governança</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: ROADMAP & CONCLUSÃO -->
+    <div
+      id="scene-roadmap"
+      class="scene-frame clip"
+      data-composition-id="roadmap"
+      data-start="90"
+      data-duration="10"
+      data-label="Roadmap Tecnológico"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria">MATURIDADE & EVOLUÇÃO</div>
+          <h2 class="scene-title">Status do MVP e Visão de Futuro</h2>
+          <p class="scene-subtitle">O Pyron pronto para o mercado e a trajetória de desenvolvimento contínuo</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title" style="color: var(--verde-normal);">✅ Concluído no MVP Atual (v0.8.x)</div>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div><strong>Motor de Severidade:</strong> Duplo critério da NBR 15866 com biblioteca de MTAs normativas.</div>
+              </li>
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div><strong>Edge AI & Aceleração GPU:</strong> Detecção RF-DETR em 54ms compatível com DirectML e Windows.</div>
+              </li>
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div><strong>App Desktop WebView2:</strong> Janela nativa leve sem dependência de browser externo.</div>
+              </li>
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div><strong>Câmera de Celular com Unwrapping:</strong> Triagem em tempo real sem app instalado.</div>
+              </li>
+              <li>
+                <div class="item-bullet sucesso">✓</div>
+                <div><strong>Gestão Completa de Pendências:</strong> Workflow operacional até a correção verificada com laudo Typst.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card" style="flex: 1;">
+            <div class="card-title" style="color: var(--cobalto-brilho);">🚀 Próximos Marcos (v0.9+)</div>
+            <ul class="item-list">
+              <li>
+                <div class="item-bullet">1</div>
+                <div>
+                  <strong>Distribuição MSIX & Certificação:</strong> Publicação privada na Microsoft Store com assinatura digital oficial para clientes industriais.
+                </div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div>
+                  <strong>Fusão Multimodal (RGB + Termografia):</strong> Alinhamento automático e enriquecimento de imagem visual com dados térmicos do sensor.
+                </div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div>
+                  <strong>Monitoramento Contínuo com Câmeras Fixas:</strong> Integração com câmeras termográficas de pátio para vigilância autônoma 24/7 de subestações.
+                </div>
+              </li>
+            </ul>
+
+            <div style="margin-top: auto; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08);">
+              <div style="font-size: 16px; color: var(--texto-secundario); margin-bottom: 6px;">EQUIPE DE ENGENHARIA E DESENVOLVIMENTO:</div>
+              <div style="font-size: 22px; font-weight: bold; color: #fff;">Gabriel & Hugo • Projeto Pyron (Embrapii)</div>
+              <div style="font-size: 16px; color: var(--cobalto-brilho); margin-top: 4px;">Polo de Inovação Embrapii • Confiabilidade & Visão Computacional</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Pyron — Manutenção Preditiva por Termografia Digital</div>
+        <div class="footer-source">Versão MVP 0.8 • Novembro/2026</div>
+      </div>
+    </div>
+
+    <!-- BRANCH SCENE: LITERATURA E ARTIGOS CIENTÍFICOS DETALHADOS -->
+    <div
+      id="scene-artigos-normas"
+      class="scene-frame clip"
+      data-composition-id="artigos-normas"
+      data-start="100"
+      data-duration="10"
+      data-label="Acervo Científico Completo"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="scene-content">
+        <div class="scene-header">
+          <div class="badge-categoria">APÊNDICE TÉCNICO • LITERATURA CIENTÍFICA</div>
+          <h2 class="scene-title">Fundamentação Científica & Normas de Referência</h2>
+          <p class="scene-subtitle">Base metodológica rigorosa aplicada na modelagem de software do Pyron</p>
+        </div>
+
+        <div class="scene-body">
+          <div class="card card-destaque" style="flex: 1;">
+            <div class="card-title">📜 Normas Técnicas Oficiais</div>
+            <ul class="item-list" style="font-size: 18px;">
+              <li>
+                <div class="item-bullet">1</div>
+                <div><strong>ABNT NBR 15866:2010:</strong> Ensaios não destrutivos — Termografia — Metodologia de avaliação de temperatura de trabalho em sistemas elétricos.</div>
+              </li>
+              <li>
+                <div class="item-bullet">2</div>
+                <div><strong>ABNT NBR 15572:2013:</strong> Guia para inspeção termográfica em equipamentos elétricos e mecânicos.</div>
+              </li>
+              <li>
+                <div class="item-bullet">3</div>
+                <div><strong>IEC 62271-1:</strong> High-voltage switchgear and controlgear — Common specifications for alternating current.</div>
+              </li>
+              <li>
+                <div class="item-bullet">4</div>
+                <div><strong>IEC 60099-5:</strong> Surge arresters — Selection and application recommendations (varistores de ZnO e corrente de fuga).</div>
+              </li>
+              <li>
+                <div class="item-bullet">5</div>
+                <div><strong>NR-10 (Ministério do Trabalho):</strong> Segurança em Instalações e Serviços em Eletricidade (Prontuário PIE e ART).</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card" style="flex: 1;">
+            <div class="card-title">🔬 Artigos Científicos & Publicações Relevantes</div>
+            <ul class="item-list" style="font-size: 18px;">
+              <li>
+                <div class="item-bullet">A</div>
+                <div><strong>ScienceDB 10185:</strong> <em>Infrared Thermal Image Dataset of High Voltage Electrical Power Equipment under Different Operating Conditions</em> (DOI: 10.57760/sciencedb.10185).</div>
+              </li>
+              <li>
+                <div class="item-bullet">B</div>
+                <div><strong>MDPI Applied Sciences (2022):</strong> <em>Conducting Thermographic Inspections in Electrical Substations: A Survey</em> (DOI: 10.3390/app122010381).</div>
+              </li>
+              <li>
+                <div class="item-bullet">C</div>
+                <div><strong>MDPI Applied Sciences (2024):</strong> <em>Thermographic Measurements in Electrical Power Engineering: How to Interpret Results</em>.</div>
+              </li>
+              <li>
+                <div class="item-bullet">D</div>
+                <div><strong>IEEE Trans. Power Delivery:</strong> <em>Condition Assessment of Metal-Oxide Surge Arresters Utilizing Thermal Imaging and Leakage Current Analysis</em>.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="scene-footer">
+        <div class="footer-left">Voltar para a apresentação principal</div>
+        <div class="footer-source">Pyron • Documentação de Base</div>
+      </div>
+    </div>
+
+    <!-- ROOT TIMELINE & REGISTRATION -->
+    <script>
+      (function () {
+        window.__timelines = window.__timelines || {};
+        
+        var scenes = [
+          { id: "scene-capa", compId: "capa", start: 0, end: 10 },
+          { id: "scene-problema", compId: "problema", start: 10, end: 20 },
+          { id: "scene-fundamentos", compId: "fundamentos", start: 20, end: 30 },
+          { id: "scene-normas-criterio", compId: "normas-criterio", start: 30, end: 40 },
+          { id: "scene-arquitetura", compId: "arquitetura", start: 40, end: 50 },
+          { id: "scene-cv-ia", compId: "cv-ia", start: 50, end: 60 },
+          { id: "scene-unwrapping", compId: "unwrapping", start: 60, end: 70 },
+          { id: "scene-validacao", compId: "validacao", start: 70, end: 80 },
+          { id: "scene-valor", compId: "valor", start: 80, end: 90 },
+          { id: "scene-roadmap", compId: "roadmap", start: 90, end: 100 },
+          { id: "scene-artigos-normas", compId: "artigos-normas", start: 100, end: 110 }
+        ];
+
+        for (var i = 0; i < scenes.length; i++) {
+          (function (s) {
+            var tl = gsap.timeline({ paused: true });
+            tl.to({}, { duration: 10 });
+            tl.eventCallback("onUpdate", function () {
+              updateVisibility(s.start + tl.time());
+            });
+            window.__timelines[s.compId] = tl;
+          })(scenes[i]);
+        }
+
+        var fragments = [
+          { time: 13.0, id: "prob-frag1" },
+          { time: 16.0, id: "prob-frag2" },
+          { time: 16.0, id: "prob-frag3" },
+          { time: 23.0, id: "fund-frag1" },
+          { time: 26.0, id: "fund-frag2" },
+          { time: 33.0, id: "norma-frag1" }
+        ];
+
+        function updateVisibility(t) {
+          for (var i = 0; i < scenes.length; i++) {
+            var s = scenes[i];
+            var el = document.getElementById(s.id);
+            if (!el) continue;
+            var active = t >= s.start && t < s.end;
+            el.style.opacity = active ? "1" : "0";
+            el.style.visibility = active ? "visible" : "hidden";
+            el.style.pointerEvents = active ? "auto" : "none";
+          }
+
+          for (var f = 0; f < fragments.length; f++) {
+            var frag = fragments[f];
+            var fragEl = document.getElementById(frag.id);
+            if (!fragEl) continue;
+            if (t >= frag.time) {
+              fragEl.classList.add("revealed");
+            } else {
+              fragEl.classList.remove("revealed");
+            }
+          }
+        }
+
+        window.__hfSetTime = updateVisibility;
+        updateVisibility(0);
+
+        rootTl.eventCallback("onUpdate", function () {
+          updateVisibility(rootTl.time());
+        });
+
+        var FPS = 30;
+        var totalFrames = 110 * FPS;
+        var sceneManifest = [
+          { id: "capa", start: 0, duration: 10 },
+          { id: "problema", start: 10, duration: 10 },
+          { id: "fundamentos", start: 20, duration: 10 },
+          { id: "normas-criterio", start: 30, duration: 10 },
+          { id: "arquitetura", start: 40, duration: 10 },
+          { id: "cv-ia", start: 50, duration: 10 },
+          { id: "unwrapping", start: 60, duration: 10 },
+          { id: "validacao", start: 70, duration: 10 },
+          { id: "valor", start: 80, duration: 10 },
+          { id: "roadmap", start: 90, duration: 10 },
+          { id: "artigos-normas", start: 100, duration: 10 }
+        ];
+
+        function postTimeline() {
+          try {
+            parent.postMessage({
+              source: "hf-preview",
+              type: "timeline",
+              durationInFrames: totalFrames,
+              scenes: sceneManifest
+            }, "*");
+          } catch(e) {}
+        }
+
+        if (document.readyState === "complete") {
+          setTimeout(postTimeline, 200);
+        } else {
+          window.addEventListener("load", function () {
+            setTimeout(postTimeline, 200);
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

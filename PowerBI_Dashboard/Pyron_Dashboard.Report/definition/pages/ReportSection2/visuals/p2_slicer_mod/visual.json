@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "p2_slicer_mod",
   "position": {
-    "x": 980,
+    "x": 1055,
     "y": 15,
     "z": 400,
     "height": 110,
-    "width": 280,
+    "width": 205,
     "tabOrder": 400
   },
   "visual": {
@@ -54,5 +54,10 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "syncGroup": {
+    "groupName": "Sync_Modelo",
+    "fieldChanges": true,
+    "filterChanges": true
   }
 }

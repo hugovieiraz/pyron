@@ -1,16 +1,20 @@
 relationship Rel_Equipamento_Inspecoes
+	crossFilteringBehavior: bothDirections
 	fromColumn: Fato_Inspecoes.equipamento_id
 	toColumn: Dim_Equipamentos.equipamento_id
 
 relationship Rel_Subestacao_Inspecoes
+	crossFilteringBehavior: bothDirections
 	fromColumn: Fato_Inspecoes.instalacao_id
 	toColumn: Dim_Subestacoes.subestacao_id
 
 relationship Rel_Inspecao_Pendencias
+	crossFilteringBehavior: bothDirections
 	fromColumn: Fato_Pendencias_OS.inspecao_id
 	toColumn: Fato_Inspecoes.inspecao_id
 
 relationship Rel_Inspecao_Regioes
+	crossFilteringBehavior: bothDirections
 	fromColumn: Fato_Regioes_ROI.inspecao_id
 	toColumn: Fato_Inspecoes.inspecao_id
 

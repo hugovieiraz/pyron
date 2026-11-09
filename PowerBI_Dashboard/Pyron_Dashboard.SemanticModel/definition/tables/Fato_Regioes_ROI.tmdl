@@ -10,7 +10,7 @@ table Fato_Regioes_ROI
 	column ordem
 		dataType: int64
 		lineageTag: b6fabba5-f2d0-4fcd-8157-b1559d032484
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: ordem
 
 	column regiao_id
@@ -64,25 +64,25 @@ table Fato_Regioes_ROI
 	column confianca
 		dataType: double
 		lineageTag: e18f60cc-68af-48d9-af6c-a3a5010b52e9
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: confianca
 
 	column t_max
 		dataType: double
 		lineageTag: f63992db-b8c5-4f11-ac35-46b3c732151a
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: t_max
 
 	column t_med
 		dataType: double
 		lineageTag: 392f7eac-7087-4373-a759-511f8b2a61f6
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: t_med
 
 	column t_min
 		dataType: double
 		lineageTag: aad4dcc5-0e98-40bf-8ab6-04f633f4b25f
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: t_min
 
 	column dt_corrigido
@@ -94,7 +94,7 @@ table Fato_Regioes_ROI
 	column pct_mta
 		dataType: double
 		lineageTag: 26afb854-f078-4bce-be12-195bc91b8953
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: pct_mta
 
 	column severidade
@@ -106,13 +106,13 @@ table Fato_Regioes_ROI
 	column x_max
 		dataType: double
 		lineageTag: b92bbadb-d389-4b5b-a43c-9390d9d5a2e3
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: x_max
 
 	column y_max
 		dataType: double
 		lineageTag: b93d9e57-9395-4aa4-9c41-0be7c234abf4
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: y_max
 
 	partition Fato_Regioes_ROI = m

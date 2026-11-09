@@ -90,6 +90,7 @@ table Fato_Inspecoes
 		lineageTag: ce968cc9-d13d-457c-8ef6-1c1c87460c6d
 		summarizeBy: none
 		sourceColumn: severidade
+		sortByColumn: severidade_ordem
 
 	column severidade_ordem
 		dataType: int64
@@ -100,37 +101,37 @@ table Fato_Inspecoes
 	column t_max_cena
 		dataType: double
 		lineageTag: 52ada5b3-d902-46e0-9d09-dda9d6dc82bb
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: t_max_cena
 
 	column t_min_cena
 		dataType: double
 		lineageTag: 5c4dbca3-1fc6-4d9d-aa5d-16a94ff2336a
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: t_min_cena
 
 	column delta_t_ambiente_c
 		dataType: double
 		lineageTag: b4afc4f0-e063-44d7-868f-22c5794f2718
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: delta_t_ambiente_c
 
 	column maior_pct_mta
 		dataType: double
 		lineageTag: 7683d8be-48b6-4980-b23b-5c3080c5ea7f
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: maior_pct_mta
 
 	column ambiente_c
 		dataType: double
 		lineageTag: f6af18fb-da8f-49c8-8135-3a1d6f11cf7d
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: ambiente_c
 
 	column carga_pct
 		dataType: double
 		lineageTag: 23917893-dbb5-4c16-9627-2f6622e39634
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: carga_pct
 
 	column camera
@@ -148,7 +149,7 @@ table Fato_Inspecoes
 	column distancia_m
 		dataType: double
 		lineageTag: 6eebcd92-4dd3-4c70-8ed9-88daada1e8c6
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: distancia_m
 
 	column temp_refletida_c

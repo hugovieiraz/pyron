@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" data-pptx-page-role="content">
+    <!-- Obsidian Frost Background -->
+    <rect width="1280" height="720" fill="#10141A"/>
+    <!-- Linhas Guia Estruturais -->
+    <g id="deck-guides" data-pptx-role="decoration" data-pptx-bounds="56 140 1168 520" stroke="#1E293B" stroke-width="0.5">
+        <line x1="56" y1="140" x2="1224" y2="140"/>
+        <line x1="56" y1="660" x2="1224" y2="660"/>
+    </g>
+    
+    <!-- Header Telemetria -->
+    <g id="slide-header" data-pptx-role="header" data-pptx-bounds="56 36 1168 100">
+        <rect x="56" y="36" width="344" height="24" rx="9999" fill="#1D4A6A" stroke="#A2CBF1" stroke-width="0.75"/>
+        <text x="76" y="52" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#FFFFFF" letter-spacing="1.5">EMBASAMENTO TEÓRICO · FÍSICA APLICADA</text>
+        <text x="56" y="96" font-family="EB Garamond, Georgia, serif" font-size="36" font-weight="600" fill="#FFFFFF" letter-spacing="0.5">O Paradoxo da Baixa Carga e Efeito Joule</text>
+        <text x="56" y="124" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" font-weight="400" fill="#94A3B8">Severidade Oculta: Correntes de 30% Mascaram Falhas Térmicas Imediatas</text>
+    </g>
+    <!-- Footer Telemetria -->
+    <g id="slide-footer" data-pptx-role="footer" data-pptx-bounds="56 676 1168 28">
+        <line x1="56" y1="676" x2="1224" y2="676" stroke="#1E293B" stroke-width="1"/>
+        <text x="56" y="694" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">PYRON MVP · TERMOGRAFIA DIGITAL PREDITIVA</text>
+        <text x="640" y="694" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="500" fill="#94A3B8">CONFORMIDADE ABNT NBR 15866 &amp; IEC 60099-5 · 100% OFFLINE EDGE</text>
+        <text x="1224" y="694" text-anchor="end" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="#A2CBF1">02 / 12</text>
+    </g>
+    
+    <!-- Card Esquerda: Medição Aparente -->
+    <g id="measured-condition" data-pptx-bounds="56 150 568 330">
+        <rect x="56" y="150" width="568" height="330" rx="24" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <rect x="88" y="180" width="160" height="24" rx="9999" fill="#0A0E14"/>
+        <text x="168" y="196" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#A2CBF1">OPERAÇÃO EM CAMPO (30% CARGA)</text>
+        <text x="88" y="240" font-family="EB Garamond, Georgia, serif" font-size="28" font-weight="600" fill="#FFFFFF">Medição Térmica Aparente</text>
+        <text x="88" y="280" font-family="EB Garamond, Georgia, serif" font-size="44" font-weight="400" fill="#A2CBF1">ΔT = 5,4 °C</text>
+        <text x="88" y="320" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Temperatura medida no conector: <tspan font-weight="700" fill="#FFFFFF">35,4 °C</tspan> (Ambiente: 30,0 °C).</text>
+        <text x="88" y="342" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Corrente de operação no momento da foto: <tspan font-weight="700" fill="#FFFFFF">300 A</tspan> (Nominal: 1.000 A).</text>
+        <rect x="88" y="370" width="504" height="84" rx="12" fill="#0A0E14"/>
+        <text x="108" y="396" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#94A3B8">AVALIAÇÃO CONVENCIONAL SEM CORREÇÃO:</text>
+        <text x="108" y="420" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">NÍVEL NORMAL / ATENÇÃO LEVE · Reinspeção em 1 ano</text>
+        <text x="108" y="440" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" fill="#FFB4AB">Perigo Crítico: O inspetor ignora o aquecimento incipiente!</text>
+    </g>
+
+    <!-- Card Direita: Projeção Real -->
+    <g id="projected-condition" data-pptx-bounds="656 150 568 330">
+        <rect x="656" y="150" width="568" height="330" rx="24" fill="#3B1219" stroke="#FFB4AB" stroke-width="1.5"/>
+        <rect x="688" y="180" width="180" height="24" rx="9999" fill="#0A0E14"/>
+        <text x="778" y="196" text-anchor="middle" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="600" fill="#FFB4AB">PROJEÇÃO A 100% DE CARGA</text>
+        <text x="688" y="240" font-family="EB Garamond, Georgia, serif" font-size="28" font-weight="600" fill="#FFFFFF">Severidade Imediata Real</text>
+        <text x="688" y="280" font-family="EB Garamond, Georgia, serif" font-size="44" font-weight="400" fill="#FFB4AB">ΔT = 60,0 °C</text>
+        <text x="688" y="320" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Temperatura corrigida projetada: <tspan font-weight="700" fill="#FFFFFF">90,0 °C</tspan>.</text>
+        <text x="688" y="342" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="13" fill="#DFE2EB">Efeito Joule: ΔT_100% = 5,4 × (100 / 30)² = 60,0 °C.</text>
+        <rect x="688" y="370" width="504" height="84" rx="12" fill="#0A0E14"/>
+        <text x="708" y="396" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#FFB4AB">DIAGNÓSTICO AUTOMATIZADO PYRON (NBR 15866):</text>
+        <text x="708" y="420" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="14" font-weight="700" fill="#FFB4AB">NÍVEL IMEDIATO · Intervenção requerida em até 24 horas</text>
+        <text x="708" y="440" font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="11" fill="#DFE2EB">Prevenção contra fusão do contato, arco elétrico e desligamento forçado.</text>
+    </g>
+
+    <!-- Barra Inferior de Fórmulas e Montsinger -->
+    <g id="formulas-strip" data-pptx-bounds="56 504 1168 152">
+        <rect x="56" y="504" width="1168" height="152" rx="20" fill="#181C22" stroke="#353940" stroke-width="1"/>
+        <text x="88" y="538" font-family="EB Garamond, Georgia, serif" font-size="18" font-weight="600" fill="#FFFFFF">As Leis Térmicas Incorporadas ao Motor Pyron</text>
+        <g font-family="Plus Jakarta Sans, Segoe UI, Roboto, sans-serif" font-size="12" fill="#DFE2EB">
+            <text x="88" y="572"><tspan font-weight="700" fill="#A2CBF1">Lei de Joule Quadrática:</tspan> P = R · I² ⟹ ΔT_proj = ΔT_med × (I_nom / I_op)²</text>
+            <text x="88" y="598"><tspan font-weight="700" fill="#A2CBF1">Regra de Montsinger / Arrhenius:</tspan> Vida Útil L = L₀ × 2^(-ΔT / 8°C). Cada 8 °C acima da MTA reduz a vida residual pela metade.</text>
+            <text x="88" y="624"><tspan font-weight="700" fill="#A2CBF1">Corrente Suportável:</tspan> I_máx = I_atual × √((MTA - T_amb) / (T_med - T_amb)) calculada instantaneamente para o conector.</text>
+        </g>
+    </g>
+
+</svg>
