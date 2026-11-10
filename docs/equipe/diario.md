@@ -13,6 +13,17 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 10/11/2026 · Hugo: integrado o `v09-f5-desktop`; pedido sobre `.agents/skills`
+
+- Feito: o branch local do Hugo avançou até `9666246` (LAYA, Painel BI, Power BI) sem merge; testes rápidos: 466
+  passaram, 4 pulados.
+- Para o outro: o `9bec885` (e seguintes) trouxe cerca de 13.100 arquivos em `.agents/skills`, configuração de
+  assistente, não código do Pyron. Isso pesa o repositório para todo mundo.
+- Pendente (Gabriel decide): tirar `.agents/` do repositório (`git rm -r --cached .agents` e incluir no `.gitignore`;
+  os arquivos continuam na máquina dele) antes de levar o branch ao `main`. Também conferir se `nucleo/analise.py`
+  pode importar o LAYA (e o PyTorch) só quando for usado: na máquina do Hugo o Controle Inteligente às vezes bloqueia
+  o PyTorch, e hoje toda análise passa por esse import.
+
 ## 10/11/2026 · Gabriel: Implementação, Integração e Benchmark do LAYA no Pyron
 
 - Feito: implementação completa da integração do LAYA (Layer-wise Attention Aggregator + Laya System-1 Calibrated Engine v0.4.31) cobrindo as 5 etapas de agregação do Pyron:
