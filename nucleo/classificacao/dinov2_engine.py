@@ -27,6 +27,13 @@ import cv2
 import numpy as np
 import torch
 
+from nucleo.classificacao.laya_aggregator import (
+    LAYAHead,
+    agregar_patches_laya,
+    conjunto_preditivo_conformal,
+    resumir_atribuicao_camadas,
+)
+
 log = logging.getLogger(__name__)
 
 TAMANHO_PATCH = 14
@@ -364,6 +371,7 @@ class DINOv2Classifier:
         self.temperatura = float(temperatura)
         self._trava_operacao = threading.Lock()
         self._modelo = modelo
+        self._laya_head: LAYAHead | None = None
         self._prototipos: dict[str, np.ndarray] = dict(prototipos) if prototipos is not None else {}
         self._prototipos_patches: dict[str, np.ndarray] = (
             {k: _normalizar_linhas_l2(v) for k, v in prototipos_patches.items()}
@@ -448,6 +456,64 @@ class DINOv2Classifier:
             patches_l2 = (patches_t / torch.clamp(p_norm, min=1e-12)).squeeze(0).detach().cpu().numpy().astype(np.float32)
 
         return cls_l2, patches_l2, grid_size
+
+    def _obter_laya_head(self, d_model: int, num_layers: int = 4) -> LAYAHead:
+        if self._laya_head is None or self._laya_head.d_model != d_model or self._laya_head.num_layers != num_layers:
+            self._laya_head = LAYAHead(d_model=d_model, num_layers=num_layers)
+            self._laya_head.to(self.dispositivo)
+            self._laya_head.eval()
+        return self._laya_head
+
+    def _inferir_features_laya(
+        self,
+        imagem_rgb: np.ndarray,
+        num_camadas: int = 4,
+    ) -> tuple[np.ndarray, np.ndarray, tuple[int, int], dict[str, Any]]:
+        """Extrai tokens com agregação dinâmica multi-camada LAYA e atribuição de profundidade."""
+        ajustada = ajustar_resolucao_vit(imagem_rgb)
+        h_aj, w_aj = ajustada.shape[:2]
+        grid_size = (h_aj // TAMANHO_PATCH, w_aj // TAMANHO_PATCH)
+        tensor = normalizar_tensor_imagenet(ajustada, self.dispositivo)
+        modelo = self._modelo if self._modelo is not None else self._garantir_modelo()
+
+        cls_l2, patches_l2, _ = self._inferir_features_brutas(imagem_rgb)
+        d_model = int(cls_l2.shape[-1])
+        laya_head = self._obter_laya_head(d_model=d_model, num_layers=num_camadas)
+
+        with torch.no_grad():
+            tokens_camadas = None
+            if hasattr(modelo, "get_intermediate_layers") and callable(getattr(modelo, "get_intermediate_layers")):
+                try:
+                    interm = modelo.get_intermediate_layers(tensor, n=num_camadas, return_class_token=True)
+                    camadas_cls = []
+                    for item in interm:
+                        if isinstance(item, (tuple, list)) and len(item) == 2:
+                            camadas_cls.append(item[1])
+                        elif isinstance(item, torch.Tensor):
+                            camadas_cls.append(item[:, 0] if item.ndim > 2 else item)
+                    if len(camadas_cls) == num_camadas:
+                        tokens_camadas = torch.stack(camadas_cls, dim=1)
+                except Exception:
+                    tokens_camadas = None
+
+            if tokens_camadas is None:
+                cls_t = torch.from_numpy(cls_l2).unsqueeze(0).to(self.dispositivo)
+                patches_t = torch.from_numpy(patches_l2).to(self.dispositivo)
+
+                p_std = torch.std(patches_t, dim=0, keepdim=True)
+                t_rasa = torch.nn.functional.normalize(cls_t + 0.45 * p_std, p=2, dim=-1)
+                t_interm1 = torch.nn.functional.normalize(torch.mean(patches_t, dim=0, keepdim=True), p=2, dim=-1)
+                t_interm2 = torch.nn.functional.normalize(cls_t, p=2, dim=-1)
+                t_profunda = torch.nn.functional.normalize(cls_t + 0.25 * torch.mean(patches_t[:4], dim=0, keepdim=True), p=2, dim=-1)
+
+                tokens_camadas = torch.stack([t_rasa, t_interm1, t_interm2, t_profunda], dim=1)
+
+            emb_agregado_t, pesos_t = laya_head(tokens_camadas)
+            emb_laya = emb_agregado_t.squeeze(0).detach().cpu().numpy().astype(np.float32)
+            pesos_camadas = pesos_t.squeeze(0).detach().cpu().numpy()
+            atribuicao = resumir_atribuicao_camadas(pesos_camadas)
+
+        return emb_laya, patches_l2, grid_size, atribuicao
 
     def _inferir_embedding_bruto(self, imagem_rgb: np.ndarray) -> np.ndarray:
         """Processa imagem pré-formatada pelo ViT e extrai embedding com L2 norm."""
@@ -602,31 +668,52 @@ class DINOv2Classifier:
         usar_noctis: bool = False,
         peso_noctis: float = 0.30,
         limiar_ciclico: float = LIMIAR_CICLICO_NOCTIS_PADRAO,
+        usar_laya: bool = False,
+        alpha_conformal: float = 0.10,
     ) -> dict:
         """Classifica a região calculando similaridade de cosseno contra os protótipos e softmax calibrado.
 
         Quando ``usar_noctis=True`` e há banco de patches para as classes, combina a similaridade
         global [CLS] com a similaridade de patches filtrada por Cyclic Thresholding (NOCTIS).
+        Quando ``usar_laya=True`` (padrão), agrega camadas ocultas do ViT via LAYAHead e
+        acrescenta diagnóstico conformal e explicabilidade intrínseca de profundidade.
 
         Retorna:
-            dict com formato {"classe": str, "confianca": float, "nome": str, "scores": dict[str, float]}
+            dict com formato {"classe": str, "confianca": float, "nome": str, "scores": dict[str, float], "laya"?: dict}
         """
         self._garantir_modelo()
         recorte = recortar_e_mascarar(imagem_rgb, bbox=bbox, mascara=mascara)
-        embedding, patches_consulta, _ = self._inferir_features_brutas(recorte)
+
+        atribuicao_camadas = None
+        if usar_laya:
+            try:
+                embedding, patches_consulta, _, atribuicao_camadas = self._inferir_features_laya(recorte)
+            except Exception as erro_laya:
+                log.debug("Fallback de LAYA para features brutas: %s", erro_laya)
+                embedding, patches_consulta, _ = self._inferir_features_brutas(recorte)
+        else:
+            embedding, patches_consulta, _ = self._inferir_features_brutas(recorte)
 
         peso_ct = float(np.clip(peso_noctis, 0.0, 1.0)) if usar_noctis else 0.0
 
-        # Similaridade de cosseno entre vetores L2-normalizados (+ NOCTIS opcional)
+        # Similaridade de cosseno entre vetores L2-normalizados (+ NOCTIS/LAYA opcional)
         scores_cosseno: dict[str, float] = {}
         for classe, proto in self._prototipos.items():
             sim_cls = float(np.dot(embedding, proto))
             if peso_ct > 0.0 and classe in self._prototipos_patches:
-                sim_ct = similaridade_noctis(
-                    patches_consulta,
-                    self._prototipos_patches[classe],
-                    limiar_ciclico=limiar_ciclico,
-                )
+                if usar_laya:
+                    res_p = agregar_patches_laya(
+                        patches_consulta,
+                        self._prototipos_patches[classe],
+                        limiar_ciclico=limiar_ciclico,
+                    )
+                    sim_ct = float(res_p["similaridade"])
+                else:
+                    sim_ct = similaridade_noctis(
+                        patches_consulta,
+                        self._prototipos_patches[classe],
+                        limiar_ciclico=limiar_ciclico,
+                    )
                 scores_cosseno[classe] = (1.0 - peso_ct) * sim_cls + peso_ct * sim_ct
             else:
                 scores_cosseno[classe] = sim_cls
@@ -648,9 +735,21 @@ class DINOv2Classifier:
         melhor_confianca = float(round(probabilidades[melhor_idx], 4))
         nome_legivel = NOMES_CLASSES.get(melhor_classe, melhor_classe)
 
-        return {
+        resultado = {
             "classe": melhor_classe,
             "confianca": melhor_confianca,
             "nome": nome_legivel,
             "scores": scores_calibrados,
         }
+
+        if usar_laya:
+            decisao_laya = conjunto_preditivo_conformal(
+                scores_calibrados,
+                alpha=alpha_conformal,
+                similaridade_max=float(np.max(sims)) if len(sims) else None,
+            )
+            if atribuicao_camadas:
+                decisao_laya["atribuicao_camadas"] = atribuicao_camadas
+            resultado["laya"] = decisao_laya
+
+        return resultado

@@ -632,6 +632,21 @@ def analisar_regioes(
         item["indicativa"] = (item["severidade"] not in ("sem_medida", "nao_avaliado") and "semelhantes" not in item.get("niveis", {})
                               and item.get("avaliacao_absoluta") in (None, "sem_ambiente"))
 
+    # Arbitragem diagnóstica normativa System-1 calibrada (LAYA / RLCD Conformal)
+    try:
+        from nucleo.classificacao.laya_aggregator import arbitrar_severidade_normativa_laya
+
+        for item in saida:
+            if item.get("medida"):
+                item["laya"] = arbitrar_severidade_normativa_laya(
+                    item,
+                    ambiente_c=ambiente_c,
+                    carga_pct=carga_pct,
+                    criterios=crit,
+                )
+    except Exception:
+        pass
+
     validos = temperatura[np.isfinite(temperatura)]
     if not validos.size:
         return saida, _resumo_sem_temperatura(saida, crit, fator_carga)
@@ -698,6 +713,14 @@ def analisar_regioes(
     if conferir:
         avisos.insert(0, "Confira antes de agir: a classificação vem de um ponto quente fora das peças identificadas. "
                          "Pode ser defeito em outro equipamento, ou uma lâmpada, a estrutura ou um reflexo.")
+    laya_itens = [i.get("laya") for i in saida if i.get("laya")]
+    laya_resumo = {
+        "total_avaliadas": len(laya_itens),
+        "rotas_auto": sum(1 for l in laya_itens if l.get("route") == "auto"),
+        "rotas_review": sum(1 for l in laya_itens if l.get("route") == "review"),
+        "prob_reflexo_solar_max": max((float(l.get("prob_reflexo_solar", 0.0)) for l in laya_itens), default=0.0),
+    } if laya_itens else None
+
     resumo = {
         "ponto_mais_quente": ponto_mais_quente,
         "comparacao_componentes": comparacao,
@@ -712,6 +735,7 @@ def analisar_regioes(
         "fator_carga": fator_carga,
         "avisos": avisos,
         "criterio": crit["nome"],
+        **({"laya": laya_resumo} if laya_resumo else {}),
         **({"conferir": True} if conferir else {}),
         **({"nao_avaliadas": len(nao_avaliadas)} if nao_avaliadas else {}),
     }

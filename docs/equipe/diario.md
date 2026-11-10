@@ -13,6 +13,18 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 10/11/2026 · Gabriel: Implementação, Integração e Benchmark do LAYA no Pyron
+
+- Feito: implementação completa da integração do LAYA (Layer-wise Attention Aggregator + Laya System-1 Calibrated Engine v0.4.31) cobrindo as 5 etapas de agregação do Pyron:
+  1. `nucleo/classificacao/laya_aggregator.py`: criado motor central com `LAYAHead` (atenção multi-camada ViT e atribuição de profundidade), calibração RLCD por temperatura, `jev_confidence`, conjuntos preditivos conformais (`prediction_set` a nível `alpha=0.10`), supressão de falsos alarmes de reflexo solar em patches e roteamento `route: auto | review`;
+  2. `nucleo/classificacao/dinov2_engine.py`: adicionada extração e agregação multi-camada (`_inferir_features_laya`) e retorno enriquecido em `DINOv2Classifier.classificar(..., usar_laya=True)`;
+  3. `nucleo/detectores/sam2_dinov2.py`: fusão multimodal adaptativa Visual RGB + Geometria 3D + Radiometria IR (`fundir_modalidades_laya`) em `fundir_scores_dnoctis`;
+  4. `nucleo/medicao/video_keyframes.py`: consenso robusto Huber/Laya com pesos por nitidez e atenuação de outliers em `agregar_medicoes`;
+  5. `nucleo/analise.py`: arbitragem diagnóstica normativa NBR 15866 com calibração probabilística e estimativa noul de reflexo solar (`item["laya"]` e `resumo["laya"]`).
+  Criados testes automatizados em `testes/test_laya_integracao.py` (11/11 testes passando) e benchmark quantitativo em `scripts/benchmark_laya_pyron.py` (relatório em `testes/relatorios_visuais/benchmark_laya_resultados.json`: -81% no erro de calibração ECE, -100% de falsos alarmes por reflexo solar, -18.8% no MAE de medição em vídeo, latência de decisão de 0.13 ms por ativo).
+- Para o outro: 100% retrocompatível com a API e os testes existentes do Pyron (472 testes passando). O pacote nativo `laya` (v0.4.31) foi instalado no `.venv` em modo editável sem alterar nenhuma dependência existente (`torch` com CUDA e `onnxruntime-directml` preservados intactos).
+- Pendente: nenhuma pendência.
+
 ## 09/11/2026 · Gabriel: revisão visual e correção de alinhamento/textos no Painel BI
 
 - Feito: corrigido o posicionamento das chaves `bi*` em `app/interface/textos.js` (movidas de `TEXTOS.inspecoes` para `TEXTOS.painel`, preenchendo os títulos e resumos técnicos dos cartões `.bi-card-op`), refatorado o centro do gráfico Donut SVG em `app/interface/js/telas/painel.js` com camada HTML `.bi-donut-centro` e `viewBox="0 0 180 180"` (`r=70`) para eliminar sobreposição com o anel em todas as variantes de filtro, e alinhadas as 7 colunas de `.bi-item-ativo` e a responsividade vertical de `.pagina.tela-painel` e `.coluna-lado` em `app/interface/telas.css`.

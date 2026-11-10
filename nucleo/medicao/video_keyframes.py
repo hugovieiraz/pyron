@@ -282,16 +282,18 @@ def propagar_pista(pista: dict, img_origem: np.ndarray, img_destino: np.ndarray)
     return nova_pista
 
 
-def agregar_medicoes(medidas: list[Any]) -> dict[str, Any]:
+def agregar_medicoes(medidas: list[Any], usar_laya: bool = True) -> dict[str, Any]:
     """Consolida as medições individuais de múltiplos keyframes em um consenso estatístico.
     
     A combinação de múltiplos pontos de vista reduz a incerteza estatística (erro cai com ~1/sqrt(N)).
+    Quando ``usar_laya=True`` (padrão), agrega via pesos de Huber, nitidez e confiança com atribuição de janela.
     """
     if not medidas:
         return {}
 
     campos = ["comprimento_cm", "largura_cm", "altura_cm", "espessura_cm", "distancia_cm"]
     consenso: dict[str, Any] = {}
+    laya_detalhes: dict[str, Any] = {}
 
     for c in campos:
         valores = [getattr(m, c) for m in medidas if getattr(m, c, None) is not None]
@@ -306,7 +308,7 @@ def agregar_medicoes(medidas: list[Any]) -> dict[str, Any]:
         # Ganho teórico na redução de incerteza por amostragem multi-frame
         fator_reducao = round((1.0 - (1.0 / math.sqrt(n_amostras))) * 100.0, 1) if n_amostras > 1 else 0.0
 
-        consenso[c] = {
+        item_consenso: dict[str, Any] = {
             "valor": round(mediana, 2),
             "desvio_padrao": round(desvio, 2),
             "minimo": round(float(np.min(arr)), 2),
@@ -314,6 +316,22 @@ def agregar_medicoes(medidas: list[Any]) -> dict[str, Any]:
             "n_quadros": n_amostras,
             "reducao_incerteza_pct": fator_reducao,
         }
+
+        if usar_laya and n_amostras >= 1:
+            try:
+                from nucleo.classificacao.laya_aggregator import agregar_keyframes_laya
+
+                confiancas = [float(getattr(m, "confianca", 1.0) or 1.0) for m in medidas if getattr(m, c, None) is not None]
+                nitidez_lista = [float(getattr(m, "nitidez", 100.0) or 100.0) for m in medidas if getattr(m, c, None) is not None]
+                res_laya = agregar_keyframes_laya(valores, nitidez=nitidez_lista, confiancas=confiancas)
+                item_consenso["valor_laya"] = res_laya["valor"]
+                item_consenso["desvio_laya"] = res_laya["desvio_padrao"]
+                item_consenso["reducao_incerteza_laya_pct"] = res_laya["reducao_incerteza_pct"]
+                item_consenso["laya"] = res_laya
+            except Exception:
+                pass
+
+        consenso[c] = item_consenso
 
     metodos = [getattr(m, "metodo", "") for m in medidas]
     consenso["metodo"] = metodos[0] if len(set(metodos)) == 1 else "misto"

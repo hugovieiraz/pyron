@@ -155,11 +155,14 @@ def fundir_scores_dnoctis(
     altura_m: float | None = None,
     razao_aspecto: float | None = None,
     peso_geometrico: float = 0.30,
+    estatisticas_termicas: Any | None = None,
+    usar_laya: bool = True,
 ) -> dict[str, Any]:
-    """Funde as probabilidades visuais DINOv2 com o score de consistência geométrica 3D (D-NOCTIS).
+    """Funde as probabilidades visuais DINOv2 com o score de consistência geométrica 3D (D-NOCTIS) e LAYA.
 
     Permite desambiguar componentes com textura semelhante mas escalas métricas distintas
     (ex.: conector de 0,50 m vs. bucha de 1,25 m vs. transformador de 1,60 m).
+    Quando ``usar_laya=True`` (padrão), utiliza o motor adaptativo ``fundir_modalidades_laya``.
     """
     if not scores_visuais:
         return {
@@ -170,16 +173,41 @@ def fundir_scores_dnoctis(
             "consistencia_geometrica": {},
         }
 
+    scores_geom: dict[str, float] = {}
+    for c in scores_visuais:
+        s_g = calcular_consistencia_geometrica(altura_m, razao_aspecto, c)
+        scores_geom[c] = round(s_g, 4)
+
+    if usar_laya:
+        try:
+            from nucleo.classificacao.laya_aggregator import fundir_modalidades_laya
+
+            res_laya = fundir_modalidades_laya(
+                scores_visuais=scores_visuais,
+                scores_geometricos=scores_geom if (altura_m is not None or razao_aspecto is not None) else None,
+                estatisticas_termicas=estatisticas_termicas,
+                tem_telemetria_3d=bool(altura_m is not None and float(altura_m) > 0),
+            )
+            cls_final = res_laya["classe"]
+            return {
+                "classe": cls_final,
+                "confianca": round(float(res_laya["confianca"]), 4),
+                "nome": NOMES_ATIVOS.get(cls_final, cls_final.capitalize()),
+                "scores": res_laya["scores"],
+                "consistencia_geometrica": scores_geom,
+                "pesos_modalidades": res_laya.get("pesos_modalidades", {}),
+                "laya": res_laya.get("laya", {}),
+            }
+        except Exception as erro:
+            log.debug("Fallback de fundir_modalidades_laya para fusao linear dnoctis: %s", erro)
+
     lam = float(np.clip(peso_geometrico, 0.0, 0.85))
     if altura_m is None and razao_aspecto is None:
         lam = 0.0
 
-    scores_geom: dict[str, float] = {}
     scores_combinados: dict[str, float] = {}
-
     for c, s_vis in scores_visuais.items():
-        s_g = calcular_consistencia_geometrica(altura_m, razao_aspecto, c)
-        scores_geom[c] = round(s_g, 4)
+        s_g = scores_geom[c]
         scores_combinados[c] = (1.0 - lam) * float(s_vis) + lam * s_g
 
     soma = sum(scores_combinados.values())
@@ -281,6 +309,7 @@ class SAM2DINOv2Detector(Detector):
         usar_noctis: bool = True,
         usar_dnoctis: bool = True,
         usar_defectsam: bool = True,
+        usar_laya: bool = True,
         grounding_detector: Any | None = None,
         segmentador_sam2: Any | None = None,
     ) -> None:
@@ -301,6 +330,7 @@ class SAM2DINOv2Detector(Detector):
         self.usar_noctis = usar_noctis
         self.usar_dnoctis = usar_dnoctis
         self.usar_defectsam = usar_defectsam
+        self.usar_laya = usar_laya
         self._grounding_detector = grounding_detector
         self._segmentador_sam2 = segmentador_sam2
         self._caminho_pesos = Path(caminho_pesos_sam2) if caminho_pesos_sam2 else Path("modelos/sam2/sam2.1_hiera_small.pt")
@@ -530,27 +560,6 @@ class SAM2DINOv2Detector(Detector):
                     ref_points_y=pts_y,
                 )
 
-            # Fusão D-NOCTIS (Consistência Geométrica 3D) quando altura por telemetria ou aspect_ratio estão presentes
-            consistencia_geom = {}
-            if self.usar_dnoctis and sel.get("scores"):
-                altura_independente = float(dim_res["height_meters"]) if dist_m else None
-                ar_medido = float(dim_res.get("aspect_ratio", 0.0)) or None
-                fusao = fundir_scores_dnoctis(
-                    sel["scores"],
-                    altura_m=altura_independente,
-                    razao_aspecto=ar_medido,
-                    peso_geometrico=0.30 if dist_m else 0.15,
-                )
-                classe = fusao["classe"]
-                sel["classe"] = classe
-                sel["nome_classe"] = fusao["nome"]
-                sel["confianca"] = fusao["confianca"]
-                sel["scores"] = fusao["scores"]
-                consistencia_geom = fusao["consistencia_geometrica"]
-                h_ref = PADROES_ALTURA.get(classe, h_ref)
-
-            contagem[classe] = contagem.get(classe, 0) + 1
-
             # Redimensiona máscara e caixa para coordenadas da matriz térmica
             if (w_mat, h_mat) != (w_rgb, h_rgb):
                 mask_mat = cv2.resize(mask_rgb, (w_mat, h_mat), interpolation=cv2.INTER_NEAREST)
@@ -564,11 +573,38 @@ class SAM2DINOv2Detector(Detector):
                 mask_mat = mask_rgb
                 caixa_mat = [round(v, 2) for v in sel["caixa_rgb"]]
 
-            # Contorno SVG no espaço da matriz
-            contorno = simplificar_contorno_binario(mask_mat, epsilon=1.0)
-
             # Pureza térmica dentro do ativo
             stat_termica = estatisticas_termicas(matriz, mask_mat)
+
+            # Fusão D-NOCTIS e LAYA Multimodal (Visual + Consistência Geométrica 3D + Térmica)
+            consistencia_geom = {}
+            fusao_laya_diag = {}
+            fusao_pesos_mod = {}
+            if self.usar_dnoctis and sel.get("scores"):
+                altura_independente = float(dim_res["height_meters"]) if dist_m else None
+                ar_medido = float(dim_res.get("aspect_ratio", 0.0)) or None
+                fusao = fundir_scores_dnoctis(
+                    sel["scores"],
+                    altura_m=altura_independente,
+                    razao_aspecto=ar_medido,
+                    peso_geometrico=0.30 if dist_m else 0.15,
+                    estatisticas_termicas=stat_termica,
+                    usar_laya=self.usar_laya,
+                )
+                classe = fusao["classe"]
+                sel["classe"] = classe
+                sel["nome_classe"] = fusao["nome"]
+                sel["confianca"] = fusao["confianca"]
+                sel["scores"] = fusao["scores"]
+                consistencia_geom = fusao.get("consistencia_geometrica", {})
+                fusao_laya_diag = fusao.get("laya", {})
+                fusao_pesos_mod = fusao.get("pesos_modalidades", {})
+                h_ref = PADROES_ALTURA.get(classe, h_ref)
+
+            contagem[classe] = contagem.get(classe, 0) + 1
+
+            # Contorno SVG no espaço da matriz
+            contorno = simplificar_contorno_binario(mask_mat, epsilon=1.0)
 
             # DefectSAM: sub-segmentação da mancha térmica (hotspot) dentro do ativo
             hotspot_info = None
@@ -627,6 +663,8 @@ class SAM2DINOv2Detector(Detector):
                     "nome": sel["nome_classe"],
                     "scores": sel["scores"],
                     "consistencia_geometrica": consistencia_geom,
+                    "pesos_modalidades": fusao_pesos_mod,
+                    "laya": fusao_laya_diag,
                 },
             })
 
