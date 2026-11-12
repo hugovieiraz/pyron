@@ -13,6 +13,26 @@ Modelo de entrada (curta; o detalhe fica no commit):
 - Pendente: o que ficou para depois ou espera decisão.
 ```
 
+## 12/11/2026 · Hugo: Painel inicial mais limpo, com a rosca do Painel BI ligada aos dados reais
+
+- Feito: revisão de UX da tela inicial (`app/interface/js/telas/painel.js`, seção Painel de `telas.css`,
+  `textos.js`). A rosca com filtro cruzado do Painel BI do Gabriel continua, agora em "Situação atual": uma fatia
+  por nível de severidade, com a última inspeção de cada equipamento; clicar numa fatia ou na legenda (alvo de
+  teclado) filtra a lista ao lado por aquele nível, qualquer que seja (com Normal ou Sem medida o título da lista
+  vira "Equipamentos"), e o centro mostra quantos estão fora do normal ou no nível escolhido. O que mudou no bloco e por quê: os seis ativos (TR-01, PR-02, SE Patos Oeste...) estavam fixos no
+  código (`ATIVOS_BI_REFERENCIA`) e apareciam em qualquer base, ao lado do indicador real (no `pyron-demo`: "6
+  ativos críticos" no bloco e "0 críticas" no indicador); "Inspecionar →" ia para `#analise/<id>`, rota que não
+  existe (a Análise abre por `#inspecoes/<id>`, e agora a linha inteira é o link); o agrupamento por operação não
+  tem campo no cadastro; e o cobalto era cor de dado (`--op-transf`), contra a seção 0 do CLAUDE.md. Resto da
+  tela: os quatro indicadores numa linha no topo (cada um abre a lista filtrada) e "Atenção agora" com a tendência
+  da máxima de cada equipamento (mini série e °C/mês de `grafico.js`). Abaixo de 80em empilha; abaixo de 60em os
+  indicadores ficam dois por dois.
+- Para o outro: os tokens `--op-*` e as chaves `bi*` de `TEXTOS.painel` foram removidos; a barra empilhada da
+  Situação atual deu lugar à rosca. O arquivo do FigCraft não foi tocado. Para voltar a filtrar por operação
+  (transformação, proteção, manobra), falta um campo de operação no cadastro do equipamento; com ele, o filtro
+  cruzado pode ganhar esse segundo agrupamento.
+- Pendente: nada.
+
 ## 07/11/2026 · Hugo: repositório com endereço novo
 
 - Feito: o GitHub passou a responder pelo endereço novo, https://github.com/hugovieiraz/pyron (o antigo,

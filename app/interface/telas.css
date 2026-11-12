@@ -145,7 +145,9 @@
 .fraco { color: var(--texto-3); }
 
 /* ================================================================ telas de lista (Inspeções; Equipamentos e Pendências na 5b) */
-.pagina.tela-lista, .pagina.tela-painel { flex: none; height: calc(100vh - var(--topo)); } /* a lista rola por dentro, com o cabeçalho da tabela fixo */
+.pagina.tela-lista { flex: none; height: calc(100vh - var(--topo)); }
+.pagina.tela-painel { flex: 1; min-height: calc(100vh - var(--topo)); }
+.pagina.tela-painel:has(> .painel-grade) { flex: none; height: calc(100vh - var(--topo)); } /* com dados, a tela cabe na janela e a lista de Atenção rola por dentro; os números ficam à vista */
 .barra-lista { display: flex; flex-wrap: wrap; align-items: center; gap: var(--e-3); padding-bottom: var(--e-4); }
 .barra-lista[hidden] { display: none; }
 .barra-lista .empurrar { margin-left: auto; }
@@ -195,11 +197,51 @@ body.com-selecao .avisos { bottom: calc(var(--e-6) + var(--alvo) + var(--e-8)); 
 @keyframes entrar-selecao { from { opacity: 0; transform: translate(-50%, var(--e-2)); } }
 
 /* ================================================================ Painel */
-.painel-grade { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) var(--detalhe); gap: var(--e-8); min-height: 0; }
-.coluna-principal { display: flex; flex-direction: column; gap: var(--e-8); min-height: 0; }
-.coluna-atencao { display: flex; flex-direction: column; flex: 0 1 auto; min-height: 0; }
-.coluna-atencao:has(> .vazio) { flex: 1 1 auto; }
-.bloco-recentes { flex: none; }
+/* Painel: números de ação em cima; Atenção agora (larga, rola por dentro) e a coluna de contexto embaixo */
+.tela-painel .indicadores-linha { flex: none; }
+.tela-painel .indicador { background: var(--superficie); border-color: var(--borda); }
+.tela-painel a.indicador:hover { border-color: var(--borda-forte); }
+.painel-grade { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) var(--detalhe); grid-template-rows: minmax(0, 1fr); gap: var(--e-8); min-height: 0; }
+/* a lista é a região de trabalho: branca com linha de 1 px, do tamanho do conteúdo, rola por dentro quando passa da tela */
+.coluna-atencao { display: flex; flex-direction: column; align-self: start; max-height: 100%; min-height: 0; overflow: hidden; background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--r-g); }
+.coluna-atencao > .titulo-bloco { padding: var(--e-3) var(--e-4); }
+.coluna-atencao > .vazio { flex: 1; }
+.lista-atencao > li:last-child .linha-atencao { border-bottom: 0; }
+.titulo-bloco { display: flex; align-items: baseline; justify-content: space-between; gap: var(--e-3); padding-bottom: var(--e-2); border-bottom: 1px solid var(--borda); }
+.titulo-bloco h2 { display: flex; align-items: baseline; gap: var(--e-2); white-space: nowrap; }
+.titulo-bloco h2 .qtd { color: var(--texto-3); font-weight: var(--p-normal); font-variant-numeric: tabular-nums; }
+.titulo-bloco .nota { text-align: right; }
+.titulo-bloco .nota, .titulo-bloco a { font-size: var(--t-1); line-height: var(--a-1); }
+.titulo-bloco a { display: inline-flex; align-items: center; min-height: var(--alvo); margin: calc((var(--alvo) - var(--a-1)) / -2) 0; } /* alvo de 44 px sem mudar a altura da faixa */
+/* colunas: traço, equipamento, tendência, temperatura, nível; subgrid alinha os números entre as linhas */
+.lista-atencao { list-style: none; margin: 0; padding: 0; overflow: auto; min-height: 0; display: grid; grid-template-columns: var(--traco) minmax(0, 1fr) auto auto auto; column-gap: var(--e-5); align-content: start; }
+.lista-atencao > li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+.linha-atencao {
+  display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: center;
+  min-height: calc(var(--alvo) + var(--e-4)); padding: var(--e-3) var(--e-4) var(--e-3) 0; border-bottom: 1px solid var(--borda); color: var(--texto);
+  transition: background-color var(--dur-rapida) var(--ease-padrao);
+}
+.linha-atencao:hover { background: var(--superficie-2); text-decoration: none; }
+.linha-atencao .eq { display: grid; min-width: 0; }
+.linha-atencao .eq b { font-size: var(--t-2); line-height: var(--a-2); font-weight: var(--p-forte); }
+.linha-atencao .eq span { color: var(--texto-3); font-size: var(--t-1); line-height: var(--a-1); }
+.linha-atencao .tend { display: flex; align-items: center; gap: var(--e-3); font-size: var(--t-1); line-height: var(--a-1); }
+.linha-atencao .tend .tendencia { min-width: var(--col-num); }
+.linha-atencao .temp { justify-self: end; font-size: var(--t-4); line-height: var(--a-4); font-weight: var(--p-forte); white-space: nowrap; }
+.linha-atencao .selo { justify-self: start; }
+
+.coluna-lado { display: grid; align-content: start; gap: var(--e-6); min-height: 0; overflow: auto; }
+@media (max-width: 80em) { /* tablet: Atenção na largura toda, o contexto em duas colunas embaixo; a página rola inteira */
+  .pagina.tela-painel:has(> .painel-grade) { height: auto; }
+  .painel-grade { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; align-content: start; }
+  .coluna-atencao { max-height: none; }
+  .coluna-lado { grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
+  .coluna-lado > .aviso-config { grid-column: 1 / -1; }
+}
+@media (max-width: 60em) { /* retrato: números em dois por dois; a linha perde o desenho da série e fica com a tendência em número */
+  .tela-painel .indicadores-linha { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .linha-atencao .tend .mini-serie { display: none; }
+}
 .lista-recentes { list-style: none; margin: 0; padding: 0; }
 .lista-recentes a { display: grid; grid-template-columns: var(--miniatura) minmax(0, 1fr) auto var(--col-num); align-items: center; gap: var(--e-4); padding: var(--e-2) var(--e-4) var(--e-2) 0; border-bottom: 1px solid var(--borda); color: var(--texto); transition: background-color var(--dur-rapida) var(--ease-padrao); }
 .lista-recentes a:hover { background: var(--superficie-2); text-decoration: none; }
@@ -207,47 +249,40 @@ body.com-selecao .avisos { bottom: calc(var(--e-6) + var(--alvo) + var(--e-8)); 
 .lista-recentes .eq { display: grid; min-width: 0; font-size: var(--t-2); line-height: var(--a-2); }
 .lista-recentes .eq span, .lista-recentes .quando { color: var(--texto-3); font-size: var(--t-1); line-height: var(--a-1); }
 .lista-recentes .selo { justify-self: start; }
-.titulo-coluna, .titulo-bloco { display: flex; align-items: baseline; gap: var(--e-3); padding-bottom: var(--e-2); border-bottom: 1px solid var(--borda); }
-.titulo-coluna .qtd { color: var(--texto-3); font-weight: var(--p-normal); font-variant-numeric: tabular-nums; }
-.titulo-bloco { justify-content: space-between; }
-.titulo-bloco .nota, .titulo-bloco a { font-size: var(--t-1); line-height: var(--a-1); }
-.titulo-bloco a { display: inline-flex; align-items: center; min-height: var(--alvo); margin: calc((var(--alvo) - var(--a-1)) / -2) 0; } /* alvo de 44 px sem mudar a altura da faixa */
-.lista-atencao { list-style: none; margin: 0; padding: 0; overflow: auto; min-height: 0; display: grid; grid-template-columns: var(--traco) minmax(0, 1fr) auto auto; column-gap: var(--e-5); align-content: start; }
-.lista-atencao > li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; } /* temperatura e selo em coluna, alinhados entre as linhas */
-.linha-atencao {
-  display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: center; column-gap: var(--e-5);
-  padding: var(--e-3) var(--e-4) var(--e-3) 0; border-bottom: 1px solid var(--borda); color: var(--texto);
-  transition: background-color var(--dur-rapida) var(--ease-padrao);
-}
-.linha-atencao:hover { background: var(--superficie-2); text-decoration: none; }
-.linha-atencao .eq { display: grid; min-width: 0; }
-.linha-atencao .eq b { font-size: var(--t-2); line-height: var(--a-2); font-weight: var(--p-forte); }
-.linha-atencao .eq span { color: var(--texto-3); font-size: var(--t-1); line-height: var(--a-1); }
-.linha-atencao .leitura { display: contents; } /* selo ao lado da temperatura: linha mais baixa */
-.linha-atencao .leitura b { justify-self: end; }
-.linha-atencao .leitura .selo { justify-self: start; }
-.linha-atencao .leitura b { font-size: var(--t-4); line-height: var(--a-4); font-weight: var(--p-forte); white-space: nowrap; } /* abaixo do título da página, acima do nome */
-.coluna-atencao > .vazio { flex: 1; }
-
-.coluna-lado { display: grid; align-content: start; gap: var(--e-6); min-height: 0; overflow: auto; padding-bottom: var(--e-2); }
-.indicadores { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-3); }
-.indicadores .indicador:hover { text-decoration: none; }
-.aviso-config { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: var(--e-2) var(--e-3); padding: var(--e-3) var(--e-4); border-radius: var(--r-m); background: var(--superficie-2); font-size: var(--t-1); line-height: var(--a-1); color: var(--texto-2); }
+.aviso-config { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--e-2) var(--e-3); padding: var(--e-3) var(--e-4); border-radius: var(--r-m); background: var(--superficie-2); font-size: var(--t-1); line-height: var(--a-1); color: var(--texto-2); }
 .aviso-config > .ic { color: var(--aviso-texto); }
-.aviso-config .btn { grid-column: 2; justify-self: start; }
+.aviso-config .btn { justify-self: end; }
 .lista-proximas { list-style: none; margin: 0; padding: 0; }
-.lista-proximas a { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--e-3); min-height: calc(var(--alvo) + var(--e-2)); padding: var(--e-2) 0; border-bottom: 1px solid var(--borda); color: var(--texto); transition: background-color var(--dur-rapida) var(--ease-padrao); }
+.lista-proximas a { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--e-3); min-height: var(--alvo); padding: var(--e-1) 0; border-bottom: 1px solid var(--borda); color: var(--texto); transition: background-color var(--dur-rapida) var(--ease-padrao); }
 .lista-proximas a:hover { background: var(--superficie-2); text-decoration: none; }
 .lista-proximas .eq { display: grid; min-width: 0; font-size: var(--t-2); line-height: var(--a-2); }
 .lista-proximas .eq span, .lista-proximas .quando span { color: var(--texto-3); font-size: var(--t-1); line-height: var(--a-1); }
 .lista-proximas .quando { display: grid; justify-items: end; font-size: var(--t-1); line-height: var(--a-1); }
 .lista-proximas .quando .vencida { color: var(--erro-texto); font-weight: var(--p-medio); }
-.barra-empilhada { display: flex; gap: 1px; height: var(--e-3); margin-top: var(--e-3); border-radius: var(--r-p); overflow: hidden; background: var(--superficie-3); }
-.barra-empilhada i { display: block; min-width: var(--e-1); }
-.legenda-niveis { list-style: none; margin: var(--e-3) 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--e-1) var(--e-6); font-size: var(--t-1); line-height: var(--a-1); color: var(--texto-2); }
-.legenda-niveis li { display: flex; align-items: center; gap: var(--e-2); }
-.legenda-niveis i { width: var(--ponto); height: var(--ponto); border-radius: 50%; flex: none; }
-.legenda-niveis b { margin-left: auto; color: var(--texto); font-variant-numeric: tabular-nums; }
+/* Situação atual: rosca por nível (filtro cruzado com Atenção agora) e a legenda, que é o alvo de teclado */
+.rosca-bloco { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--e-6); margin-top: var(--e-3); }
+.rosca { position: relative; width: calc(var(--e-16) * 2.25); aspect-ratio: 1; }
+.rosca svg { display: block; width: 100%; height: 100%; overflow: visible; transform: rotate(-90deg); }
+.rosca circle { fill: none; stroke-width: 14; }
+.rosca .fundo-rosca { stroke: var(--superficie-3); }
+.rosca .fatia { transition: opacity var(--dur-rapida) var(--ease-padrao); }
+.rosca .fatia[data-nivel] { cursor: pointer; }
+.rosca .fatia.escolhida { stroke-width: 18; }
+.rosca .fatia.esmaecida { opacity: .25; }
+.rosca svg:has(.fatia[data-nivel]:hover) .fatia:not(:hover):not(.escolhida) { opacity: .5; }
+.centro-rosca { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; pointer-events: none; }
+.centro-rosca b { font-size: var(--t-5); line-height: var(--a-5); font-weight: var(--p-forte); font-variant-numeric: tabular-nums; }
+.centro-rosca span { max-width: calc(var(--e-16) + var(--e-4)); font-size: var(--t-1); line-height: var(--a-1); color: var(--texto-3); }
+.legenda-niveis { list-style: none; margin: 0; padding: 0; display: grid; font-size: var(--t-1); line-height: var(--a-1); color: var(--texto-2); }
+.item-nivel { display: flex; align-items: center; gap: var(--e-2); width: 100%; min-height: var(--alvo-compacto); padding: 0 var(--e-2); border: 1px solid transparent; border-radius: var(--r-m); background: none; color: inherit; font: inherit; text-align: left; }
+button.item-nivel { cursor: pointer; transition: background-color var(--dur-rapida) var(--ease-padrao); }
+button.item-nivel:hover { background: var(--hover); }
+button.item-nivel[aria-pressed="true"] { background: var(--acao-suave); border-color: var(--acao-linha); color: var(--texto); }
+.item-nivel i { width: var(--ponto); height: var(--ponto); border-radius: 50%; flex: none; }
+.item-nivel b { margin-left: auto; color: var(--texto); font-variant-numeric: tabular-nums; }
+@media (pointer: coarse) { .item-nivel { min-height: var(--alvo); } }
+.filtro-ativo { display: inline-flex; align-items: center; gap: var(--e-2); }
+.titulo-bloco .filtro-ativo .btn { margin: calc((var(--alvo-compacto) - var(--a-2)) / -2) 0; }
 
 /* primeira execução: três passos em sequência, um primário */
 .primeira-execucao { flex: 1; display: grid; align-content: center; justify-items: center; gap: var(--e-6); padding: var(--e-4) 0 var(--e-10); text-align: center; }

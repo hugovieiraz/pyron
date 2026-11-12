@@ -584,6 +584,13 @@ export const TEXTOS = {
 
   painel: {
     atencao: "Atenção agora",
+    atencaoOrdem: "Do mais grave ao mais leve",
+    mostrarTodos: "Mostrar todos",
+    foraDoNormal: "fora do normal",
+    filtrarNivel: (n) => `Listar os equipamentos em ${n.toLowerCase()}`,
+    equipamentosNoNivel: "Equipamentos",
+    legendaNiveis: "Equipamentos por nível",
+    atualizado: (hora) => `Atualizado às ${hora}`,
     tudoNormal: "Nada fora do normal",
     tudoNormalTexto: "A última inspeção de cada equipamento está normal.",
     criticas: "Críticas", criticasNota: "equipamentos em urgente ou imediato agora",
@@ -594,9 +601,6 @@ export const TEXTOS = {
     faltaResponsavel: "um responsável técnico",
     falta: (itens) => `O laudo sai incompleto: falta ${itens.join(" e ")}.`,
     configurar: "Configurar",
-    recentes: "Importadas por último",
-    verInspecoes: (n) => `Ver as ${n} inspeções`,
-    importada: (quando) => `importada ${quando}`,
     proximas: "Próximas inspeções",
     verEquipamentos: "Ver equipamentos",
     semAgenda: "Nenhum equipamento com inspeção agendada.",
